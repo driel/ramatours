@@ -77,21 +77,6 @@ a.btn{
   padding: 10px 30px 80px 80px;
 }
 
-.blackify{
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background: rgba(0,0,0,.5);
-  text-align: center;
-}
-
-.blackify img{
-  width: 32px;
-  height: auto;
-  float: right;
-  margin: 10px 10px 0 0;
-}
-
 table{
   clear: both;
 }
@@ -594,6 +579,10 @@ div#search{
 .dashed-li li{
   border-bottom: 1px dashed #e0e0e0;
   padding: 3px 0;
+}
+
+.center-align{
+  text-align: center;  
 }
 
 /*override*/

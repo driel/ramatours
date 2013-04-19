@@ -10,29 +10,33 @@
         }
       }
     });
-    $("input[type=checkbox].ibtn").wrap("<div class='custom-check'>");
-    $("input[type=checkbox].ibtn").each(function(){
-      if($(this).is(":checked")){
-        $(this).parent(".custom-check").addClass("active");
-      }
+    $(".add-module").on("click", function(e){
+      e.preventDefault();
+      var new_module = '<tr class="roles"><td><input type="text" name="module[]" /></td><td class="center-align"><input type="checkbox" name="add[]" class="ibtn" /></td><td class="center-align"><input type="checkbox" name="edit[]" class="ibtn" /></td><td class="center-align"><input type="checkbox" name="delete[]" class="ibtn" /></td><td class="center-align"><input type="checkbox" name="approve[]" class="ibtn" /></td><td class="center-align"><input type="checkbox" name="" class="ibtn check-all" /></td></tr>';
+      $(new_module).appendTo("#modules-table");
+      checkAll();
     });
-    $(".custom-check").on("click", function(){
-      if($(this).hasClass("active")){
-        $(this).removeClass("active");
-        $(this).children("input[type=checkbox].ibtn").removeAttr("checked");
-      }else{
-        $(this).addClass("active");
-        $(this).children("input[type=checkbox].ibtn").attr("checked", "checked");
-      }
-    });
+    checkAll();
   });
+  checkAll = function(){
+    $(".check-all").on("click", function(){
+      var iBtn = $(this).parents("tr.roles").children("td").children().not("input[type=text]");
+      $(iBtn).each(function(){
+        if($(this).hasClass("check-all")) return;
+        if($(this).is(":checked")){
+          $(this).removeAttr("checked");      
+        }else{
+          $(this).attr("checked", "checked");     
+        }   
+      });
+    });
+  }
 </script>
 <div class="body">
   <div class="content">
     <h2 class="rama-title">User role</h2>
     <?php echo $this->session->flashdata('message'); ?>
-    <?php echo form_open($action);
-    ?>
+    <?php echo form_open($action); ?>
     <table width="100%">
       <tr>
         <td width="20%">Role name</td>
@@ -43,64 +47,25 @@
       <tr>
         <td>Roled modules</td>
         <td>
-          <ul class="dashed-li">
-          <li>
-            <div class="span3"><strong>Module</strong></div>
-            <div class="span1"><strong>Add</strong></div>
-            <div class="span1"><strong>Edit</strong></div>
-            <div class="span1"><strong>Delete</strong></div>
-            <div class="span1"><strong>Approve</strong></div>
-            <div class="span1"><strong><a href="#" class="bootstrap-tooltip" data-placement="top" data-title="this is used for listing the entry, if unchecked then it will display nothing">Select</a></strong></div>
-            <br class="cl" />
-          </li>
-          <?php
-            // buka directory controllers
-            $path = APPPATH."controllers";
-            $dir = dir($path);
-            while(($controllers = $dir->read()) !== false){
-              if(preg_match("/~/", $controllers) == false && !is_dir($controllers)){ // skip directory (.|..) and backup file
-                $controller = explode(".", $controllers);
-                $controller = $controller[0];
-                $controller = ucwords(str_replace("_", " ", $controller));
-                $controller = str_replace(" ", "_", $controller);
-                $is_add = "";
-                if(isset($role_detail["add_{$controller}"]) && $role_detail["add_{$controller}"]==1){
-                  $is_add = "checked";
-                }
-                $is_edit = "";
-                if(isset($role_detail["edit_{$controller}"]) && $role_detail["edit_{$controller}"]==1){
-                  $is_edit = "checked";
-                }
-                $is_delete = "";
-                if(isset($role_detail["delete_{$controller}"]) && $role_detail["delete_{$controller}"]==1){
-                  $is_delete = "checked";
-                }
-                $is_approve = "";
-                if(isset($role_detail["approve_{$controller}"]) && $role_detail["approve_{$controller}"]==1){
-                  $is_approve = "checked";
-                }
-                $is_select = "";
-                if(isset($role_detail["select_{$controller}"]) && $role_detail["select_{$controller}"]==1){
-                  $is_select = "checked";
-                }
-                ?>
-                <li>
-                  <div class="span3">
-                    <?php echo $controller; ?>
-                    <input type="hidden" name="modules[]" value="<?php echo $controller; ?>">
-                  </div>
-                  <div class="span1"><input type="checkbox" name="add_<?php echo $controller; ?>" class="ibtn" <?php echo $is_add; ?>/></div>
-                  <div class="span1"><input type="checkbox" name="edit_<?php echo $controller; ?>" class="ibtn" <?php echo $is_edit; ?>/></div>
-                  <div class="span1"><input type="checkbox" name="delete_<?php echo $controller; ?>" class="ibtn" <?php echo $is_delete; ?>/></div>
-                  <div class="span1"><input type="checkbox" name="approve_<?php echo $controller; ?>" class="ibtn" <?php echo $is_approve; ?>/></div>
-                  <div class="span1"><input type="checkbox" name="select_<?php echo $controller; ?>" class="ibtn" <?php echo $is_select; ?>/></div>
-                  <br class="cl" />
-                </li>
-                <?php
-              }
-            }
-            $dir->close();
-            ?></ul>
+          <table width="100%" id="modules-table">
+          	<tr>
+          		<td width="50%"><b>Module</b></td>
+          		<td width="10%" class="center-align"><b>add</b></td>
+          		<td width="10%" class="center-align"><b>edit</b></td>
+          		<td width="10%" class="center-align"><b>delete</b></td>
+          		<td width="10%" class="center-align"><b>approve</b></td>
+          		<td width="10%" class="center-align"><b>All</b></td>
+          	</tr>
+          	<tr class="roles">
+            	<td><input type="text" name="module[]" /></td>
+            	<td class="center-align"><input type="checkbox" name="add[]" class="ibtn" /></td>
+            	<td class="center-align"><input type="checkbox" name="edit[]" class="ibtn" /></td>
+            	<td class="center-align"><input type="checkbox" name="delete[]" class="ibtn" /></td>
+            	<td class="center-align"><input type="checkbox" name="approve[]" class="ibtn" /></td>
+            	<td class="center-align"><input type="checkbox" class="ibtn check-all" /></td>
+            </tr>
+          </table>
+          <a href="#" class="btn btn-info add-module">Add module</a>
         </td>
       </tr>
     </table>
@@ -109,3 +74,5 @@
   </div>
 </div>
 <?php get_footer(); ?>
+;
+    });
