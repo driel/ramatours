@@ -13,6 +13,9 @@ class Users extends CI_Controller {
         parent::__construct();
         $this->load->model('User');
         $this->load->model('Staff');
+        $this->load->model("Module_model", "module");
+        $this->load->model("Role", "role");
+        $this->load->model("Role_Detail", "roled");
         $this->dir_path = '/uploads/avatar/';
     }
 
@@ -141,90 +144,77 @@ class Users extends CI_Controller {
             'value' => 'Save',
             'class' => 'btn btn-primary'
         );
+        $data["link_back"] = anchor("users/roles", "Back", array("class"=>"btn btn-danger"));
         $data["role_detail"] = null;
+        $data["role_id"] = null;
+        $data["modules"] = $this->module->get_all();
 
         $this->load->view('users/add_role', $data);
     }
 
     function edit_role($id) {
-        /*$role = new Role();
-        $row = $role->where('role_id', $id)->get();
         $data['action'] = site_url('users/update_role/' . $id);
-        $data['role_name'] = array('name' => 'role_name', 'value' => $row->role_name);
         $data['btn_save'] = array('name' => 'btn_save',
-            'value' => 'Update',
-            'class' => 'btn btn-primary btn-large'
-        );*/
-        $data['action'] = site_url('users/update_role/' . $id);
-        $role = $this->db->get_where("user_roles", array("role_id"=>$id))->row();
-        $data["role_name"] = array('name' => 'role_name', 'value' => $role->role_name);
-        $roles_detail = $this->db->get_where("user_roled", array("role_id"=>$id));
-        if($roles_detail->num_rows() > 0){
-          $data["role_detail"] = array();
-          foreach($roles_detail->result() as $role_detail){
-            $data["role_detail"]["add_{$role_detail->roled_module}"] = $role_detail->roled_add;
-            $data["role_detail"]["edit_{$role_detail->roled_module}"] = $role_detail->roled_edit;
-            $data["role_detail"]["delete_{$role_detail->roled_module}"] = $role_detail->roled_delete;
-            $data["role_detail"]["approve_{$role_detail->roled_module}"] = $role_detail->roled_approval;
-            $data["role_detail"]["select_{$role_detail->roled_module}"] = $role_detail->roled_select;
-          }
-        }
-        $data['btn_save'] = array('name' => 'btn_save',
-          'value' => 'Update',
-          'class' => 'btn btn-primary'
+            'value' => 'Save',
+            'class' => 'btn btn-primary'
         );
+        $data["link_back"] = anchor("users/roles", "Back", array("class"=>"btn btn-danger"));
+        $roled = $this->role->_get($id);
+        $data["role_name"] = array("name"=>"role_name", "value"=>$roled->role_name);
+        $data["role_id"] = $roled->role_id;
+        $data["modules"] = $this->module->get_all();
         $this->load->view('users/add_role', $data);
     }
 
     function update_role($id) {
-        /*$role = new Role();
-        $role->where('role_id', $id)
-                ->update('role_name', $this->input->post('role_name'));
-
-        $this->session->set_flashdata('message', 'Role Update successfuly.');
-        redirect('users/roles');*/
         $this->form_validation->set_rules(array(
           array("field"=>"role_name", "label"=>"Role name", "rules"=>"required")
         ));
         if($this->form_validation->run()===false){
           // gagal son
         }else{
+          $role_id = $this->input->post("role_id");
           $role_name = $this->input->post("role_name");
-          $modules = $this->input->post("modules");
-          $this->db->update("user_roles", array("role_name"=>$role_name), array("role_id"=>$id));
-          print_r($modules);
+          $this->db->update("user_roles", array("role_name"=>$role_name), array("role_id"=>$role_id));
+          $modules = $this->input->post("module");
           foreach($modules as $module){
-            print_r($module);
-            $add = ($this->input->post("add_{$module}") == "on" ? 1:0);
-            $edit = ($this->input->post("edit_{$module}") == "on" ? 1:0);
-            $delete = ($this->input->post("delete_{$module}") == "on" ? 1:0);
-            $approve = ($this->input->post("approve_{$module}") == "on" ? "1":0);
-            $select = ($this->input->post("select_{$module}") == "on" ? 1:0);
-            // check if module name already exists for given role id
-            $check = $this->db->get_where("user_roled", array("roled_module"=>$module, "role_id"=>$id));
-            if($check->num_rows() > 0){ // update module previlege
-              $this->db->update("user_roled", array(
-                "role_id"=>$id,
-                "roled_module"=>$module,
-                "roled_add"=>$add,
-                "roled_edit"=>$edit,
-                "roled_delete"=>$delete,
-                "roled_approval"=>$approve,
-                "roled_select"=>$select
-              ), array("role_id"=>$id));
-            }else{ // create new otherwise
-              $this->db->insert("user_roled", array(
-                "role_id"=>$id,
-                "roled_module"=>$module,
-                "roled_add"=>$add,
-                "roled_edit"=>$edit,
-                "roled_delete"=>$delete,
-                "roled_approval"=>$approve,
-                "roled_select"=>$select
-              ));
-            }
-            
-          }
+            if(strlen($module) > 0){
+              $module_id = $this->input->post($module);
+              if($module_id != FALSE){ // this is hidden field, its value is module_id
+                // update
+                $this->module->update($module, $module_id);
+                $add = $this->input->post("add_{$module}") == FALSE ? 0:1;
+                $edit = $this->input->post("edit_{$module}") == FALSE ? 0:1;
+                $delete = $this->input->post("delete_{$module}") == FALSE ? 0:1;
+                $approve = $this->input->post("approve_{$module}") == FALSE ? 0:1;
+                $super = $this->input->post("super"); // danger, can see salary!
+                $this->db->update("user_roled", array(
+                  "roled_add"=>$add,
+                  "roled_edit"=>$edit,
+                  "roled_delete"=>$delete,
+                  "roled_approve"=>$approve,
+                  "roled_super"=>$super
+                ), array("role_id"=>$role_id, "module_id"=>$module_id));   
+              }else{
+                // create
+                $module_id = $this->module->add($module);
+                $add = $this->input->post("add_{$module}") == FALSE ? 0:1;
+                $edit = $this->input->post("edit_{$module}") == FALSE ? 0:1;
+                $delete = $this->input->post("delete_{$module}") == FALSE ? 0:1;
+                $approve = $this->input->post("approve_{$module}") == FALSE ? 0:1;
+                $super = $this->input->post("super"); // danger, can see salary!
+                $this->db->insert("user_roled", array(
+                  "role_id"=>$role_id,
+                  "module_id"=>$module_id,
+                  "roled_add"=>$add,
+                  "roled_edit"=>$edit,
+                  "roled_delete"=>$delete,
+                  "roled_approve"=>$approve,
+                  "roled_super"=>$super
+                ));
+              }              
+            }   
+          } 
         }
         redirect('users/roles');
     }
@@ -232,51 +222,43 @@ class Users extends CI_Controller {
     function delete_role($id) {
         $role = new Role();
         $role->_delete($id);
-
+        $this->roled->_delete($id);
         $this->session->set_flashdata('message', 'Role successfully deleted!');
         redirect('users/roles');
     }
 
     function save_role() {
-        /*$role = new Role();
-        $role->role_name = $this->input->post('role_name');
-        if ($role->save()) {
-            $this->session->set_flashdata('message', 'Role successfully created!');
-            redirect('users/roles');
-        } else {
-            // Failed
-            $role->error_message('custom', 'Role Name required');
-            $msg = $role->error->custom;
-            $this->session->set_flashdata('message', $msg);
-            redirect('users/add_role');
-        }*/
         $this->form_validation->set_rules(array(
-          array("field"=>"role_name", "label"=>"Role name", "rules"=>"required")
+          array("field"=>"role_name", "label"=>"Role name", "rules"=>"required"),
+          array("field"=>"module", "label"=>"Module", "rules"=>"required")
         ));
         if($this->form_validation->run()===false){
           // gagal son
         }else{
-          $role_name = $this->input->post("role_name");
-          $modules = $this->input->post("modules");
-          $this->db->insert("user_roles", array("role_name"=>$role_name));
+          $role = $this->input->post("role_name");
+          $this->db->insert("user_roles", array(
+            "role_name"=>$role          
+          ));
           $role_id = $this->db->insert_id();
-          print_r($modules);
+          $modules = $this->input->post("module");
           foreach($modules as $module){
-            print_r($module);
-            $add = ($this->input->post("add_{$module}") == "on" ? "1":0);
-            $edit = ($this->input->post("edit_{$module}") == "on" ? "1":0);
-            $delete = ($this->input->post("delete_{$module}") == "on" ? "1":0);
-            $approve = ($this->input->post("approve_{$module}") == "on" ? "1":0);
-            $select = ($this->input->post("select_{$module}") == "on" ? "1":0);
-            $this->db->insert("user_roled", array(
-              "role_id"=>$role_id,
-              "roled_module"=>$module,
-              "roled_add"=>$add,
-              "roled_edit"=>$edit,
-              "roled_delete"=>$delete,
-              "roled_approval"=>$approve,
-              "roled_select"=>$select
-            ));
+            if(strlen($module) > 0){
+              $module_id = $this->module->add($module);
+              $add = $this->input->post("add_{$module}") == FALSE ? 0:1;
+              $edit = $this->input->post("edit_{$module}") == FALSE ? 0:1;
+              $delete = $this->input->post("delete_{$module}") == FALSE ? 0:1;
+              $approve = $this->input->post("approve_{$module}") == FALSE ? 0:1;
+              $super = $this->input->post("super"); // danger, can see salary!
+              $this->db->insert("user_roled", array(
+                "role_id"=>$role_id,
+                "module_id"=>$module_id,
+                "roled_add"=>$add,
+                "roled_edit"=>$edit,
+                "roled_delete"=>$delete,
+                "roled_approve"=>$approve,
+                "roled_super"=>$super
+              ));
+            }
           }
         }
         redirect("users/roles");
