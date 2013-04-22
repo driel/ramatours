@@ -114,7 +114,11 @@
     <div class="one_third">
       <h3>Photo</h3>
       <div class="form-signin">
-        <img src="<?php echo strlen($staff_photo['value']) ? assets_url('upload/' . $staff_photo['value']) : assets_url('images/User-icon.png'); ?>" alt="" id="preview" />
+        <?php if(isset($staff_photo["value"])): ?>
+          <img src="<?php echo strlen($staff_photo['value']) ? assets_url('upload/' . $staff_photo['value']) : assets_url('images/User-icon.png'); ?>" alt="" id="preview" />
+        <?php else: ?>
+          <img src="<?php echo assets_url('images/User-icon.png'); ?>" alt="" id="preview" />
+        <?php endif; ?>
       </div>
       <div class="input-append file">
         <input type="file" name="photo" onchange="readURL(this)" style="display:none;" />

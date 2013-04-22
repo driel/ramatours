@@ -175,6 +175,7 @@ class Staffs extends CI_Controller {
         
         $data["date_out"] = array("name"=>"date_out", "class"=>"datepicker");
         $data["out_note"] = array("name"=>"out_note");
+        $data["pph_by_company"] = 'n';
 
         $this->load->view('staffs/frm_staff', $data);
     }
