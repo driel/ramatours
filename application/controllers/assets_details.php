@@ -176,6 +176,81 @@ class Assets_Details extends CI_Controller {
         redirect('assets/' . $this->asset_id . '/details/index');
     }
 
+    function report() {
+        $asset = new Asset();
+        $rs = $asset->where('asset_id', $this->asset_id)->get();
+        $data['id'] = $rs->asset_id;
+        $data['asset_name'] = $rs->asset_name;
+        $data['asset_code'] = $rs->asset_code;
+        $data['asset_status'] = $rs->asset_status;
+
+        $date = new DateTime($rs->date_buy);
+        $data['date_buy'] = $rs->date_buy == '0000-00-00'? '':$date->format('d-m-Y');
+        $date = new DateTime($rs->date_tempo);
+        $data['date_terms'] = $rs->date_tempo == '0000-00-00'? '':$date->format('d-m-Y');
+        $date = new DateTime($rs->date);
+        $data['date_handover'] = ($rs->date == '0000-00-00' || $rs->date == '0000-00-00 00:00:00')? '':$date->format('d-m-Y');
+        $data['description'] = $rs->discription;
+
+        // Staffs
+        $staff = new Staff();
+        $used_by = $staff->where('staff_id',$rs->staff_id)->get();
+        $data['staff_name'] = $used_by->staff_name;
+
+        $data['date'] = array('name' => 'date', 'id' => 'date', 'value' => $rs->date);
+
+        $asset_detail = new Asset_Detail();
+        $data['staff'] = new Staff();
+        switch ($this->input->get('c')) {
+            case "1":
+                $data['col'] = "date";
+                break;
+            case "2":
+                $data['col'] = "staff_id";
+                break;
+            case "3":
+                $data['col'] = "descriptions";
+                break;
+            case "4":
+                $data['col'] = "assetd_status";
+                break;
+            case "5":
+                $data['col'] = "assetd_id";
+                break;
+            default:
+                $data['col'] = "assetd_id";
+        }
+
+        if ($this->input->get('d') == "1") {
+            $data['dir'] = "DESC";
+        } else {
+            $data['dir'] = "ASC";
+        }
+
+        $asset_detail->where('asset_id', $this->asset_id)->order_by($data['col'], $data['dir']);
+
+        $total_rows = $asset_detail->count();
+        $data['asset_id'] = $this->asset_id;
+        $data['title'] = "Assets Details";
+        $data['btn_home'] = anchor('assets/', 'Home', array('class' => 'btn'));
+
+        $offset = $this->uri->segment($this->uri_segment);
+
+        $data['assets_details'] = $asset_detail
+                        ->where('asset_id', $this->asset_id)
+                        ->order_by($data['col'], $data['dir'])
+                        ->get($this->limit, $offset)->all;
+
+        $config['base_url'] = site_url('assets/' . $this->asset_id . '/details/index');
+        $config['total_rows'] = $total_rows;
+        $config['per_page'] = $this->limit;
+        $config['uri_segment'] = $this->uri_segment;
+        $this->pagination->initialize($config);
+        $data['pagination'] = $this->pagination->create_links();
+
+        $this->load->view('assets_details/report', $data);
+    }
+
     function filter_access($module, $field, $page) {
         $user = new User();
         $status_access = $user->get_access($this->sess_role_id, $module, $field);
