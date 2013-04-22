@@ -106,7 +106,6 @@ function HeaderLink($value, $key, $col, $dir) {
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><?php echo anchor('assets/' . $row->asset_id . '/details/add', '<i class="icon-list"></i> Add Detail'); ?></li>
                                 <li><?php echo anchor('assets/edit/' . $row->asset_id, '<i class="icon-pencil"></i> Edit'); ?></li>
                                 <li><?php echo anchor('assets/delete/' . $row->asset_id, '<i class="icon-trash"></i> Delete', array('onclick' => "return confirm('Are you sure want to delete?')")); ?></li>
                             </ul>

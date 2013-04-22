@@ -29,6 +29,7 @@
             if(_module.length > 0){ // check if module name is not empty, if so then don't do anything
               var attr = $(this).children().attr("name");
               if(typeof attr != "undefined"){ // skip unnamed checkbox, eg. check-all checkbox
+                _module = _module.replace(/ /g, "_");
                 $(this).children().attr("name", attr+"_"+_module);               
               }        
             }          
@@ -53,7 +54,8 @@
         // remove check-all if one of ibtn is unchecked
         $(this).on("click", function(){
           if(!$(this).is(":checked")){
-            $(".check-all").removeAttr("checked");
+            $(this).parents("tr.roles").children("td").children(".check-all").removeAttr("checked");
+            //$(".check-all").removeAttr("checked");
             $(this).val("0");      
           }else{
             $(this).val("1");  
@@ -66,7 +68,7 @@
 <div class="body">
   <div class="content">
     <h2 class="rama-title">User role</h2>
-    <?php echo $this->session->flashdata('message'); ?>
+    <?php if(validation_errors()) echo error_box(validation_errors()); ?>
     <?php echo form_open($action); ?>
     <table width="100%">
       <tr>
@@ -96,8 +98,8 @@
                 ?>
                 <tr class="roles">
                   <td>
-                  <input type="text" name="module[]" value="<?php echo $module->name; ?>" readonly /></td>
-                  <?php echo form_hidden($module->name, $module->id); ?>
+                  <input type="text" name="module[]" value="<?php echo str_replace("_", " ", $module->name); ?>" readonly /></td>
+                  <?php echo form_hidden(str_replace(" ", "_", $module->name), $module->id); ?>
                   <?php if($roled->num_rows() > 0){ foreach($roled->result() as $roled){ ?>
                 	<td class="center-align"><input type="checkbox" name="add" class="ibtn"<?php echo $roled->roled_add == "1" ? ' checked':''; ?> /></td>
                 	<td class="center-align"><input type="checkbox" name="edit" class="ibtn"<?php echo $roled->roled_edit == "1" ? ' checked':''; ?> /></td>

@@ -18,10 +18,6 @@ class Welcome extends CI_Controller {
         $data['highchart_cabang'] = $this->highchart_cabang();
         $data['highchart_get_name_branch'] = $this->highchart_get_name_branch();
         $data['highchart_get_name_dept'] = $this->highchart_get_name_dept();
-
-
-
-
         $data['btn_new_staff'] = anchor('staffs/add', '<span class="icon-white icon-plus"></span>', array('class' => 'btn btn-primary bootstrap-tooltip', 'data-placement' => 'top', 'data-title' => 'Add new Employee'));
         $this->load->view('welcome_message', $data);
     }

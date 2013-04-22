@@ -45,7 +45,7 @@ function HeaderLink($value, $key, $col, $dir) {
 ?>
 <div class="body">
     <div class="content">
-        <?php echo $this->session->flashdata('message'); ?>
+        <?php if(strlen($this->session->flashdata('message')) > 0) echo success_box($this->session->flashdata('message')); ?>
         <div class="page-header">
             <div class="icon">
                 <span class="ico-tag"></span>

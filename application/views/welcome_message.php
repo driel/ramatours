@@ -93,7 +93,9 @@
     <div class="content" style="padding-top: 0;">
         <div class="page-header" style="padding: 0;">
             <h3>Welcome (<?php echo $this->session->userdata('username'); ?>)</h3>
-            
+            <?php if($this->session->flashdata("denied")){
+              echo error_box($this->session->flashdata("denied"));
+            }?>
         </div>
         <br class="cl" />
         <div class="section section-small">

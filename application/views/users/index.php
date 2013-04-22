@@ -45,7 +45,7 @@ function HeaderLink($value, $key, $col, $dir) {
 ?>
 <div class="body">
     <div class="content">
-        <?php echo $this->session->flashdata('message'); ?>
+        <?php if(strlen($this->session->flashdata('message')) > 0) echo success_box($this->session->flashdata('message')); ?>
         <div class="page-header">
             <div class="icon">
                 <span class="ico-site-map"></span>
@@ -61,7 +61,7 @@ function HeaderLink($value, $key, $col, $dir) {
         <div id="search_bar" class="widget-header">
             <?php search_form(array("" => "By", "username" => "Username")); ?>
         </div>
-        <table class="table boo-table table-bordered table-condensed table-hover">
+        <table class="table fpTable table-hover">
             <thead>
                 <tr>
                     <th width="45%">User ID</th>
@@ -77,8 +77,18 @@ function HeaderLink($value, $key, $col, $dir) {
                     <td><?php echo $row->id; ?></td>
                     <td><?php echo $row->username; ?></td>
                     <td><?php echo $row->role_id; ?></td>
-                    <td class="action_cell"><?php echo anchor('users/edit/' . $row->id, img(array("src" => assets_url('images/photon/icons/default/edit.png')))); ?></td>
-                    <td class="action_cell"><?php echo anchor('users/delete/' . $row->id, img(array("src" => assets_url('images/photon/icons/default/delete-item.png'))), array('onclick' => "return confirm('Are you sure want to delete?')")); ?></td>
+                    <td>
+                    <div class="btn-group">
+                      <a href="#" data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                        <i class="icon-cog"></i>
+                        <span class="caret"></span>
+                      </a>
+                    	<ul class="dropdown-menu pull-right">
+                      	<li><?php echo anchor('users/edit/' . $row->id, '<i class="icon-pencil"></i> Edit'); ?></li>
+                      	<li><?php echo anchor('users/delete/' . $row->id, '<i class="icon-trash"></i> Delete', array('onclick' => "return confirm('Are you sure want to delete?')")); ?></li>
+                      </ul>
+                    </div>
+                    </td>
                 </tr>
             <?php } ?>
         </table>
