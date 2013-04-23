@@ -34,7 +34,11 @@
             </tr>
             <tr>
                 <td>Status</td>
-                <td><input type="checkbox" id="status" /></td>
+                <td><?php echo $status; ?></td>
+            </tr>
+            <tr>
+                <td>Branch</td>
+                <td><?php echo $branch; ?></td>
             </tr>
             <tr>
             	<td>Tgl. Beli</td>

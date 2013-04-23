@@ -57,9 +57,11 @@ function HeaderLink($value, $key, $col, $dir) {
         <?php 
           if($this->session->flashdata('denied')){
             echo error_box($this->session->flashdata('denied'));          
+          }
+          if($this->session->flashdata('message')){
+            echo success_box($this->session->flashdata('message'));          
           }        
         ?>
-        <?php echo $this->session->flashdata('message'); ?>
         <div class="page-header">
             <div class="icon">
                 <span class="ico-tag"></span>

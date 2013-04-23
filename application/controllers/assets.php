@@ -77,16 +77,17 @@ class Assets extends CI_Controller {
 
         $data['id'] = '';
         $data['asset_name'] = array('name' => 'asset_name');
-        $options_status = array(
-            'enable' => 'Enable',
-            'disable' => 'Disable'
-        );
+        
         $data["date_buy"] = array("name"=>"date_buy", "class"=>"datepicker");
         $data["date_terms"] = array("name"=>"date_terms", "class"=>"datepicker");
         $data["description"] = array("name"=>"description", "id"=>"description");
         $data["code"] = array("name"=>"code");
-        $status_selected = 'enable';
-        $data['asset_status'] = form_dropdown('asset_status', $options_status, $status_selected);
+        
+        $data["status"] = form_checkbox(array('name'=>'asset_status', 'id'=>'status'));
+        
+        $branch = new Branch();
+        $list_branch = $branch->list_drop();
+        $data["branch"] = form_dropdown('branch', $list_branch, '');
 
         // Staffs
         $staff = new Staff();
@@ -106,18 +107,23 @@ class Assets extends CI_Controller {
         $rs = $asset->where('asset_id', $id)->get();
         $data['id'] = $rs->asset_id;
         $data['asset_name'] = array('name' => 'asset_name', 'value' => $rs->asset_name);
-        $options_status = array(
-            'enable' => 'Enable',
-            'disable' => 'Disable'
-        );
-        $status_selected = $rs->asset_status;
-        $data['asset_status'] = form_dropdown('asset_status', $options_status, $status_selected);
+        $status_selected = $rs->asset_status == 'enable' ? TRUE:FALSE;
+        $data["status"] = form_checkbox(array('name'=>'asset_status', 'id'=>'status', 'checked'=>$status_selected));
 
         // Staffs
         $staff = new Staff();
         $list_staff = $staff->list_drop();
         $staff_selected = $rs->staff_id;
         $data['staff_id'] = form_dropdown('staff_id', $list_staff, $staff_selected);
+        
+        $branch = new Branch();
+        $list_branch = $branch->list_drop();
+        $data["branch"] = form_dropdown('branch', $list_branch, $rs->branch);
+        
+        $data["date_buy"] = array("name"=>"date_buy", "class"=>"datepicker", "value"=>$rs->date_buy);
+        $data["date_terms"] = array("name"=>"date_terms", "class"=>"datepicker", "value"=>$rs->date_tempo);
+        $data["description"] = array("name"=>"description", "id"=>"description", "value"=>$rs->description);
+        $data["code"] = array("name"=>"code", "value"=>$rs->asset_code);
 
 
         $data['date'] = array('name' => 'date', 'id' => 'date', 'value' => $rs->date);
@@ -125,7 +131,7 @@ class Assets extends CI_Controller {
 
         $data['title'] = 'Update';
         $data['form_action'] = site_url('assets/update');
-        $data['link_back'] = anchor('assets/', 'Back', array('class' => 'btn'));
+        $data['link_back'] = anchor('assets/', 'Back', array('class' => 'btn btn-danger'));
 
         $this->load->view('assets/frm_assets', $data);
     }
@@ -135,12 +141,11 @@ class Assets extends CI_Controller {
         $asset = new Asset();
         $asset->asset_name = $this->input->post('asset_name');
         $asset->asset_status = $this->input->post('asset_status') == "on" ? "enable":"disable" ;
-        $asset->staff_id = $this->input->post('staff_id');
-        $asset->date = $this->input->post('date');
         $asset->date_buy = $this->input->post('date_buy');
         $asset->date_tempo = $this->input->post('date_terms');
         $asset->description = $this->input->post('description');
         $asset->asset_code = $this->input->post('code');
+        $asset->branch = $this->input->post('branch');
         if ($asset->save()) {
             $this->session->set_flashdata('message', 'Asset successfully created!');
             redirect('assets/');
@@ -156,12 +161,16 @@ class Assets extends CI_Controller {
     function update() {
         filter_access(__CLASS__, "edit");
         $asset = new Asset();
+        $status = $this->input->post('asset_status') == "on" ? "enable":"disable";
         $asset->where('asset_id', $this->input->post('id'))
                 ->update(array(
                     'asset_name' => $this->input->post('asset_name'),
-                    'asset_status' => $this->input->post('asset_status'),
-                    'staff_id' => $this->input->post('staff_id'),
-                    'date' => $this->input->post('date')
+                    'asset_code'=> $this->input->post('code'),
+                    'date_buy'=>$this->input->post('date_buy'),
+                    'date_tempo'=>$this->input->post('date_terms'),
+                    'asset_status' => $status,
+                    'description'=>$this->input->post('description'),
+                    'branch'=>$this->input->post('branch')
                         )
         );
 
