@@ -18,7 +18,7 @@ class Assets extends CI_Controller {
     }
 
     public function index($offset = 0) {
-        filter_access(__CLASS__, "index");
+        filter_access(__CLASS__, "view");
         $asset_list = new Asset();
         $data['staff'] = new Staff();
 
@@ -71,7 +71,6 @@ class Assets extends CI_Controller {
 
     function add() {
         filter_access(__CLASS__, "add");
-
         $data['title'] = 'Add New Asset';
         $data['form_action'] = site_url('assets/save');
         $data['link_back'] = anchor('assets/', 'Back', array('class' => 'btn btn-danger'));
@@ -132,7 +131,7 @@ class Assets extends CI_Controller {
     }
 
     function save() {
-        $this->filter_access('Assets', 'roled_add', 'assets/index');
+        filter_access(__CLASS__, "add");
         $asset = new Asset();
         $asset->asset_name = $this->input->post('asset_name');
         $asset->asset_status = $this->input->post('asset_status') == "on" ? "enable":"disable" ;

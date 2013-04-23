@@ -45,7 +45,14 @@ function HeaderLink($value, $key, $col, $dir) {
 ?>
 <div class="body">
   <div class="content">
-    <?php echo $this->session->flashdata('message'); ?>
+    <?php 
+      if($this->session->flashdata('denied')){
+        echo error_box($this->session->flashdata('denied'));          
+      }
+      if($this->session->flashdata('message')){
+        echo success_box($this->session->flashdata('message'));          
+      }        
+    ?>
     <div class="page-header">
       <div class="icon">
         <span class="ico-site-map"></span>
@@ -66,7 +73,7 @@ function HeaderLink($value, $key, $col, $dir) {
             <tr>
                 <th width="5%"><?php echo HeaderLink("Branch ID", "branch_id", $col, $dir); ?></th>
                 <th width="50%"><?php echo HeaderLink("Branch Name", "branch_name", $col, $dir); ?></th>
-                <th width="10%" class="action_cell">Action</th>
+                <th width="5%" class="action_cell">Action</th>
             </tr>
         </thead>
         <?php
@@ -75,8 +82,17 @@ function HeaderLink($value, $key, $col, $dir) {
             <tr>
                 <td><?php echo $row->branch_id; ?></td>
                 <td><?php echo $row->branch_name; ?></td>
-                <td class="action_cell">
-                  <?php btn_action('branches/edit/'.$row->branch_id, "Edit User", "branches/delete/". $row->branch_id); ?>
+                <td>
+                  <div class="btn-group">
+                      <a href="#" data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
+                          <i class="icon-cog"></i>
+                          <span class="caret"></span>
+                      </a>
+                      <ul class="dropdown-menu pull-right">
+                          <li><?php echo anchor('branches/edit/'.$row->branch_id, '<i class="icon-pencil"></i> Edit'); ?></li>
+                          <li><?php echo anchor('branches/delete/'.$row->branch_id, '<i class="icon-trash"></i> Delete', array("class"=>"delete")); ?></li>
+                      </ul>
+                  </div>
                 </td>
             </tr>
         <?php } ?>

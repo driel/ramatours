@@ -18,6 +18,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     public function index($offset = 0) {
+        filter_access(__CLASS__, 'view');
         $tax_list = new Tax_Employee();
         switch ($this->input->get('c')) {
             case "1":
@@ -67,7 +68,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     function add() {
-        $this->filter_access('Tax_Employee', 'roled_add', 'taxes_employees/index');
+        filter_access(__CLASS__, 'add');;
 
         $data['title'] = 'Add New Tax Employee';
         $data['form_action'] = site_url('taxes_employees/save');
@@ -83,8 +84,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     function edit($id) {
-        $this->filter_access('Tax_Employee', 'roled_edit', 'taxes_employees/index');
-
+        filter_access(__CLASS__, 'edit');
         $te = new Tax_Employee();
         $rs = $te->where('sp_id', $id)->get();
         $data['id'] = $rs->sp_id;
@@ -108,7 +108,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     function save() {
-        $this->filter_access('Tax_Employee', 'roled_add', 'taxes_employees/index');
+        filter_access(__CLASS__, 'add');
 
         $te = new Tax_Employee();
         $te->sp_status = $this->input->post('sp_status');
@@ -128,7 +128,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     function update() {
-        $this->filter_access('Tax_Employee', 'roled_edit', 'taxes_employees/index');
+        filter_access(__CLASS__, 'edit');
 
         $te = new Tax_Employee();
         $te->where('sp_id', $this->input->post('id'))
@@ -144,7 +144,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     function delete($id) {
-        $this->filter_access('Tax_Employee', 'roled_delete', 'taxes_employees/index');
+        filter_access(__CLASS__, 'delete');
 
         $te = new Tax_Employee();
         $te->_delete($id);
@@ -154,17 +154,6 @@ class Taxes_Employees extends CI_Controller {
 
     function to_excel(){
         $this->load->view('taxes_employees/to_excel');
-    }
-
-    function filter_access($module, $field, $page) {
-        $user = new User();
-        $status_access = $user->get_access($this->sess_role_id, $module, $field);
-
-        if ($status_access == false) {
-            $msg = '<div class="alert alert-error">You do not have access to this page, please contact administrator</div>';
-            $this->session->set_flashdata('message', $msg);
-            redirect($page);
-        }
     }
 
 }

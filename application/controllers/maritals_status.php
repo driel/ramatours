@@ -17,6 +17,7 @@ class Maritals_Status extends CI_Controller {
     }
 
     public function index($offset = 0) {
+        filter_access('Marital Status', 'view');
         $marital_list = new Marital();
         switch ($this->input->get('c')) {
             case "1":
@@ -63,7 +64,7 @@ class Maritals_Status extends CI_Controller {
     }
 
     function add() {
-        $this->filter_access('Marital_Status', 'roled_add', 'maritals_status/index');
+        filter_access('Marital Status', 'add');
 
         $data['title'] = 'Add New Marital Status';
         $data['form_action'] = site_url('maritals_status/save');
@@ -77,7 +78,7 @@ class Maritals_Status extends CI_Controller {
     }
 
     function edit($id) {
-        $this->filter_access('Marital_Status', 'roled_edit', 'maritals_status/index');
+        filter_access('Marital Status', 'edit');
 
         $marital = new Marital();
         $rs = $marital->where('sn_id', $id)->get();
@@ -94,7 +95,7 @@ class Maritals_Status extends CI_Controller {
     }
 
     function save() {
-        $this->filter_access('Marital_Status', 'roled_add', 'maritals_status/index');
+        filter_access('Marital Status', 'add');
 
         $marital = new Marital();
         $marital->sn_name = $this->input->post('sn_name');
@@ -111,7 +112,7 @@ class Maritals_Status extends CI_Controller {
     }
 
     function update() {
-        $this->filter_access('Marital_Status', 'roled_edit', 'maritals_status/index');
+        filter_access('Marital Status', 'edit');
 
         $marital = new Marital();
         $marital->where('sn_id', $this->input->post('id'))
@@ -122,7 +123,7 @@ class Maritals_Status extends CI_Controller {
     }
 
     function delete($id) {
-        $this->filter_access('Marital_Status', 'roled_delete', 'maritals_status/index');
+        filter_access('Marital Status', 'delete');
 
         $marital = new Marital();
         $marital->_delete($id);
@@ -132,17 +133,6 @@ class Maritals_Status extends CI_Controller {
 
     function to_excel() {
         $this->load->view('maritals_status/to_excel');
-    }
-
-    function filter_access($module, $field, $page) {
-        $user = new User();
-        $status_access = $user->get_access($this->sess_role_id, $module, $field);
-
-        if ($status_access == false) {
-            $msg = '<div class="alert alert-error">You do not have access to this page, please contact administrator</div>';
-            $this->session->set_flashdata('message', $msg);
-            redirect($page);
-        }
     }
 
 }

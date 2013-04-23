@@ -54,6 +54,11 @@ function HeaderLink($value, $key, $col, $dir) {
 ?>
 <div class="body">
     <div class="content">
+        <?php 
+          if($this->session->flashdata('denied')){
+            echo error_box($this->session->flashdata('denied'));          
+          }        
+        ?>
         <?php echo $this->session->flashdata('message'); ?>
         <div class="page-header">
             <div class="icon">
@@ -107,7 +112,7 @@ function HeaderLink($value, $key, $col, $dir) {
                             </a>
                             <ul class="dropdown-menu pull-right">
                                 <li><?php echo anchor('assets/edit/' . $row->asset_id, '<i class="icon-pencil"></i> Edit'); ?></li>
-                                <li><?php echo anchor('assets/delete/' . $row->asset_id, '<i class="icon-trash"></i> Delete', array('onclick' => "return confirm('Are you sure want to delete?')")); ?></li>
+                                <li><?php echo anchor('assets/delete/' . $row->asset_id, '<i class="icon-trash"></i> Delete', array("class"=>"delete")); ?></li>
                             </ul>
                         </div>
                     </td>

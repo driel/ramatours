@@ -17,7 +17,7 @@ class Departments extends CI_Controller {
     }
 
     public function index($offset = 0) {
-        $this->filter_access('Departement', 'roled_select', base_url());
+        filter_access(__CLASS__, 'view');
         $dept_list = new Department();
 
         switch ($this->input->get('c')) {
@@ -66,7 +66,7 @@ class Departments extends CI_Controller {
     }
 
     function add() {
-        $this->filter_access('Departement', 'roled_add', 'departments/index');
+        filter_access(__CLASS__, 'add');
 
         $data['title'] = 'Add New Departement';
         $data['form_action'] = site_url('departments/save');
@@ -80,7 +80,7 @@ class Departments extends CI_Controller {
     }
 
     function edit($id) {
-        $this->filter_access('Departement', 'roled_edit', 'departments/index');
+       filter_access(__CLASS__, 'edit');
 
         $dept = new Department();
         $rs = $dept->where('dept_id', $id)->get();
@@ -97,7 +97,7 @@ class Departments extends CI_Controller {
     }
 
     function save() {
-        $this->filter_access('Departement', 'roled_add', 'departments/index');
+        filter_access(__CLASS__, 'add');
 
         $dept = new Department();
         $dept->dept_name = $this->input->post('dept_name');
@@ -114,7 +114,7 @@ class Departments extends CI_Controller {
     }
 
     function update() {
-        $this->filter_access('Departement', 'roled_edit', 'departments/index');
+        filter_access(__CLASS__, 'update');
 
         $dept = new Department();
         $dept->where('dept_id', $this->input->post('id'))
@@ -125,7 +125,7 @@ class Departments extends CI_Controller {
     }
 
     function delete($id) {
-        $this->filter_access('Departement', 'roled_delete', 'departments/index');
+        filter_access(__CLASS__, 'delete');
 
         $dept = new Department();
         $dept->_delete($id);
@@ -136,17 +136,6 @@ class Departments extends CI_Controller {
 
     function to_excel() {
         $this->load->view('departments/to_excel');
-    }
-
-    function filter_access($module, $field, $page) {
-        $user = new User();
-        $status_access = $user->get_access($this->sess_role_id, $module, $field);
-
-        if ($status_access == false) {
-            $msg = '<div class="alert alert-error">You do not have access to this page, please contact administrator</div>';
-            $this->session->set_flashdata('message', $msg);
-            redirect($page);
-        }
     }
 
 }

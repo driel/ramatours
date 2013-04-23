@@ -182,6 +182,7 @@ class Users extends CI_Controller {
         $role_name = $this->input->post("role_name");
         $this->db->update("user_roles", array("role_name"=>$role_name), array("role_id"=>$role_id));
         $modules = $this->input->post("module");
+        $super = $this->input->post("super") == FALSE ? 0:1; // danger, can see salary!
         foreach($modules as $module){
           if(strlen($module) > 0){
             $module = str_replace(" ", "_", $module);
@@ -189,12 +190,13 @@ class Users extends CI_Controller {
             if($module_id != FALSE){ // this is hidden field, its value is module_id
               // update
               $this->module->update($module, $module_id);
+              $view = $this->input->post("view_{$module}") == FALSE ? 0:1;
               $add = $this->input->post("add_{$module}") == FALSE ? 0:1;
               $edit = $this->input->post("edit_{$module}") == FALSE ? 0:1;
               $delete = $this->input->post("delete_{$module}") == FALSE ? 0:1;
               $approve = $this->input->post("approve_{$module}") == FALSE ? 0:1;
-              $super = $this->input->post("super"); // danger, can see salary!
               $this->db->update("user_roled", array(
+                "roled_view"=>$view,
                 "roled_add"=>$add,
                 "roled_edit"=>$edit,
                 "roled_delete"=>$delete,
@@ -204,14 +206,15 @@ class Users extends CI_Controller {
             }else{
               // create
               $module_id = $this->module->add($module);
+              $view = $this->input->post("view_{$module}") == FALSE ? 0:1;
               $add = $this->input->post("add_{$module}") == FALSE ? 0:1;
               $edit = $this->input->post("edit_{$module}") == FALSE ? 0:1;
               $delete = $this->input->post("delete_{$module}") == FALSE ? 0:1;
               $approve = $this->input->post("approve_{$module}") == FALSE ? 0:1;
-              $super = $this->input->post("super"); // danger, can see salary!
               $this->db->insert("user_roled", array(
                 "role_id"=>$role_id,
                 "module_id"=>$module_id,
+                "roled_view"=>$view,
                 "roled_add"=>$add,
                 "roled_edit"=>$edit,
                 "roled_delete"=>$delete,
@@ -249,18 +252,20 @@ class Users extends CI_Controller {
         ));
         $role_id = $this->db->insert_id();
         $modules = $this->input->post("module");
+        $super = $this->input->post("super") == FALSE ? 0:1; // danger, can see salary!. put it before loop so that it won't be false when not checke.
         foreach($modules as $module){
           if(strlen($module) > 0){
             $module = str_replace(" ", "_", $module);
             $module_id = $this->module->add($module);
+            $view = $this->input->post("view_{$module}") == FALSE ? 0:1;
             $add = $this->input->post("add_{$module}") == FALSE ? 0:1;
             $edit = $this->input->post("edit_{$module}") == FALSE ? 0:1;
             $delete = $this->input->post("delete_{$module}") == FALSE ? 0:1;
             $approve = $this->input->post("approve_{$module}") == FALSE ? 0:1;
-            $super = $this->input->post("super"); // danger, can see salary!
             $this->db->insert("user_roled", array(
               "role_id"=>$role_id,
               "module_id"=>$module_id,
+              "roled_view"=>$view,
               "roled_add"=>$add,
               "roled_edit"=>$edit,
               "roled_delete"=>$delete,

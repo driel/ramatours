@@ -6,7 +6,6 @@
 )); ?>
 
 <?php
-  print_r($id); 
   // load them all
   $component_a = get_component_a($id);
   $component_b = get_component_b($id);
@@ -295,6 +294,7 @@
       </div>
     </div>
     <!-- tabs salary -->
+    <?php if(isSuper()): ?>
     <h3>Salaries</h3>
     <ul class="nav nav-tabs">
       <li class="active"><a href="#salary_components" data-toggle="tab">Salary Component</a></li>
@@ -327,6 +327,9 @@
         </table>
       </div>
     </div>
+    <?php else: ?>
+    
+    <?php endif; ?>
     <br class="cl" />
     <div class="spacer2"></div>
     <div id="families_hidden"></div>

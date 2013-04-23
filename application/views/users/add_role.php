@@ -85,7 +85,8 @@
         <td>
           <table width="100%" id="modules-table">
           	<tr>
-          		<td width="50%"><b>Module</b></td>
+          		<td width="40%"><b>Module</b></td>
+          		<td width="10%" class="center-align"><b>view</b></td>
           		<td width="10%" class="center-align"><b>add</b></td>
           		<td width="10%" class="center-align"><b>edit</b></td>
           		<td width="10%" class="center-align"><b>delete</b></td>
@@ -93,6 +94,7 @@
           		<td width="10%" class="center-align"><b>All</b></td>
           	</tr>
           	<?php
+          	  $_super = 0;
               foreach($modules->result() as $module){
                 $roled = get_roled($role_id, $module->id);
                 ?>
@@ -100,13 +102,15 @@
                   <td>
                   <input type="text" name="module[]" value="<?php echo str_replace("_", " ", $module->name); ?>" readonly /></td>
                   <?php echo form_hidden(str_replace(" ", "_", $module->name), $module->id); ?>
-                  <?php if($roled->num_rows() > 0){ foreach($roled->result() as $roled){ ?>
+                  <?php if($roled->num_rows() > 0){ foreach($roled->result() as $roled){ $_super = $roled->roled_super; ?>
+                  <td class="center-align"><input type="checkbox" name="view" class="ibtn"<?php echo $roled->roled_view == "1" ? ' checked':''; ?> /></td>
                 	<td class="center-align"><input type="checkbox" name="add" class="ibtn"<?php echo $roled->roled_add == "1" ? ' checked':''; ?> /></td>
                 	<td class="center-align"><input type="checkbox" name="edit" class="ibtn"<?php echo $roled->roled_edit == "1" ? ' checked':''; ?> /></td>
                 	<td class="center-align"><input type="checkbox" name="delete" class="ibtn"<?php echo $roled->roled_delete == "1" ? ' checked':''; ?> /></td>
                 	<td class="center-align"><input type="checkbox" name="approve" class="ibtn"<?php echo $roled->roled_approve == "1" ? ' checked':''; ?> /></td>
                 	<td class="center-align"><input type="checkbox" class="ibtn check-all" /></td>
                 	<?php }}else{ ?>
+                	<td class="center-align"><input type="checkbox" name="view" class="ibtn" /></td>
                 	<td class="center-align"><input type="checkbox" name="add" class="ibtn" /></td>
                 	<td class="center-align"><input type="checkbox" name="edit" class="ibtn" /></td>
                 	<td class="center-align"><input type="checkbox" name="delete" class="ibtn" /></td>
@@ -119,11 +123,15 @@
           	?>
           	<tr class="roles">
             	<td><input type="text" name="module[]" /></td>
+            	<td class="center-align"><input type="checkbox" name="view" class="ibtn" /></td>
             	<td class="center-align"><input type="checkbox" name="add" class="ibtn" /></td>
             	<td class="center-align"><input type="checkbox" name="edit" class="ibtn" /></td>
             	<td class="center-align"><input type="checkbox" name="delete" class="ibtn" /></td>
             	<td class="center-align"><input type="checkbox" name="approve" class="ibtn" /></td>
             	<td class="center-align"><input type="checkbox" class="ibtn check-all" /></td>
+            </tr>
+            <tr>
+            	<td><input type="checkbox" name="super" class="ibtn"<?php echo $_super == "1" ? ' checked':''; ?>  /> <a href="#" class="bootstrap-tooltip" data-placement="top" data-title="Warning, this permission can see salary tab. use it on 'President' only"><b>Super</b></a></td>
             </tr>
           </table>
           <a href="#" class="btn btn-info add-module">Add module</a>

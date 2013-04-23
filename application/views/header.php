@@ -77,7 +77,7 @@
                         <ul>
                         	<li><?php echo anchor('assets', 'Assets'); ?></li>
                         	<li><?php echo anchor('branches', 'Branch'); ?></li>
-                        	<li><?php echo anchor('departments', 'Departements'); ?></li>
+                        	<li><?php echo anchor('departments', 'Departments'); ?></li>
                         	<li><?php echo anchor('taxes_employees', 'Taxes Employees'); ?></li>
                         	<li><?php echo anchor('employees_status', 'Employees Status'); ?></li>
                         	<li><?php echo anchor('maritals_status', 'Marital Status'); ?></li>

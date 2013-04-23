@@ -28,6 +28,7 @@ class Staffs extends CI_Controller {
     }
 
     public function index($offset = 0) {
+        filter_access('Staff', 'view');
         $staff_list = new Staff();
         switch ($this->input->get('c')) {
             case "1":
@@ -93,6 +94,7 @@ class Staffs extends CI_Controller {
     }
 
     function add() {
+        filter_access('Staff', 'add');
         $data['title'] = 'Add New Staff';
         $data['form_action'] = site_url('staffs/save');
         $data['link_back'] = anchor('staffs/', 'Back', array('class' => 'btn btn-danger'));
@@ -181,6 +183,7 @@ class Staffs extends CI_Controller {
     }
 
     function edit($id) {
+        filter_access('Staff', 'edit');
         $staff = new Staff();
         $rs = $staff->where('staff_id', $id)->get();
         $data['id'] = $rs->staff_id;
@@ -281,6 +284,7 @@ class Staffs extends CI_Controller {
     }
 
     function save() {
+        filter_access('Staff', 'add');
         $staff = new Staff();
         $staff->staff_nik = $this->input->post('staff_nik');
         $staff->staff_kode_absen = $this->input->post('staff_kode_absen');
@@ -364,6 +368,7 @@ class Staffs extends CI_Controller {
     }
 
     function update() {
+        filter_access('Staff', 'edit');
         $staff = new Staff();
         // upload photo
         $config['upload_path'] = 'assets/upload';
@@ -441,6 +446,7 @@ class Staffs extends CI_Controller {
     }
 
     function delete($id) {
+        filter_access('Staff', 'delete');
         $staff = new Staff();
         $staff->_delete($id);
         redirect('staffs/');

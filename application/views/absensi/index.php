@@ -53,8 +53,8 @@ function HeaderLink($value, $key, $col, $dir) {
             <div class="icon">
                 <span class="ico-tag"></span>
             </div>
-            <h1>Assets
-                <small>Manage assets</small>
+            <h1>Absensi
+                <small>Manage absensi</small>
             </h1>
         </div>
         <br class="cl" />
@@ -79,8 +79,8 @@ function HeaderLink($value, $key, $col, $dir) {
             $staff = get_staff_detail($row->staff_id);
             ?>
                 <tr>
-                    <td><?php echo $staff->staff_kode_absen; ?></td>
-                    <td><?php echo $staff->staff_name; ?></td>
+                    <td><?php echo $staff == true ? $staff->staff_kode_absen:"-"; ?></td>
+                    <td><?php echo $staff == true ? $staff->staff_name:"-"; ?></td>
                     <td><?php echo $row->date; ?></td>
                     <td><?php echo $row->hari_masuk; ?></td>
                     <td>

@@ -18,7 +18,7 @@ class Branches extends CI_Controller {
     }
 
     public function index($offset = 0) {
-        $this->filter_access('Branch', 'roled_select', base_url());
+        filter_access("Branch", "view");
 
         $branch_list = new Branch();
 
@@ -67,7 +67,7 @@ class Branches extends CI_Controller {
     }
 
     function add() {
-        $this->filter_access('Branch', 'roled_add', 'branches/index');
+        filter_access("Branch", "add");
 
         $data['title'] = 'Add New Branch';
         $data['form_action'] = site_url('branches/save');
@@ -81,7 +81,7 @@ class Branches extends CI_Controller {
     }
 
     function edit($id) {
-        $this->filter_access('Branch', 'roled_edit', 'branches/index');
+        filter_access("Branch", "edit");
 
         $branch = new Branch();
         $rs = $branch->where('branch_id', $id)->get();
@@ -97,7 +97,7 @@ class Branches extends CI_Controller {
     }
 
     function save() {
-        $this->filter_access('Branch', 'roled_add', 'branches/index');
+        filter_access("Branch", "add");
 
         $branch = new Branch();
         $branch->branch_name = $this->input->post('branch_name');
@@ -114,7 +114,7 @@ class Branches extends CI_Controller {
     }
 
     function update() {
-        $this->filter_access('Branch', 'roled_edit', 'branches/index');
+        filter_access("Branch", "edit");
 
         $branch = new Branch();
         $branch->where('branch_id', $this->input->post('id'))
@@ -125,7 +125,7 @@ class Branches extends CI_Controller {
     }
 
     function delete($id) {
-        $this->filter_access('Branch', 'roled_delete', 'branches/index');
+        filter_access("Branch", "delete");
 
         $branch = new Branch();
         $branch->_delete($id);
@@ -154,17 +154,6 @@ class Branches extends CI_Controller {
 
     function to_excel() {
         $this->load->view('branches/to_excel');
-    }
-
-    function filter_access($module, $field, $page) {
-        $user = new User();
-        $status_access = $user->get_access($this->sess_role_id, $module, $field);
-
-        if ($status_access == false) {
-            $msg = '<div class="alert alert-error">You do not have access to this page, please contact administrator</div>';
-            $this->session->set_flashdata('message', $msg);
-            redirect($page);
-        }
     }
 
 }

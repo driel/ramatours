@@ -17,6 +17,7 @@ class Employees_Status extends CI_Controller {
     }
 
     public function index($offset = 0) {
+        filter_access('Employee Status', 'view');
         $es_list = new Employee_Status();
         switch ($this->input->get('c')) {
             case "1":
@@ -63,7 +64,7 @@ class Employees_Status extends CI_Controller {
     }
 
     function add() {
-        $this->filter_access('Employee_Status', 'roled_add', 'employees_status/index');
+        filter_access('Employee Status', 'add');
 
         $data['title'] = 'Add New Employee Status';
         $data['form_action'] = site_url('employees_status/save');
@@ -77,7 +78,7 @@ class Employees_Status extends CI_Controller {
     }
 
     function edit($id) {
-        $this->filter_access('Employee_Status', 'roled_edit', 'employees_status/index');
+        filter_access('Employee Status', 'edit');
 
         $es = new Employee_Status();
         $rs = $es->where('sk_id', $id)->get();
@@ -94,7 +95,7 @@ class Employees_Status extends CI_Controller {
     }
 
     function save() {
-        $this->filter_access('Employee_Status', 'roled_add', 'employees_status/index');
+        filter_access('Employee Status', 'add');
 
         $es = new Employee_Status();
         $es->sk_name = $this->input->post('sk_name');
@@ -111,7 +112,7 @@ class Employees_Status extends CI_Controller {
     }
 
     function update() {
-        $this->filter_access('Employee_Status', 'roled_edit', 'employees_status/index');
+        filter_access('Employee Status', 'edit');
 
         $es = new Employee_Status();
         $es->where('sk_id', $this->input->post('id'))
@@ -122,7 +123,7 @@ class Employees_Status extends CI_Controller {
     }
 
     function delete($id) {
-        $this->filter_access('Employee_Status', 'roled_delete', 'employees_status/index');
+        filter_access('Employee Status', 'delete');
 
         $es = new Employee_Status();
         $es->_delete($id);
@@ -132,17 +133,6 @@ class Employees_Status extends CI_Controller {
 
     function to_excel() {
         $this->load->view('employees_status/to_excel');
-    }
-
-    function filter_access($module, $field, $page) {
-        $user = new User();
-        $status_access = $user->get_access($this->sess_role_id, $module, $field);
-
-        if ($status_access == false) {
-            $msg = '<div class="alert alert-error">You do not have access to this page, please contact administrator</div>';
-            $this->session->set_flashdata('message', $msg);
-            redirect($page);
-        }
     }
 
 }

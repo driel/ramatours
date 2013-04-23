@@ -25,7 +25,14 @@
 </script>
 <div class="body">
     <div class="content">
-        <h2 class="rama-title">Form Absensi</h2>
+        <div class="page-header">
+            <div class="icon">
+                <span class="ico-tag"></span>
+            </div>
+            <h1>Absensi
+                <small>Manage absensi</small>
+            </h1>
+        </div>
         <?php echo $this->session->flashdata('message'); ?>
         <?php echo form_open_multipart($form_action) . form_hidden('id', $id); ?>
         <input type="hidden" name="staff_id" id="staff_id" />
