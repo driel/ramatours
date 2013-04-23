@@ -175,6 +175,7 @@ class Assets extends CI_Controller {
         );
 
         $this->session->set_flashdata('message', 'Asset Update successfuly.');
+        //print_r($this->input->post());
         redirect('assets/');
     }
 

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 22, 2013 at 10:13 AM
+-- Generation Time: Apr 23, 2013 at 01:45 PM
 -- Server version: 5.5.28
 -- PHP Version: 5.3.10-1ubuntu3.4
 
@@ -52,8 +52,9 @@ INSERT INTO `absensi` (`id`, `staff_id`, `date`, `hari_masuk`) VALUES
 CREATE TABLE IF NOT EXISTS `assets` (
   `asset_id` int(11) NOT NULL AUTO_INCREMENT,
   `asset_name` varchar(30) NOT NULL,
-  `asset_code` varchar(50) NOT NULL,
+  `asset_code` varchar(30) NOT NULL,
   `asset_status` enum('enable','disable') NOT NULL,
+  `branch` varchar(50) NOT NULL,
   `date_buy` date NOT NULL,
   `date_tempo` date NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -66,11 +67,11 @@ CREATE TABLE IF NOT EXISTS `assets` (
 -- Dumping data for table `assets`
 --
 
-INSERT INTO `assets` (`asset_id`, `asset_name`, `asset_code`, `asset_status`, `date_buy`, `date_tempo`, `description`, `staff_id`, `date`) VALUES
-(1, 'Motor v-ixion 150', '', 'disable', '2013-04-02', '0000-00-00', '<p>Nopol : D6249JI</p>\n', 0, '0000-00-00 00:00:00'),
-(2, 'Table Office', '', 'enable', '0000-00-00', '0000-00-00', '', 1, '2013-09-09 00:00:00'),
-(3, 'Motor Honda Supra RX', '', 'enable', '0000-00-00', '0000-00-00', '', 1, '2013-04-25 00:00:00'),
-(4, 'Kursi', '', 'enable', '0000-00-00', '0000-00-00', '', 2, '2013-01-10 00:00:00');
+INSERT INTO `assets` (`asset_id`, `asset_name`, `asset_code`, `asset_status`, `branch`, `date_buy`, `date_tempo`, `description`, `staff_id`, `date`) VALUES
+(1, 'Motor v-ixion 150', 'v-ixion6249JI', 'enable', 'Bandung', '2013-04-02', '2013-04-25', '<p>Nopol : D6249JI</p>\n', 0, '0000-00-00 00:00:00'),
+(2, 'Table Office', '', 'enable', '0', '0000-00-00', '0000-00-00', '', 1, '2013-09-09 00:00:00'),
+(3, 'Motor Honda Supra RX', '', 'enable', '0', '0000-00-00', '0000-00-00', '', 1, '2013-04-25 00:00:00'),
+(4, 'Kursi', '', 'enable', '0', '0000-00-00', '0000-00-00', '', 2, '2013-01-10 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -128,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `branches` (
   `branch_id` int(11) NOT NULL AUTO_INCREMENT,
   `branch_name` varchar(50) NOT NULL,
   PRIMARY KEY (`branch_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
 -- Dumping data for table `branches`
@@ -150,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   `comp_name` varchar(20) NOT NULL,
   `comp_type` varchar(8) NOT NULL COMMENT 'kalau Opsi daily ketika input gaji maka opsi amount_daily muncul, misalnya uang makan',
   PRIMARY KEY (`comp_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `components`
@@ -219,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `departments` (
   `dept_id` int(11) NOT NULL AUTO_INCREMENT,
   `dept_name` varchar(50) NOT NULL,
   PRIMARY KEY (`dept_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `departments`
@@ -271,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `employees_status` (
   `sk_id` int(11) NOT NULL AUTO_INCREMENT,
   `sk_name` varchar(10) NOT NULL,
   PRIMARY KEY (`sk_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `employees_status`
@@ -280,7 +281,7 @@ CREATE TABLE IF NOT EXISTS `employees_status` (
 INSERT INTO `employees_status` (`sk_id`, `sk_name`) VALUES
 (1, 'Kontrak'),
 (2, 'Tetap'),
-(4, 'Freelance');
+(5, 'nganggur');
 
 -- --------------------------------------------------------
 
@@ -344,9 +345,9 @@ CREATE TABLE IF NOT EXISTS `izin` (
 
 CREATE TABLE IF NOT EXISTS `maritals_status` (
   `sn_id` int(11) NOT NULL AUTO_INCREMENT,
-  `sn_name` varchar(8) NOT NULL,
+  `sn_name` varchar(50) NOT NULL,
   PRIMARY KEY (`sn_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `maritals_status`
@@ -402,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `module` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 --
 -- Dumping data for table `module`
@@ -411,11 +412,13 @@ CREATE TABLE IF NOT EXISTS `module` (
 INSERT INTO `module` (`id`, `name`) VALUES
 (1, 'Assets'),
 (2, 'Branch'),
-(3, 'Departements'),
+(3, 'Departments'),
 (11, 'Staff'),
 (12, 'Title'),
-(14, 'Martial_Status'),
-(15, 'Taxes_Employees');
+(15, 'Taxes_Employees'),
+(16, 'Employee_Status'),
+(17, 'Marital_Status'),
+(18, 'Component');
 
 -- --------------------------------------------------------
 
@@ -603,7 +606,7 @@ CREATE TABLE IF NOT EXISTS `taxes_employees` (
   `sp_ptkp` int(11) NOT NULL,
   `sp_note` varchar(255) NOT NULL,
   PRIMARY KEY (`sp_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `taxes_employees`
@@ -626,7 +629,7 @@ CREATE TABLE IF NOT EXISTS `titles` (
   `title_id` int(11) NOT NULL AUTO_INCREMENT,
   `title_name` varchar(20) NOT NULL,
   PRIMARY KEY (`title_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `titles`
@@ -675,27 +678,29 @@ CREATE TABLE IF NOT EXISTS `user_roled` (
   `roled_id` int(11) NOT NULL AUTO_INCREMENT,
   `role_id` int(11) NOT NULL,
   `module_id` int(11) NOT NULL,
+  `roled_view` tinyint(1) NOT NULL,
   `roled_add` tinyint(1) NOT NULL,
   `roled_edit` tinyint(1) NOT NULL,
   `roled_delete` tinyint(1) NOT NULL,
   `roled_approve` tinyint(1) NOT NULL,
   `roled_super` tinyint(1) NOT NULL COMMENT 'this role only used for "president"',
   PRIMARY KEY (`roled_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `user_roled`
 --
 
-INSERT INTO `user_roled` (`roled_id`, `role_id`, `module_id`, `roled_add`, `roled_edit`, `roled_delete`, `roled_approve`, `roled_super`) VALUES
-(1, 2, 14, 1, 1, 1, 1, 0),
-(2, 3, 1, 1, 1, 0, 0, 0),
-(3, 3, 2, 0, 0, 0, 0, 0),
-(4, 3, 3, 0, 0, 0, 0, 0),
-(5, 3, 11, 0, 0, 0, 0, 0),
-(6, 3, 12, 0, 0, 0, 0, 0),
-(7, 3, 14, 0, 0, 0, 0, 0),
-(8, 3, 15, 0, 0, 0, 0, 0);
+INSERT INTO `user_roled` (`roled_id`, `role_id`, `module_id`, `roled_view`, `roled_add`, `roled_edit`, `roled_delete`, `roled_approve`, `roled_super`) VALUES
+(2, 3, 1, 1, 1, 1, 1, 1, 1),
+(3, 3, 2, 1, 1, 1, 1, 0, 1),
+(4, 3, 3, 1, 1, 1, 1, 0, 1),
+(5, 3, 11, 1, 1, 0, 0, 0, 1),
+(6, 3, 12, 1, 1, 1, 1, 1, 1),
+(8, 3, 15, 1, 1, 1, 1, 0, 1),
+(9, 3, 16, 1, 1, 1, 1, 0, 1),
+(10, 3, 17, 1, 1, 1, 1, 1, 1),
+(11, 3, 18, 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 

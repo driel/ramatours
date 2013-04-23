@@ -9,9 +9,9 @@
       uncheckedLabel: "Disable",
       onChange: function(e, checked){
         if(checked){
-          $(e).attr('checked', 'checked');
+          $(e).attr('checked', 'checked').val("on");
         }else{
-          $(e).removeAttr('checked');       
+          $(e).removeAttr('checked').val("");       
         }      
       }  
     });      
