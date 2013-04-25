@@ -210,6 +210,13 @@ function header_btn_group($download_url = "#", $add_url = "#"){
 
 function header_btn_group_report(){
   ?>
+  <script type="text/javascript">
+  $(document).ready(function(){
+	  $(".filter").on("click", function(){
+		  $("#filtering").slideToggle();
+		});
+	});
+  </script>
   <div class="btn-group float-right">
     <a href="<?php echo base_url('dashboard/index'); ?>" class="btn btn-primary bootstrap-tooltip" data-placement="top" data-title="Back to Dashboard">
       <span class="icon-home icon-white"></span>
@@ -219,6 +226,9 @@ function header_btn_group_report(){
     </a>-->
     <a data-toggle="modal" data-target="#printModal" class="btn btn-primary bootstrap-tooltip" data-placement="top" data-title="Download">
       <span class="icon-download-alt icon-white"></span>
+    </a>
+    <a href="#" class="filter btn btn-primary bootstrap-tooltip" data-placement="top" data-title="Filter result">
+      <span class="icon-filter icon-white"></span>
     </a>
   </div>
   <br class="cl" />

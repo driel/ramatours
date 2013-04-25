@@ -92,51 +92,31 @@ $(document).ready(function(){
         <div id="search_bar" class="widget-header">
             <form action="" method="get">
       		<?php
-	      	$myUrl = 'http://'.$_SERVER['HTTP_HOST'];
-			$requestUri = $_SERVER['REQUEST_URI'];
+      		//var_dump($this->input->get());
+	      	$block = $this->input->get() != false ? ' style="display:block"':'';
       		?>
-      		<table width="30%" align="center">
-      			<tr>
-      				<td><span class="search_by">Branch</span></td>
-     				<td>
-     					<div id="search">
-		      				<?php
-						      if(strlen($this->input->get('branch')) > 0){
-								$requestUri = str_replace($this->input->get('branch'),"",$requestUri);
-						        echo anchor("$myUrl$requestUri", '<span class="ico-remove"></span>', array(
-						          "class"=>"clear-search-report",
-						          "data-placement"=>"top",
-						          "data-title"=>"Clear search"
-						        ));
-						      }
-						    ?>
-					 		<?php echo $branch; ?>
-					 	</div>
-					 </td>
-   				</tr>
-      			<tr>
-      				<td><span class="search_by">Name</span></td>
-     				<td>
-     					<div id="search">
-		      				<?php
-						      if(strlen($this->input->get('asset_name')) > 0){
-								$requestUri = str_replace($this->input->get('asset_name'),"",$requestUri);
-						        echo anchor("$myUrl$requestUri", '<span class="ico-remove"></span>', array(
-						          "class"=>"clear-search-report",
-						          "data-placement"=>"top",
-						          "data-title"=>"Clear search"
-						        ));
-						      }
-						    ?>
-					 		<?php echo form_input(array('name' => 'asset_name', 'value' => $this->input->get('asset_name'), 'size' => '28'));?>
-					 	</div>
-					 </td>
-   				</tr>
-   				<tr>
-   					<td>&nbsp;</td>
-	      			<td><input type="submit" name="search" value="Search" class="btn btn-primary" /></td>
-     			</tr>
-	      	</table>
+      		<div id="filtering"<?php echo $block; ?>>
+      		  <table width="100%">
+      		  	<tr>
+      		  		<td width="10%">Branch</td>
+      		  		<td width="20%"><?php echo $branch; ?></td>
+      		  		<td width="10%">Name</td>
+      		  		<td width="20%"><?php echo form_input(array('name' => 'asset_name', 'value' => $this->input->get('asset_name'), 'size' => '28'));?></td>
+      		  		<td width="40%" style="text-align: right;">
+      		  		  <?php
+  						      if($this->input->get('asset_name') != FALSE || $this->input->get('branch') != FALSE){
+                      echo anchor(current_url(), 'reset', array(
+                        "class"=>"bootstrap-tooltip btn btn-danger",
+                        "data-placement"=>"top",
+                        "data-title"=>"Clear search"
+                      )); //'<a href="'.current_url().'" class="btn btn-danger">reset</a>';
+                    }
+						      ?>
+      		  		  <input type="submit" name="search" class="btn btn-primary" value="Search"/>
+      		  		</td>
+      		  	</tr>
+      		  </table>
+      		</div>
     	</form>
         </div>
 
@@ -195,7 +175,7 @@ $(document).ready(function(){
     <!-- Modal -->
 	<div id="printModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">ï¿½</button>
 			<h3 id="myModalLabel">Asset List Report</h3>
 		</div>
 		<div class="modal-body">

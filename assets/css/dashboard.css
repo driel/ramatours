@@ -28,6 +28,10 @@ a.btn{
   display: none;
 }
 
+#filtering{
+	display: none;
+}
+
 #nav{
   width: 17%;
   background: #353a40;
