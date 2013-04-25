@@ -89,6 +89,20 @@ function HeaderLink($value, $key, $col, $dir) {
 .modal-body{
   max-height: 800px!important;
 }
+.report_overflow {
+	overflow: auto;
+	position:relative;
+	margin:0 auto;
+	width: 970px;
+	height:200px;
+	left:0%;
+	top:0px;
+	-webkit-box-sizing:border-box; 
+	-moz-box-sizing:border-box; 
+	box-sizing:border-box; 
+	overflow:auto;
+	background:transparent;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -104,6 +118,24 @@ $(document).ready(function(){
   		document.location.href = '<?php echo base_url('staffs/report_list').'?'.$_SERVER['QUERY_STRING'].'&to=xls'; ?>';
   	});
 });
+(function($){
+	$(window).load(function(){
+		$("#staff_detail").mCustomScrollbar({
+			horizontalScroll:true,
+			scrollButtons:{
+			enable:true
+			}
+		});
+	});
+	$('#printModal').on('shown', function () {
+		$("#model_staff_detail").mCustomScrollbar({
+			horizontalScroll:true,
+			scrollButtons:{
+			enable:true
+			}
+		});
+	});
+})(jQuery);
 </script>
 <div class="body">
   <div class="content">
@@ -225,7 +257,7 @@ $(document).ready(function(){
     	</form>
     </div>
     <div class="row">
-		<div class="span10" style="width: 970px; overflow: auto;">
+		<div id="staff_detail" class="report_overflow">
 		    <table class="table fpTable table-hover">
 		      <thead>
 		        <tr>
@@ -297,66 +329,64 @@ $(document).ready(function(){
 			<h3 id="myModalLabel">Staff List</h3>
 		</div>
 		<div class="modal-body">
-			<div class="row">
-				<div class="span10">
-				    <table width="1500px;" style="border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse; border-style: solid;">
-				      <thead>
-				        <tr>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Name</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Branch</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Departement</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Title</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Sex</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Birth Date</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Address</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Email</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Home Phone</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Cellular Phone</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Start</th>
-				          <?php
-				          if ($this->input->get("staff_birthdate") != "") {
-				          ?>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Yang Ke</th>
-				          <?php
-				          }
-				          ?>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Marital</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Status</th>
-				          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Active</th>
-				        </tr>
-				      </thead>
-				      <tbody>
-				      <?php
-				      foreach ($staff_list as $row) {
-				      ?>
-				          <tr>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_name; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_cabang; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_departement; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_jabatan; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_sex; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_birthplace.', '.date_format(new DateTime($row->staff_birthdate),'j M Y'); ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_address; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_email; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_phone_home; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_phone_hp; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php date_format(new DateTime($row->mulai_kerja),'j M Y'); ?></td>
-				          	<?php
-				          	if ($this->input->get("staff_birthdate") != "") {
-				          	?>
-				          	<td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php $birthyear = date('Y', strtotime($row->staff_birthdate)); echo intval(date('Y')-intval($birthyear)); ?></td>
-				          	<?php
-				          	}
-				          	?>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_status_nikah; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_status_karyawan; ?></td>
-				            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php $date_out = date_format(new DateTime($row->date_out),'j M Y'); $contract_to = $row->contract_to; echo ($date_out != '' && $contract_to < date('Y-m-d')? 'Active':'Inactive'); ?></td>
-				          </tr>
-				      <?php } ?>
-				      </tbody>
-				    </table>
-		  		</div>
-		    </div>
+			<div id="modal_staff_detail" class="report_overflow">
+			    <table style="border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse; border-style: solid;">
+			      <thead>
+			        <tr>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Name</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Branch</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Departement</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Title</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Sex</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Birth Date</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Address</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Email</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Home Phone</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Cellular Phone</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Start</th>
+			          <?php
+			          if ($this->input->get("staff_birthdate") != "") {
+			          ?>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Yang Ke</th>
+			          <?php
+			          }
+			          ?>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Marital</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Status</th>
+			          <th style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;">Active</th>
+			        </tr>
+			      </thead>
+			      <tbody>
+			      <?php
+			      foreach ($staff_list as $row) {
+			      ?>
+			          <tr>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_name; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_cabang; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_departement; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_jabatan; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_sex; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_birthplace.', '.date_format(new DateTime($row->staff_birthdate),'j M Y'); ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_address; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_email; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_phone_home; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_phone_hp; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php date_format(new DateTime($row->mulai_kerja),'j M Y'); ?></td>
+			          	<?php
+			          	if ($this->input->get("staff_birthdate") != "") {
+			          	?>
+			          	<td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php $birthyear = date('Y', strtotime($row->staff_birthdate)); echo intval(date('Y')-intval($birthyear)); ?></td>
+			          	<?php
+			          	}
+			          	?>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_status_nikah; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php echo $row->staff_status_karyawan; ?></td>
+			            <td style="margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;"><?php $date_out = date_format(new DateTime($row->date_out),'j M Y'); $contract_to = $row->contract_to; echo ($date_out != '' && $contract_to < date('Y-m-d')? 'Active':'Inactive'); ?></td>
+			          </tr>
+			      <?php } ?>
+			      </tbody>
+			    </table>
+	  		</div>
 		</div>
 		<div class="modal-footer">
 			<button id="printPDF" class="btn btn-primary">Save as PDF</button>
