@@ -745,6 +745,21 @@ class Staffs extends CI_Controller {
             case "10":
                 $data['col'] = "staff_id";
                 break;
+            case "11":
+                $data['col'] = "staff_sex";
+                break;
+            case "12":
+                $data['col'] = "staff_birthdate";
+                break;
+            case "13":
+                $data['col'] = "mulai_kerja";
+                break;
+            case "14":
+                $data['col'] = "staff_status_nikah";
+                break;
+            case "15":
+                $data['col'] = "staff_status_karyawan";
+                break;
             default:
                 $data['col'] = "staff_id";
         }
@@ -763,31 +778,82 @@ class Staffs extends CI_Controller {
         $uri_segment = 3;
         $offset = $this->uri->segment($uri_segment);
 
-		if ($this->input->get("q") != "") {
-			$param = $this->input->get("q");
-			if ($this->input->get("search_by") == "staff_birthdate") {
-				$birthdate = str_replace(date('Y-'),"",$param);
-				$staff_list->where("DATE_FORMAT(".$this->input->get("search_by").",'%m-%d')",$birthdate);
-			} else {
-				$staff_list->like($this->input->get("search_by"),$param);
-			}
+		if ($this->input->get("staff_cabang") != "") {
+			$staff_list->like('staff_cabang',$this->input->get("staff_cabang"));
+		}
+
+		if ($this->input->get("staff_departement") != "") {
+			$staff_list->like('staff_departement',$this->input->get("staff_departement"));
+		}
+
+		if ($this->input->get("staff_jabatan") != "") {
+			$staff_list->like('staff_jabatan',$this->input->get("staff_jabatan"));
+		}
+
+		if ($this->input->get("staff_birthdate") != "") {
+			$birthdate = str_replace(date('Y-'),"",$this->input->get("staff_birthdate"));
+			$staff_list->where("DATE_FORMAT(staff_birthdate,'%m-%d')",$birthdate);
+		}
+
+		if ($this->input->get("staff_name") != "") {
+			$staff_list->like('staff_name',$this->input->get("staff_name"));
 		}
 
         $staff_list->order_by($data['col'], $data['dir']);
         $data['staff_list'] = $staff_list
                         ->get($this->limit, $offset)->all;
 
-        $config['base_url'] = site_url("staffs/index");
-        $config['total_rows'] = $total_rows;
-        $config['per_page'] = $this->limit;
-        $config['uri_segment'] = $uri_segment;
-        $this->pagination->initialize($config);
-        $data['pagination'] = $this->pagination->create_links();
+		// Branch
+        $branch = new Branch();
+        $list_branch = $branch->list_drop();
+        $branch_selected = $this->input->get('staff_cabang');
+        $data['staff_cabang'] = form_dropdown('staff_cabang',
+                        $list_branch,
+                        $branch_selected);
 
-        $this->load->view('staffs/report_list', $data);
+		// Departement
+        $dept = new Department();
+        $list_dpt = $dept->list_drop();
+        $dpt_selected = $this->input->get('staff_departement');
+        $data['staff_departement'] = form_dropdown('staff_departement',
+                        $list_dpt,
+                        $dpt_selected);
+
+		//Jabatan
+        $title = new Title();
+        $list_jbt = $title->list_drop();
+        $jbt_selected = $this->input->get('staff_jabatan');
+        $data['staff_jabatan'] = form_dropdown('staff_jabatan',
+                        $list_jbt,
+                        $jbt_selected);
+
+		$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
+
+		if ($this->input->get('to') == 'pdf') {
+			$this->load->library('html2pdf');
+
+			$this->html2pdf->filename = 'staff_list_report.pdf';
+	    	$this->html2pdf->paper('a4', 'landscape');
+	    	$this->html2pdf->html($this->load->view('staffs/list_to_pdf', $data, true));
+	    
+	    	$this->html2pdf->create();
+    	} else if ($this->input->get('to') == 'xls') {
+    		$param['file_name'] = 'staff_list_report.xls';
+    		$param['content_sheet'] = $this->load->view('staffs/list_to_pdf', $data, true);
+    		$this->load->view('to_excel',$param);
+		} else {
+	        $config['base_url'] = site_url("staffs/index");
+	        $config['total_rows'] = $total_rows;
+	        $config['per_page'] = $this->limit;
+	        $config['uri_segment'] = $uri_segment;
+	        $this->pagination->initialize($config);
+	        $data['pagination'] = $this->pagination->create_links();
+
+        	$this->load->view('staffs/report_list', $data);
+        }
     }
 
-    public function list_to_pdf() {
+    public function report_cuti($offset = 0) {
         $staff_list = new Staff();
         switch ($this->input->get('c')) {
             case "1":
@@ -820,6 +886,9 @@ class Staffs extends CI_Controller {
             case "10":
                 $data['col'] = "staff_id";
                 break;
+            case "11":
+                $data['col'] = "saldo_cuti";
+                break;
             default:
                 $data['col'] = "staff_id";
         }
@@ -830,29 +899,79 @@ class Staffs extends CI_Controller {
             $data['dir'] = "ASC";
         }
 
-		$data['search_by'] = $this->uri->segment(3);
-		$data['q'] = $this->uri->segment(4);
+        $total_rows = $staff_list->count();
 
-		if ($this->input->get("q") != "") {
-			$param = $this->input->get("q");
-			if ($this->input->get("search_by") == "staff_birthdate") {
-				$birthdate = str_replace(date('Y-'),"",$param);
-				$staff_list->where("DATE_FORMAT(".$this->input->get("search_by").",'%m-%d')",$birthdate);
-			} else {
-				$staff_list->like($this->input->get("search_by"),$param);
-			}
+        $uri_segment = 3;
+        $offset = $this->uri->segment($uri_segment);
+
+		if ($this->input->get("staff_cabang") != "") {
+			$staff_list->like('staff_cabang',$this->input->get("staff_cabang"));
+		}
+
+		if ($this->input->get("staff_departement") != "") {
+			$staff_list->like('staff_departement',$this->input->get("staff_departement"));
+		}
+
+		if ($this->input->get("staff_jabatan") != "") {
+			$staff_list->like('staff_jabatan',$this->input->get("staff_jabatan"));
+		}
+
+		if ($this->input->get("staff_name") != "") {
+			$staff_list->like('staff_name',$this->input->get("staff_name"));
 		}
 
         $staff_list->order_by($data['col'], $data['dir']);
         $data['staff_list'] = $staff_list
-                        ->get()->all;
+                        ->get($this->limit, $offset)->all;
 
-		$this->load->library('html2pdf');
+		// Branch
+        $branch = new Branch();
+        $list_branch = $branch->list_drop();
+        $branch_selected = $this->input->get('staff_cabang');
+        $data['staff_cabang'] = form_dropdown('staff_cabang',
+                        $list_branch,
+                        $branch_selected);
+
+		// Departement
+        $dept = new Department();
+        $list_dpt = $dept->list_drop();
+        $dpt_selected = $this->input->get('staff_departement');
+        $data['staff_departement'] = form_dropdown('staff_departement',
+                        $list_dpt,
+                        $dpt_selected);
+
+		//Jabatan
+        $title = new Title();
+        $list_jbt = $title->list_drop();
+        $jbt_selected = $this->input->get('staff_jabatan');
+        $data['staff_jabatan'] = form_dropdown('staff_jabatan',
+                        $list_jbt,
+                        $jbt_selected);
+
+		$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
+
+		if ($this->input->get('to') == 'pdf') {
+			$this->load->library('html2pdf');
+
+			$this->html2pdf->filename = 'sisa_cuti_staff_report.pdf';
+	    	$this->html2pdf->paper('a4', 'landscape');
+	    	$this->html2pdf->html($this->load->view('staffs/cuti_to_pdf', $data, true));
 	    
-	    $this->html2pdf->paper('a4', 'landscape');
-	    $this->html2pdf->html($this->load->view('staffs/list_to_pdf', $data, true));
-	    
-	    $this->html2pdf->create();
+	    	$this->html2pdf->create();
+    	} else if ($this->input->get('to') == 'xls') {
+    		$param['file_name'] = 'sisa_cuti_staff_report.xls';
+    		$param['content_sheet'] = $this->load->view('staffs/cuti_to_pdf', $data, true);
+    		$this->load->view('to_excel',$param);
+		} else {
+	        $config['base_url'] = site_url("staffs/index");
+	        $config['total_rows'] = $total_rows;
+	        $config['per_page'] = $this->limit;
+	        $config['uri_segment'] = $uri_segment;
+	        $this->pagination->initialize($config);
+	        $data['pagination'] = $this->pagination->create_links();
+
+        	$this->load->view('staffs/report_cuti', $data);
+        }
     }
 
 }

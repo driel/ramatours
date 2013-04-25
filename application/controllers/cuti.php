@@ -173,14 +173,25 @@ class Cuti extends CI_Controller{
 
     $uri_segment = 3;
     $offset = $this->uri->segment($uri_segment);
-   	$data['cuti'] = $this->cuti->list_where($this->input->get('search_by'),$this->input->get('q'));
 
-    $config['base_url'] = site_url("cuti/index");
-    $config['total_rows'] = $total_rows;
-    $config['per_page'] = $this->limit;
-    $config['uri_segment'] = $uri_segment;
-    $this->pagination->initialize($config);
-    $data['pagination'] = $this->pagination->create_links();
+	$where = array();
+	if ($this->input->get("staff_cabang") != "") {
+		$where['staff_cabang'] = $this->input->get("staff_cabang");
+	}
+
+	if ($this->input->get("staff_departement") != "") {
+		$where['staff_departement'] = $this->input->get("staff_departement");
+	}
+
+	if ($this->input->get("staff_jabatan") != "") {
+		$where['staff_jabatan'] = $this->input->get("staff_jabatan");
+	}
+
+	if ($this->input->get("staff_name") != "") {
+		$where['staff_name'] = $this->input->get("staff_name");
+	}
+
+    $data['cuti'] = $this->cuti->list_where($where);
     
     // update status purpose
     $data["status"] = array(
@@ -188,52 +199,56 @@ class Cuti extends CI_Controller{
       "approve"=>"Approve",
       "decline"=>"Decline"
     );
-    
-    $data["comment"] = array("name"=>"comment", "id"=>"comment");
-    
-    $this->load->view("cuti/report", $data);
-  }
-  
-  function to_pdf(){
-    switch ($this->input->get('c')) {
-      case "1":
-          $data['col'] = "staff_id";
-          break;
-      case "2":
-          $data['col'] = "date_request";
-          break;
-      case "3":
-          $data['col'] = "date_start";
-          break;
-      case "4":
-          $data['col'] = "date_end";
-          break;
-      default:
-          $data['col'] = "staff_id";
-    }
 
-    if ($this->input->get('d') == "1") {
-        $data['dir'] = "DESC";
-    } else {
-        $data['dir'] = "ASC";
-    }
+	// Branch
+    $branch = new Branch();
+    $list_branch = $branch->list_drop();
+    $branch_selected = $this->input->get('staff_cabang');
+    $data['staff_cabang'] = form_dropdown('staff_cabang',
+                    $list_branch,
+                    $branch_selected);
 
-   	$data['cuti'] = $this->cuti->list_where($this->input->get('search_by'),$this->input->get('q'));
+	// Departement
+    $dept = new Department();
+    $list_dpt = $dept->list_drop();
+    $dpt_selected = $this->input->get('staff_departement');
+    $data['staff_departement'] = form_dropdown('staff_departement',
+                    $list_dpt,
+                    $dpt_selected);
+
+	//Jabatan
+    $title = new Title();
+    $list_jbt = $title->list_drop();
+    $jbt_selected = $this->input->get('staff_jabatan');
+    $data['staff_jabatan'] = form_dropdown('staff_jabatan',
+                    $list_jbt,
+                    $jbt_selected);
+
+	$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
+
+	if ($this->input->get('to') == 'pdf') {
+		$this->load->library('html2pdf');
+
+		$this->html2pdf->filename = 'cuti_report.pdf';
+    	$this->html2pdf->paper('a4', 'landscape');
+    	$this->html2pdf->html($this->load->view("cuti/to_pdf", $data, true));
+	    
+    	$this->html2pdf->create();
+	} else if ($this->input->get('to') == 'xls') {
+		$param['file_name'] = 'cuti_report.xls';
+		$param['content_sheet'] = $this->load->view('cuti/to_pdf', $data, true);
+		$this->load->view('to_excel',$param);
+	} else {
+	    $config['base_url'] = site_url("cuti/index");
+	    $config['total_rows'] = $total_rows;
+	    $config['per_page'] = $this->limit;
+	    $config['uri_segment'] = $uri_segment;
+	    $this->pagination->initialize($config);
+	    $data['pagination'] = $this->pagination->create_links();
     
-    // update status purpose
-    $data["status"] = array(
-      "pending"=>"Pending",
-      "approve"=>"Approve",
-      "decline"=>"Decline"
-    );
+    	$data["comment"] = array("name"=>"comment", "id"=>"comment");
     
-    $data["comment"] = array("name"=>"comment", "id"=>"comment");
-    
-	$this->load->library('html2pdf');
-    
-    $this->html2pdf->paper('a4', 'landscape');
-    $this->html2pdf->html($this->load->view("cuti/to_pdf", $data, true));
-    
-    $this->html2pdf->create();
+    	$this->load->view("cuti/report", $data);
+    }
   }
 }
