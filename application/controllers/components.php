@@ -361,13 +361,13 @@ class Components extends CI_Controller {
 		if ($this->input->get('to') == 'pdf') {
 			$this->load->library('html2pdf');
 
-			$this->html2pdf->filename = 'recap_component_report.pdf';
+			$this->html2pdf->filename = strtolower($period_by_selected).'_'.strtolower($period_by_selected == 'Yearly' && $yearly_by_selected == 'Branch'? 'branch_':'').'recap_component_report.pdf';
 	    	$this->html2pdf->paper('a4', 'landscape');
 	    	$this->html2pdf->html($this->load->view('components/recap_to_pdf', $data, true));
 
 	    	$this->html2pdf->create();
     	} else if ($this->input->get('to') == 'xls') {
-    		$param['file_name'] = 'recap_component_report.xls';
+    		$param['file_name'] = strtolower($period_by_selected).'_'.strtolower($period_by_selected == 'Yearly' && $yearly_by_selected == 'Branch'? 'branch_':'').'recap_component_report.xls';
     		$param['content_sheet'] = $this->load->view('components/recap_to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
 		} else {
