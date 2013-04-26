@@ -119,32 +119,32 @@
 	          <th colspan="2">Total</th>
 	        </tr>
 	        <tr>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
 	        </tr>
 	      </thead>
 	      <tbody>
@@ -208,32 +208,32 @@
 	          <th colspan="2">Total</th>
 	        </tr>
 	        <tr>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
-	          <th rowspan="2">Grand</th>
-	          <th rowspan="2">Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
+	          <th>Grand</th>
+	          <th>Net</th>
 	        </tr>
 	      </thead>
 	      <tbody>

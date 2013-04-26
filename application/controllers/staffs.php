@@ -974,4 +974,149 @@ class Staffs extends CI_Controller {
         }
     }
 
+    public function report_pph($offset = 0) {
+		$this->load->helper(array('report','bulan'));
+
+        $uri_segment = 3;
+        $offset = $this->uri->segment($uri_segment);
+
+		// Period by
+        $period_by_selected = $this->input->get('period_by') == ''? 'Monthly':$this->input->get('period_by');
+        $data['period_by'] = form_dropdown('period_by',
+                        array('Monthly'=>'Monthly','Yearly'=>'Yearly'),
+                        $period_by_selected,'id="period_by"');
+
+		$data['period_by_selected'] = $period_by_selected;
+
+		// Monthly Period
+        $list_period = array();
+		for ($i=1; $i<=12; $i++) {
+            if ($i < 10) { $i = '0'.$i; }
+            $list_period[date('Y').'-'.$i] = bulan(date('Y').'-'.$i).' '.(date('Y'));
+        }
+        
+        $period_selected = $this->input->get('period') == ''? date('Y-m'):$this->input->get('period');
+        $data['period'] = form_dropdown('period',
+                        $list_period,
+                        $period_selected);
+
+		$data['period_selected'] = $period_selected;
+
+		// Yearly Period
+        $years = array();
+		for($i=date('Y'); $i>(date('Y')-5); $i--) {
+	  		$years[$i] = $i;
+	  	}
+
+        $year_selected = $this->input->get('yearly') == ''? date('Y'):$this->input->get('yearly');
+        $data['yearly'] = form_dropdown('yearly',
+                        $years,
+                        $year_selected);
+
+		$data['year_selected'] = $year_selected;
+
+		// Yearly by
+        $yearly_by_selected = $this->input->get('yearly_by') == ''? 'Staff':$this->input->get('yearly_by');
+        $data['yearly_by'] = form_dropdown('yearly_by',
+                        array('Staff'=>'Staff','Branch'=>'Branch'),
+                        $yearly_by_selected,'id="yearly_by"');
+
+		$data['yearly_by_selected'] = $yearly_by_selected;
+
+		// Branch
+        $branch = new Branch();
+        $list_branch = $branch->list_drop();
+        $branch_selected = $this->input->get('staff_cabang');
+        $data['staff_cabang'] = form_dropdown('staff_cabang',
+                        $list_branch,
+                        $branch_selected);
+
+		// Departement
+        $dept = new Department();
+        $list_dpt = $dept->list_drop();
+        $dpt_selected = $this->input->get('staff_departement');
+        $data['staff_departement'] = form_dropdown('staff_departement',
+                        $list_dpt,
+                        $dpt_selected);
+
+		//Jabatan
+        $title = new Title();
+        $list_jbt = $title->list_drop();
+        $jbt_selected = $this->input->get('staff_jabatan');
+        $data['staff_jabatan'] = form_dropdown('staff_jabatan',
+                        $list_jbt,
+                        $jbt_selected);
+
+		$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
+
+		if ($period_by_selected == 'Yearly' && $yearly_by_selected == 'Branch') {
+			$this->db->order_by('branch_id', 'ASC');
+	    	$this->db->limit($this->limit, $offset);
+	    	$branches = $this->db->get('branches');
+	        $total_rows = $branches->num_rows();
+
+    		$data['branches'] = $branches;
+		} else {
+	    	$this->db->select('staffs.staff_id,staffs.staff_name,staffs.staff_cabang,staffs.staff_departement,staffs.staff_jabatan,staffs.pph_by_company,absensi.hari_masuk,cuti.date_start,cuti.date_end,izin.izin_jumlah_hari');
+	    	$this->db->join('branches','branches.branch_name=staffs.staff_cabang');
+	    	$this->db->join('absensi','absensi.staff_id=staffs.staff_id','left');
+	    	$this->db->join('cuti','cuti.staff_id=staffs.staff_id AND `cuti`.`status` =  \'approve\'','left');
+	    	$this->db->join('izin','izin.izin_staff_id=staffs.staff_id','left');
+
+			if ($period_by_selected == 'Monthly') {
+				if ($this->input->get("period") != "") {
+					$this->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$this->input->get("period"));
+				} else {
+					$this->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period_selected);
+				}
+
+				if ($this->input->get("staff_cabang") != "") {
+					$this->db->like('staffs.staff_cabang',$this->input->get("staff_cabang"));
+				}
+
+				if ($this->input->get("staff_departement") != "") {
+					$this->db->like('staffs.staff_departement',$this->input->get("staff_departement"));
+				}
+
+				if ($this->input->get("staff_jabatan") != "") {
+					$this->db->like('staffs.staff_jabatan',$this->input->get("staff_jabatan"));
+				}
+
+				if ($this->input->get("staff_name") != "") {
+					$this->db->like('staffs.staff_name',$this->input->get("staff_name"));
+				}
+			}
+
+	    	$this->db->order_by('branches.branch_name', 'ASC');
+	    	$this->db->limit($this->limit, $offset);
+	    	$staff_branch = $this->db->get('staffs');
+	        $total_rows = $staff_branch->num_rows();
+
+    		$data['staff_branch'] = $staff_branch;
+    	}
+
+		if ($this->input->get('to') == 'pdf') {
+			$this->load->library('html2pdf');
+
+			$this->html2pdf->filename = 'pph_staff_report.pdf';
+	    	$this->html2pdf->paper('a4', 'landscape');
+	    	$this->html2pdf->html($this->load->view('staffs/pph_to_pdf', $data, true));
+	    
+	    	$this->html2pdf->create();
+    	} else if ($this->input->get('to') == 'xls') {
+    		$param['file_name'] = 'pph_staff_report.xls';
+    		$param['content_sheet'] = $this->load->view('staffs/pph_to_pdf', $data, true);
+    		$this->load->view('to_excel',$param);
+		} else {
+	        $config['base_url'] = site_url("staffs/report_pph");
+	        $config['total_rows'] = $total_rows;
+	        $config['per_page'] = $this->limit;
+	        $config['uri_segment'] = $uri_segment;
+	        $this->pagination->initialize($config);
+	        $data['pagination'] = $this->pagination->create_links();
+
+        	$this->load->view('staffs/report_pph', $data);
+        }
+    }
+
 }
