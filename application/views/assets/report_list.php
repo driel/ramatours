@@ -96,26 +96,31 @@ $(document).ready(function(){
 	      	$block = $this->input->get() != false ? ' style="display:block"':'';
       		?>
       		<div id="filtering"<?php echo $block; ?>>
-      		  <table width="100%">
-      		  	<tr>
-      		  		<td width="10%">Branch</td>
-      		  		<td width="20%"><?php echo $branch; ?></td>
-      		  		<td width="10%">Name</td>
-      		  		<td width="20%"><?php echo form_input(array('name' => 'asset_name', 'value' => $this->input->get('asset_name'), 'size' => '28'));?></td>
-      		  		<td width="40%" style="text-align: right;">
-      		  		  <?php
+      			<table width="30%" align="center">
+	      			<tr>
+	      				<td><span class="search_by">Branch</span></td>
+	     				<td><?php echo $branch; ?></td>
+	   				</tr>
+	      			<tr>
+	      				<td><span class="search_by">Name</span></td>
+	     				<td><?php echo form_input(array('name' => 'asset_name', 'value' => $this->input->get('asset_name'), 'size' => '28'));?></td>
+	   				</tr>
+	   				<tr>
+	   					<td>&nbsp;</td>
+		      			<td>
+		      				<?php
   						      if($this->input->get('asset_name') != FALSE || $this->input->get('branch') != FALSE){
-                      echo anchor(current_url(), 'reset', array(
-                        "class"=>"bootstrap-tooltip btn btn-danger",
-                        "data-placement"=>"top",
-                        "data-title"=>"Clear search"
-                      )); //'<a href="'.current_url().'" class="btn btn-danger">reset</a>';
-                    }
-						      ?>
-      		  		  <input type="submit" name="search" class="btn btn-primary" value="Search"/>
-      		  		</td>
-      		  	</tr>
-      		  </table>
+			                      echo anchor(current_url(), 'reset', array(
+			                        "class"=>"bootstrap-tooltip btn btn-danger",
+			                        "data-placement"=>"top",
+			                        "data-title"=>"Clear search"
+			                      ));
+			                    }
+					      	?>
+						  	<input type="submit" name="search" value="Search" class="btn btn-primary" />
+		  				</td>
+	     			</tr>
+		      	</table>
       		</div>
     	</form>
         </div>

@@ -155,105 +155,48 @@ $(document).ready(function(){
     <div id="search_bar" class="widget-header">
       	<form action="" method="get">
       		<?php
-	      	$myUrl = 'http://'.$_SERVER['HTTP_HOST'];
-			$requestUri = $_SERVER['REQUEST_URI'];
+      		//var_dump($this->input->get());
+	      	$block = $this->input->get() != false ? ' style="display:block"':'';
       		?>
-      		<table width="30%" align="center">
-      			<tr>
-      				<td><span class="search_by">Branch</span></td>
-     				<td>
-     					<div id="search">
-		      				<?php
-						      if(strlen($this->input->get('staff_cabang')) > 0){
-								$requestUri = str_replace($this->input->get('staff_cabang'),"",$requestUri);
-						        echo anchor("$myUrl$requestUri", '<span class="ico-remove"></span>', array(
-						          "class"=>"clear-search-report",
-						          "data-placement"=>"top",
-						          "data-title"=>"Clear search"
-						        ));
-						      }
-						    ?>
-					 		<?php echo $staff_cabang; ?>
-					 	</div>
-					 </td>
-   				</tr>
-      			<tr>
-      				<td><span class="search_by">Department</span></td>
-     				<td>
-     					<div id="search">
-		      				<?php
-						      if(strlen($this->input->get('staff_departement')) > 0){
-								$requestUri = str_replace($this->input->get('staff_departement'),"",$requestUri);
-						        echo anchor("$myUrl$requestUri", '<span class="ico-remove"></span>', array(
-						          "class"=>"clear-search-report",
-						          "data-placement"=>"top",
-						          "data-title"=>"Clear search"
-						        ));
-						      }
-						    ?>
-					 		<?php echo $staff_departement; ?>
-					 	</div>
-					 </td>
-   				</tr>
-      			<tr>
-      				<td><span class="search_by">Title</span></td>
-     				<td>
-     					<div id="search">
-		      				<?php
-						      if(strlen($this->input->get('staff_jabatan')) > 0){
-								$requestUri = str_replace($this->input->get('staff_jabatan'),"",$requestUri);
-						        echo anchor("$myUrl$requestUri", '<span class="ico-remove"></span>', array(
-						          "class"=>"clear-search-report",
-						          "data-placement"=>"top",
-						          "data-title"=>"Clear search"
-						        ));
-						      }
-						    ?>
-					 		<?php echo $staff_jabatan; ?>
-					 	</div>
-					 </td>
-   				</tr>
-      			<tr>
-      				<td><span class="search_by">Birth Date</span></td>
-     				<td>
-     					<div id="search">
-		      				<?php
-						      if(strlen($this->input->get('staff_birthdate')) > 0){
-								$requestUri = str_replace($this->input->get('staff_birthdate'),"",$requestUri);
-						        echo anchor("$myUrl$requestUri", '<span class="ico-remove"></span>', array(
-						          "class"=>"clear-search-report",
-						          "data-placement"=>"top",
-						          "data-title"=>"Clear search"
-						        ));
-						      }
-						    ?>
-					 		<?php echo form_input(array('id' => 'staff_birthdate', 'name' => 'staff_birthdate', 'value' => $this->input->get('staff_birthdate'), 'size' => '28'));?>
-					 	</div>
-					 </td>
-   				</tr>
-      			<tr>
-      				<td><span class="search_by">Name</span></td>
-     				<td>
-     					<div id="search">
-		      				<?php
-						      if(strlen($this->input->get('staff_name')) > 0){
-								$requestUri = str_replace($this->input->get('staff_name'),"",$requestUri);
-						        echo anchor("$myUrl$requestUri", '<span class="ico-remove"></span>', array(
-						          "class"=>"clear-search-report",
-						          "data-placement"=>"top",
-						          "data-title"=>"Clear search"
-						        ));
-						      }
-						    ?>
-					 		<?php echo form_input(array('name' => 'staff_name', 'value' => $this->input->get('staff_name'), 'size' => '28'));?>
-					 	</div>
-					 </td>
-   				</tr>
-   				<tr>
-   					<td>&nbsp;</td>
-	      			<td><input type="submit" name="search" value="Search" class="btn btn-primary" /></td>
-     			</tr>
-	      	</table>
+      		<div id="filtering"<?php echo $block; ?>>
+				<table width="30%" align="center">
+      				<tr>
+	      				<td><span class="search_by">Branch</span></td>
+	     				<td><?php echo $staff_cabang; ?></td>
+   					</tr>
+      				<tr>
+	      				<td><span class="search_by">Department</span></td>
+	     				<td><?php echo $staff_departement; ?></td>
+   					</tr>
+      				<tr>
+	      				<td><span class="search_by">Title</span></td>
+	     				<td><?php echo $staff_jabatan; ?></td>
+   					</tr>
+      				<tr>
+	      				<td><span class="search_by">Birth Date</span></td>
+	     				<td><?php echo form_input(array('id' => 'staff_birthdate', 'name' => 'staff_birthdate', 'value' => $this->input->get('staff_birthdate'), 'size' => '28'));?></td>
+   					</tr>
+      				<tr>
+	      				<td><span class="search_by">Name</span></td>
+	     				<td><?php echo form_input(array('name' => 'staff_name', 'value' => $this->input->get('staff_name'), 'size' => '28'));?></td>
+   					</tr>
+   					<tr>
+   						<td>&nbsp;</td>
+	      				<td>
+						  	<?php
+  						      	if($this->input->get() != FALSE){
+			                      echo anchor(current_url(), 'reset', array(
+			                        "class"=>"bootstrap-tooltip btn btn-danger",
+			                        "data-placement"=>"top",
+			                        "data-title"=>"Clear search"
+			                      ));
+           				     	}
+					      	?>
+						  	<input type="submit" name="search" value="Search" class="btn btn-primary" />
+					  	</td>
+     				</tr>
+	      		</table>
+	      	</div>
     	</form>
     </div>
     <div class="row">
