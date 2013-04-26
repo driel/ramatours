@@ -286,7 +286,15 @@ class Components extends CI_Controller {
         $uri_segment = 3;
         $offset = $this->uri->segment($uri_segment);
 
-		// Period
+		// Period by
+        $period_by_selected = $this->input->get('period_by') == ''? 'Monthly':$this->input->get('period_by');
+        $data['period_by'] = form_dropdown('period_by',
+                        array('Monthly'=>'Monthly','Yearly'=>'Yearly'),
+                        $period_by_selected,'id="period_by"');
+
+		$data['period_by_selected'] = $period_by_selected;
+
+		// Monthly Period
         $list_period = array();
 		for ($i=1; $i<=12; $i++) {
             if ($i < 10) { $i = '0'.$i; }
@@ -298,6 +306,21 @@ class Components extends CI_Controller {
                         $list_period,
                         $period_selected);
 
+		$data['period_selected'] = $period_selected;
+
+		// Yearly Period
+        $years = array();
+		for($i=date('Y'); $i>(date('Y')-5); $i--) {
+	  		$years[$i] = $i;
+	  	}
+
+        $year_selected = $this->input->get('yearly') == ''? date('Y'):$this->input->get('yearly');
+        $data['yearly'] = form_dropdown('yearly',
+                        $years,
+                        $year_selected);
+
+		$data['year_selected'] = $year_selected;
+
 		// Branch
         $branch = new Branch();
         $list_branch = $branch->list_drop();
@@ -306,18 +329,34 @@ class Components extends CI_Controller {
                         $list_branch,
                         $branch_selected);
 
-		$data['period_selected'] = $period_selected;
+		// Yearly by
+        $yearly_by_selected = $this->input->get('yearly_by') == ''? 'Staff':$this->input->get('yearly_by');
+        $data['yearly_by'] = form_dropdown('yearly_by',
+                        array('Staff'=>'Staff','Branch'=>'Branch'),
+                        $yearly_by_selected,'id="yearly_by"');
 
-		if ($this->input->get("branch") != "") {
-			$this->db->like('branch_name',$this->input->get("branch"));
-		}
+		$data['yearly_by_selected'] = $yearly_by_selected;
 
-    	$this->db->order_by('branch_id', 'ASC');
-    	$this->db->limit($this->limit, $offset);
-    	$branches = $this->db->get('branches');
-        $total_rows = $branches->num_rows();
+		if ($period_by_selected == 'Yearly' && $yearly_by_selected == 'Staff') {
+    		$this->db->join('branches','branches.branch_name=staffs.staff_cabang','left');
+			$this->db->order_by('branches.branch_name', 'ASC');
+	    	$this->db->limit($this->limit, $offset);
+	    	$staff_branch = $this->db->get('staffs');
+	        $total_rows = $staff_branch->num_rows();
 
-    	$data['branches'] = $branches;
+    		$data['staff_branch'] = $staff_branch;
+		} else {
+			if ($this->input->get("branch") != "" && $period_by_selected == 'Monthly') {
+				$this->db->like('branch_name',$this->input->get("branch"));
+			}
+
+	    	$this->db->order_by('branch_id', 'ASC');
+	    	$this->db->limit($this->limit, $offset);
+	    	$branches = $this->db->get('branches');
+	        $total_rows = $branches->num_rows();
+
+    		$data['branches'] = $branches;
+    	}
 
 		if ($this->input->get('to') == 'pdf') {
 			$this->load->library('html2pdf');
@@ -325,7 +364,7 @@ class Components extends CI_Controller {
 			$this->html2pdf->filename = 'recap_component_report.pdf';
 	    	$this->html2pdf->paper('a4', 'landscape');
 	    	$this->html2pdf->html($this->load->view('components/recap_to_pdf', $data, true));
-	    
+
 	    	$this->html2pdf->create();
     	} else if ($this->input->get('to') == 'xls') {
     		$param['file_name'] = 'recap_component_report.xls';
