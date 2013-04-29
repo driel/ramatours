@@ -39,7 +39,7 @@
         <tr>
           <td width="20%">Note</td>
           <td>
-            <?php echo form_textarea($sp_note); ?>
+            <div class="span5"><?php echo form_input($sp_note); ?></div>
           </td>
         </tr>
     </table>

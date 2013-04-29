@@ -798,6 +798,10 @@ class Staffs extends CI_Controller {
 		if ($this->input->get("staff_name") != "") {
 			$staff_list->like('staff_name',$this->input->get("staff_name"));
 		}
+		
+		if($this->input->get("marital_status") != FALSE){
+		  $staff_list->like("staff_status_nikah", $this->input->get("marital_status"));
+		}
 
         $staff_list->order_by($data['col'], $data['dir']);
         $data['staff_list'] = $staff_list
@@ -826,6 +830,10 @@ class Staffs extends CI_Controller {
         $data['staff_jabatan'] = form_dropdown('staff_jabatan',
                         $list_jbt,
                         $jbt_selected);
+    // Marital status
+        $marital = new Marital();
+        $list_marital = $marital->list_drop();
+        $data['marital'] = form_dropdown("marital_status", $list_marital);
 
 		$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
 
@@ -841,15 +849,17 @@ class Staffs extends CI_Controller {
     		$param['file_name'] = 'staff_list_report.xls';
     		$param['content_sheet'] = $this->load->view('staffs/list_to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
-		} else {
-	        $config['base_url'] = site_url("staffs/index");
-	        $config['total_rows'] = $total_rows;
-	        $config['per_page'] = $this->limit;
-	        $config['uri_segment'] = $uri_segment;
-	        $this->pagination->initialize($config);
-	        $data['pagination'] = $this->pagination->create_links();
-
-        	$this->load->view('staffs/report_list', $data);
+		} else if($this->input->get('to') == 'print'){
+        	$this->load->view('staffs/plain', $data);
+        }else{
+          $config['base_url'] = site_url("staffs/index");
+          $config['total_rows'] = $total_rows;
+          $config['per_page'] = $this->limit;
+          $config['uri_segment'] = $uri_segment;
+          $this->pagination->initialize($config);
+          $data['pagination'] = $this->pagination->create_links();
+          
+          $this->load->view('staffs/report_list', $data);
         }
     }
 

@@ -15,6 +15,8 @@ var Handsontable = { //class namespace
   helper: {} //helper namespace
 };
 
+var deleted_data;
+
 (function ($, window, Handsontable) {
   "use strict";
 /**
@@ -446,6 +448,7 @@ Handsontable.Core = function (rootElement, settings) {
       }
       fireEvent("datachange.handsontable", [changes, 'alter']);
       grid.keepEmptyRows(); //makes sure that we did not add rows that will be removed in next refresh
+      deleted_data = oldData[r-1];
     },
 
     /**

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 23, 2013 at 05:25 PM
+-- Generation Time: Apr 29, 2013 at 10:02 AM
 -- Server version: 5.5.28
 -- PHP Version: 5.3.10-1ubuntu3.4
 
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `branches` (
   `branch_id` int(11) NOT NULL AUTO_INCREMENT,
   `branch_name` varchar(50) NOT NULL,
   PRIMARY KEY (`branch_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `branches`
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   `comp_name` varchar(20) NOT NULL,
   `comp_type` varchar(8) NOT NULL COMMENT 'kalau Opsi daily ketika input gaji maka opsi amount_daily muncul, misalnya uang makan',
   PRIMARY KEY (`comp_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `components`
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `departments` (
   `dept_id` int(11) NOT NULL AUTO_INCREMENT,
   `dept_name` varchar(50) NOT NULL,
   PRIMARY KEY (`dept_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `departments`
@@ -347,7 +347,7 @@ CREATE TABLE IF NOT EXISTS `maritals_status` (
   `sn_id` int(11) NOT NULL AUTO_INCREMENT,
   `sn_name` varchar(50) NOT NULL,
   PRIMARY KEY (`sn_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `maritals_status`
@@ -606,7 +606,7 @@ CREATE TABLE IF NOT EXISTS `taxes_employees` (
   `sp_ptkp` int(11) NOT NULL,
   `sp_note` varchar(255) NOT NULL,
   PRIMARY KEY (`sp_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `taxes_employees`
@@ -629,7 +629,7 @@ CREATE TABLE IF NOT EXISTS `titles` (
   `title_id` int(11) NOT NULL AUTO_INCREMENT,
   `title_name` varchar(20) NOT NULL,
   PRIMARY KEY (`title_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `titles`
@@ -692,15 +692,15 @@ CREATE TABLE IF NOT EXISTS `user_roled` (
 --
 
 INSERT INTO `user_roled` (`roled_id`, `role_id`, `module_id`, `roled_view`, `roled_add`, `roled_edit`, `roled_delete`, `roled_approve`, `roled_super`) VALUES
-(2, 3, 1, 1, 1, 1, 1, 1, 0),
-(3, 3, 2, 1, 1, 1, 1, 0, 0),
-(4, 3, 3, 1, 1, 1, 1, 0, 0),
-(5, 3, 11, 1, 1, 1, 1, 0, 0),
-(6, 3, 12, 1, 1, 1, 1, 1, 0),
-(8, 3, 15, 1, 1, 1, 1, 0, 0),
-(9, 3, 16, 1, 1, 1, 1, 0, 0),
-(10, 3, 17, 1, 1, 1, 1, 1, 0),
-(11, 3, 18, 1, 1, 1, 1, 1, 0);
+(2, 3, 1, 1, 1, 1, 1, 1, 1),
+(3, 3, 2, 1, 1, 1, 1, 0, 1),
+(4, 3, 3, 1, 1, 1, 1, 0, 1),
+(5, 3, 11, 1, 1, 1, 1, 0, 1),
+(6, 3, 12, 1, 1, 1, 1, 1, 1),
+(8, 3, 15, 1, 1, 1, 1, 0, 1),
+(9, 3, 16, 1, 1, 1, 1, 0, 1),
+(10, 3, 17, 1, 1, 1, 1, 1, 1),
+(11, 3, 18, 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 

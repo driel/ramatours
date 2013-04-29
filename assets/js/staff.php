@@ -26,7 +26,7 @@ $(document).ready(function(){
     contextMenu: true,
     colWidths: [120, 80, 80, 60, 120],
     onChange: function(update, source){
-      if(source != "alter"){ // there's no changes on columns, no need to flag 1
+      if(source != "alter" && update){ // there's no changes on columns, no need to flag 1
         var row = update[0][0];
         var data = $("#family_table").handsontable("getData")[row];
         var url = "<?php echo $url.'/staffs/update_family'; ?>";
@@ -44,11 +44,11 @@ $(document).ready(function(){
       
       // delete row ajax
       if(source == "alter"){
-        var id = deleted_data[5];
+        /*var id = deleted_data[5];
         var url = "<?php echo $url.'/families/ajax_delete/'; ?>"+id;
         $.get(url, function(data){
           console.log(data);
-        });
+        });*/
       }
     },
     columns: [
@@ -76,10 +76,10 @@ $(document).ready(function(){
     startRows: 3,
     minSpareRows: 1,
     colWidths: [50, 500],
-     columns: [{type:'date'},{}],
+    columns: [{type:'date'},{}],
     contextMenu: true,
     onChange: function(update, source){
-      if(source != "alter"){ // there's no changes on columns, no need to flag 1
+      if(source != "alter" && update){ // there's no changes on columns, no need to flag 1
         var row = update[0][0];
         var data = $("#medic_table").handsontable("getData")[row];
         var url = "<?php echo $url.'/staffs/update_medic'; ?>";
@@ -94,11 +94,11 @@ $(document).ready(function(){
       
       // delete row ajax
       if(source == "alter"){
-        var id = deleted_data[2];
+        /*var id = deleted_data[2];
         var url = "<?php echo $url.'/medical_histories/ajax_delete/'; ?>"+id;
         $.get(url, function(data){
           console.log(data);
-        });
+        });*/
       }
     }
   });
@@ -113,7 +113,7 @@ $(document).ready(function(){
     columns: [{type: 'date'}, {}],
     contextMenu: true,
     onChange: function(update, source){
-      if(source != "alter"){ // there's no changes on columns, no need to flag 1
+      if(source != "alter" && update){ // there's no changes on columns, no need to flag 1
         var row = update[0][0];
         var data = $("#works_table").handsontable("getData")[row];
         var url = "<?php echo $url.'/staffs/update_work'; ?>";
@@ -128,11 +128,11 @@ $(document).ready(function(){
       
       // delete row ajax
       if(source == "alter"){
-        var id = deleted_data[2];
+        /*var id = deleted_data[2];
         var url = "<?php echo $url.'/work_histories/ajax_delete/'; ?>"+id;
         $.get(url, function(data){
           console.log(data);
-        });
+        });*/
       }
     }
   });
@@ -147,7 +147,7 @@ $(document).ready(function(){
     columns: [{type: 'numeric'}, {}, {}],
     contextMenu: true,
     onChange: function(update, source){
-      if(source != "alter"){ // there's no changes on columns, no need to flag 1
+      if(source != "alter" && update){ // there's no changes on columns, no need to flag 1
         var row = update[0][0];
         var data = $("#edu_table").handsontable("getData")[row];
         var url = "<?php echo $url.'/staffs/update_edu'; ?>";
@@ -163,11 +163,11 @@ $(document).ready(function(){
       
       // delete row ajax
       if(source == "alter"){
-        var id = deleted_data[3];
+        /*var id = deleted_data[3];
         var url = "<?php echo $url.'/educations/ajax_delete/'; ?>"+id;
         $.get(url, function(data){
           console.log(data);
-        });
+        });*/
       }
     }
   });
@@ -184,7 +184,7 @@ $(document).ready(function(){
       {
         type: 'autocomplete',
         source: function(req, process){
-          var url = "<?php echo $url.'components/get_components'; ?>"
+          var url = "<?php echo $url.'/components/get_components'; ?>"
           $.getJSON(url, function(data){
             var items = [];
             $.each(data, function(i, v){
@@ -200,7 +200,7 @@ $(document).ready(function(){
     ],
     onChange: function(update, source){
       if(source=="edit" && update[0][1]==0){
-        var url = "<?php echo $url.'components/get_where_component'; ?>/"+update[0][3];
+        var url = "<?php echo $url.'/components/get_where_component'; ?>/"+update[0][3];
         $.getJSON(url, function(data){
           $("#salary_component_a").handsontable("setDataAtCell", update[0][0], 1, data.comp_type);
           $("#salary_component_a").handsontable("setDataAtCell", update[0][0], 5, data.id);
@@ -211,7 +211,7 @@ $(document).ready(function(){
           }
         });
       }
-      if(source != "alter"){
+      if(source != "alter" && update){
         var row = update[0][0];
         var data = $("#salary_component_a").handsontable("getData")[row];
         var url = "<?php echo $url.'/staffs/update_component_a'; ?>";
@@ -248,7 +248,7 @@ $(document).ready(function(){
       {
         type: 'autocomplete',
         source: function(req, process){
-          var url = "<?php echo $url.'components/get_components'; ?>"
+          var url = "<?php echo $url.'/components/get_components'; ?>"
           $.getJSON(url, function(data){
             var items = [];
             $.each(data, function(i, v){
@@ -264,7 +264,7 @@ $(document).ready(function(){
     ],
     onChange: function(update, source){
       if(source=="edit" && update[0][1]==0){
-        var url = "<?php echo $url.'components/get_where_component'; ?>/"+update[0][3];
+        var url = "<?php echo $url.'/components/get_where_component'; ?>/"+update[0][3];
         $.getJSON(url, function(data){
           $("#salary_component_b").handsontable("setDataAtCell", update[0][0], 1, data.comp_type);
           $("#salary_component_b").handsontable("setDataAtCell", update[0][0], 5, data.id);
@@ -275,7 +275,7 @@ $(document).ready(function(){
           }
         });
       }
-      if(source != "alter"){
+      if(source != "alter" && update){
         var row = update[0][0];
         var data = $("#salary_component_b").handsontable("getData")[row];
         var url = "<?php echo $url.'/staffs/update_component_b'; ?>";
