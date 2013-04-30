@@ -9,7 +9,7 @@ class Absensi extends CI_Controller{
   }
   
   function index(){
-    switch ($this->input->get('c')) {
+   /* switch ($this->input->get('c')) {
       case "1":
           $data['col'] = "staff_id";
           break;
@@ -44,7 +44,8 @@ class Absensi extends CI_Controller{
     $this->pagination->initialize($config);
     $data['pagination'] = $this->pagination->create_links();
     
-    $this->load->view("absensi/index", $data);
+    $this->load->view("absensi/index", $data);*/
+    $this->add();
   }
   
   function get_staff($staff_name){
@@ -54,10 +55,8 @@ class Absensi extends CI_Controller{
     }
   }
   
-  function add(){
+  function _setupData(){
     $data["form_action"] = "absensi/create";
-    
-    $data["id"] = null;
     
     // branch
     $branch = new Branch();
@@ -66,18 +65,18 @@ class Absensi extends CI_Controller{
     
     // month
     $month=array(
-    '01'=>'January',
-    '02'=>'February',
-    '03'=>'March',
-    '04'=>'April',
-    '05'=>'May',
-    '06'=>'June',
-    '07'=>'July',
-    '08'=>'August',
-    '09'=>'September',
-    '10'=>'October',
-    '11'=>'November',
-    '12'=>'December');
+        '01'=>'January',
+        '02'=>'February',
+        '03'=>'March',
+        '04'=>'April',
+        '05'=>'May',
+        '06'=>'June',
+        '07'=>'July',
+        '08'=>'August',
+        '09'=>'September',
+        '10'=>'October',
+        '11'=>'November',
+        '12'=>'December');
     $data["periode"] = form_dropdown("periode", $month, date("m"));
     
     // year
@@ -86,7 +85,11 @@ class Absensi extends CI_Controller{
       $year[$t] = $t;
     }
     $data["year"] = form_dropdown("year", $year, date("Y"));
-    
+    return $data;
+  }
+  
+  function add(){
+    $data = $this->_setupData();
     $this->load->view("absensi/form", $data);
   }
   
@@ -122,21 +125,25 @@ class Absensi extends CI_Controller{
           }
           fclose($handle);
         }
+        redirect("absensi/index");
       }else{
         //print_r($this->upload->display_errors());
       }
     }else{ // manual entry
       $this->form_validation->set_rules(array(
         array("field"=>"periode", "label"=>"Periode", "rules"=>"required"),
-        array("field"=>"branch", "label"=>"Branch", "rules"=>"required")
+        array("field"=>"branch", "label"=>"Branch", "rules"=>"required"),
+        array("field"=>"year", "label"=>"Year", "rules"=>"required")
       ));
+      $this->form_validation->set_message("required", "%s cannot be blank");
       if($this->form_validation->run()===false){
-        // form validation errors
+        $data = $this->_setupData();
+        $this->load->view("absensi/form", $data);
       }else{
         $this->absensi->add();
+        redirect("absensi/index");
       }
     }
-    redirect("absensi/index");
   }
   
   function update(){

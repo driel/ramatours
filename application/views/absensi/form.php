@@ -8,28 +8,31 @@
           var action = $(this).data("action");
           var month = $("select[name=periode]").val();
           var year = $("select[name=year]").val();
+          var branch = $("select[name=branch]").val();
           if(action == "generate"){
-        	  $.getJSON(url, function(data){
-          	  var staffs = [];
-          	  $.each(data, function(i, v){
-            	  var periode_url = "<?php echo site_url("absensi/get_per_periode"); ?>?periode="+year+"-"+month+"&staff_id="+v.staff_id;
-            	  var absen = 0;
-            	  $.ajax({
-            	    url: periode_url,
-            	    dataType: "json",
-            	    async: false,
-            	    success: function(data){
-                	  if(data.absen != undefined){
-                		  absen = parseInt(data.absen);
-                	  }
-            	    }
-          	    });
-          		  staffs.push({"name": v.staff_name, "cabang": v.staff_cabang, "dept": v.staff_departement, "title": v.staff_jabatan, "absen": absen, "sid": v.staff_id});
-          	  });
-          	  generateHT(staffs);
-            });
-          }else{
-        	  
+            if(branch != " "){
+            	$.getJSON(url, function(data){
+            	  var staffs = [];
+            	  $.each(data, function(i, v){
+              	  var periode_url = "<?php echo site_url("absensi/get_per_periode"); ?>?periode="+year+"-"+month+"&staff_id="+v.staff_id;
+              	  var absen = 0;
+              	  $.ajax({
+              	    url: periode_url,
+              	    dataType: "json",
+              	    async: false,
+              	    success: function(data){
+                  	  if(data.absen != undefined){
+                  		  absen = parseInt(data.absen);
+                  	  }
+              	    }
+            	    });
+            		  staffs.push({"name": v.staff_name, "cabang": v.staff_cabang, "dept": v.staff_departement, "title": v.staff_jabatan, "absen": absen, "sid": v.staff_id});
+            	  });
+            	  generateHT(staffs);
+              });
+            }else{
+              jAlert("please select branch first", "Error");
+            }
           }
       });
 
@@ -62,6 +65,7 @@
 </script>
 <div class="body">
     <div class="content">
+      <?php if(validation_errors()) echo error_box(validation_errors()); ?>
         <div class="page-header">
             <div class="icon">
                 <span class="ico-tag"></span>
@@ -92,11 +96,11 @@
         </div>
         <div class="input-append file" style="float:left">
           <input type="file" name="csv" style="display:none"/>
-        	<a href="" class="btn submit" data-action="upload_csv" style="padding: 4px 12px; margin: 3px 0;">Import CSV</a>
+        	<a href="" class="btn submit bootstrap-tooltip" data-action="upload_csv" style="padding: 4px 12px; margin: 3px 0;" data-placement="right" data-title="kode absen, staff name, hari masuk">Import CSV</a>
         </div>
         <br class="cl"/>
-        <input type="submit" name="save" class="btn btn-primary" />
-        <a href="<?php echo site_url('absensi/index'); ?>" class="btn btn-danger">Back</a>
+        <input type="submit" name="save" class="btn btn-primary" value="Save" />
+        <!-- <a href="<?php echo site_url('absensi/index'); ?>" class="btn btn-danger">Back</a> -->
         <?php echo form_close() ?>
     </div>
 </div>

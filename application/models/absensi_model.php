@@ -23,18 +23,26 @@ class Absensi_model extends CI_Model{
     return $this->db->get("absensi");
   }
   
+  // this is actually add or update
   function add(){
     $periode = $this->input->post("periode");
-    $year = date("Y");
+    $year = $this->input->post("year");
     $periode = $year."-".$periode."-01";
     $absen = $this->input->post("absensi");
     foreach($absen as $a){
       list($sid, $absen) = explode(";", $a);
-      $this->db->insert("absensi", array(
-        "staff_id"=>$sid,
-        "date"=>$periode,
-        "hari_masuk"=>$absen
-      ));
+      $is_saved = $this->db->get_where("absensi", array("staff_id"=>$sid, "date"=>$periode));
+      if($is_saved->num_rows() > 0){ // update if is_saved
+        $this->db->update("absensi", array(
+            "hari_masuk"=>$absen
+        ), array("staff_id"=>$sid, "date"=>$periode));
+      }else{
+        $this->db->insert("absensi", array(
+            "staff_id"=>$sid,
+            "date"=>$periode,
+            "hari_masuk"=>$absen
+        ));
+      }
     }
   }
   
@@ -44,7 +52,7 @@ class Absensi_model extends CI_Model{
       $staff = $staff->row();
       $staff_id = $staff->staff_id;
       $periode = $this->input->post("periode");
-      $year = date("Y");
+      $year = $this->input->post("year");
       $periode = $year."-".$periode."-01";
       $hari_masuk = $data["hari_masuk"];
       $this->db->insert("absensi", array(
@@ -76,7 +84,7 @@ class Absensi_model extends CI_Model{
   }
   
   function get_periode($staff_id, $start, $end){
-    return $this->db->select("absen")->where("date BETWEEN '$start' AND '$end' AND staff_id='$staff_id'")->get("absensi");
+    return $this->db->select("hari_masuk AS absen")->where("date BETWEEN '$start' AND '$end' AND staff_id='$staff_id'")->get("absensi");
   }
   
 }

@@ -49,6 +49,7 @@ function HeaderLink($value, $key, $col, $dir) {
 <div class="body">
     <div class="content">
         <?php echo $this->session->flashdata('message'); ?>
+        <?php if(validation_errors()) echo error_box(validation_errors()); ?>
         <div class="page-header">
             <div class="icon">
                 <span class="ico-tag"></span>
