@@ -798,10 +798,6 @@ class Staffs extends CI_Controller {
 		if ($this->input->get("staff_name") != "") {
 			$staff_list->like('staff_name',$this->input->get("staff_name"));
 		}
-		
-		if($this->input->get("marital_status") != FALSE){
-		  $staff_list->like("staff_status_nikah", $this->input->get("marital_status"));
-		}
 
         $staff_list->order_by($data['col'], $data['dir']);
         $data['staff_list'] = $staff_list
@@ -830,20 +826,20 @@ class Staffs extends CI_Controller {
         $data['staff_jabatan'] = form_dropdown('staff_jabatan',
                         $list_jbt,
                         $jbt_selected);
-    // Marital status
+        // Marital status
         $marital = new Marital();
         $list_marital = $marital->list_drop();
         $data['marital'] = form_dropdown("marital_status", $list_marital);
 
 		$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
 
-		if ($this->input->get('to') == 'pdf') {
+    if ($this->input->get('to') == 'pdf') {
 			$this->load->library('html2pdf');
 
 			$this->html2pdf->filename = 'staff_list_report.pdf';
 	    	$this->html2pdf->paper('a4', 'landscape');
 	    	$this->html2pdf->html($this->load->view('staffs/list_to_pdf', $data, true));
-	    
+
 	    	$this->html2pdf->create();
     	} else if ($this->input->get('to') == 'xls') {
     		$param['file_name'] = 'staff_list_report.xls';
@@ -973,7 +969,7 @@ class Staffs extends CI_Controller {
     		$param['content_sheet'] = $this->load->view('staffs/cuti_to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
 		} else {
-	        $config['base_url'] = site_url("staffs/index");
+	        $config['base_url'] = site_url("staffs/report_cuti");
 	        $config['total_rows'] = $total_rows;
 	        $config['per_page'] = $this->limit;
 	        $config['uri_segment'] = $uri_segment;
@@ -1126,6 +1122,124 @@ class Staffs extends CI_Controller {
 	        $data['pagination'] = $this->pagination->create_links();
 
         	$this->load->view('staffs/report_pph', $data);
+        }
+    }
+
+    public function report_expired_doc($offset = 0) {
+        $staff_list = new Staff();
+        switch ($this->input->get('c')) {
+            case "1":
+                $data['col'] = "staff_nik";
+                break;
+            case "2":
+                $data['col'] = "staff_name";
+                break;
+            case "3":
+                $data['col'] = "no_passport";
+                break;
+            case "4":
+                $data['col'] = "passport_expired";
+                break;
+            case "5":
+                $data['col'] = "no_kitas";
+                break;
+            case "6":
+                $data['col'] = "kitas_expired";
+                break;
+            case "7":
+                $data['col'] = "staff_cabang";
+                break;
+            case "8":
+                $data['col'] = "staff_departement";
+                break;
+            case "9":
+                $data['col'] = "staff_jabatan";
+                break;
+            case "10":
+                $data['col'] = "staff_id";
+                break;
+            default:
+                $data['col'] = "staff_id";
+        }
+
+        if ($this->input->get('d') == "1") {
+            $data['dir'] = "DESC";
+        } else {
+            $data['dir'] = "ASC";
+        }
+
+        $total_rows = $staff_list->count();
+
+        $uri_segment = 3;
+        $offset = $this->uri->segment($uri_segment);
+
+		if ($this->input->get("staff_cabang") != "") {
+			$staff_list->like('staff_cabang',$this->input->get("staff_cabang"));
+		}
+
+		if ($this->input->get("staff_departement") != "") {
+			$staff_list->like('staff_departement',$this->input->get("staff_departement"));
+		}
+
+		if ($this->input->get("staff_jabatan") != "") {
+			$staff_list->like('staff_jabatan',$this->input->get("staff_jabatan"));
+		}
+
+		if ($this->input->get("staff_name") != "") {
+			$staff_list->like('staff_name',$this->input->get("staff_name"));
+		}
+
+        $staff_list->order_by($data['col'], $data['dir']);
+        $data['staff_list'] = $staff_list
+                        ->get($this->limit, $offset)->all;
+
+		// Branch
+        $branch = new Branch();
+        $list_branch = $branch->list_drop();
+        $branch_selected = $this->input->get('staff_cabang');
+        $data['staff_cabang'] = form_dropdown('staff_cabang',
+                        $list_branch,
+                        $branch_selected);
+
+		// Departement
+        $dept = new Department();
+        $list_dpt = $dept->list_drop();
+        $dpt_selected = $this->input->get('staff_departement');
+        $data['staff_departement'] = form_dropdown('staff_departement',
+                        $list_dpt,
+                        $dpt_selected);
+
+		//Jabatan
+        $title = new Title();
+        $list_jbt = $title->list_drop();
+        $jbt_selected = $this->input->get('staff_jabatan');
+        $data['staff_jabatan'] = form_dropdown('staff_jabatan',
+                        $list_jbt,
+                        $jbt_selected);
+
+		$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
+
+		if ($this->input->get('to') == 'pdf') {
+			$this->load->library('html2pdf');
+
+			$this->html2pdf->filename = 'staff_list_report.pdf';
+	    	$this->html2pdf->paper('a4', 'landscape');
+	    	$this->html2pdf->html($this->load->view('staffs/expired_doc_to_pdf', $data, true));
+	    
+	    	$this->html2pdf->create();
+    	} else if ($this->input->get('to') == 'xls') {
+    		$param['file_name'] = 'staff_list_report.xls';
+    		$param['content_sheet'] = $this->load->view('staffs/expired_doc_to_pdf', $data, true);
+    		$this->load->view('to_excel',$param);
+		} else {
+	        $config['base_url'] = site_url("staffs/report_expired_doc");
+	        $config['total_rows'] = $total_rows;
+	        $config['per_page'] = $this->limit;
+	        $config['uri_segment'] = $uri_segment;
+	        $this->pagination->initialize($config);
+	        $data['pagination'] = $this->pagination->create_links();
+
+        	$this->load->view('staffs/report_expired_doc', $data);
         }
     }
 

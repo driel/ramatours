@@ -10,14 +10,40 @@
 <script type="text/javascript">
 $(document).ready(function(){
   	$("#printPDF").click(function() {
-  		document.location.href = '<?php echo base_url('components/report_detail').'?'.$_SERVER['QUERY_STRING'].'&to=pdf'; ?>';
+  		document.location.href = '<?php echo site_url('components/report_detail').'?'.$_SERVER['QUERY_STRING'].'&to=pdf'; ?>';
   	});
 
   	$("#printXLS").click(function() {
-  		document.location.href = '<?php echo base_url('components/report_detail').'?'.$_SERVER['QUERY_STRING'].'&to=xls'; ?>';
+  		document.location.href = '<?php echo site_url('components/report_detail').'?'.$_SERVER['QUERY_STRING'].'&to=xls'; ?>';
+  	});
+
+  	$("#printPDFSlipGaji").click(function() {
+  		document.location.href = "<?php echo site_url("components/slip_gaji/");?>/"+$("#staff_id").val()+"/"+$("#staff_period").val()+"/?to=pdf";
   	});
 });
+
+function printSlipGaji(staff_id,period) {
+	$.ajax({
+        url     : "<?php echo site_url("components/slip_gaji/");?>/"+staff_id+"/"+period,
+        success : function(data) {
+        	$("#slipBody").html(data);
+        }
+    });
+    $('#printSlipGajiModal').modal('show');
+}
 </script>
+<!-- Modal -->
+<div id="printSlipGajiModal" class="modal hide fade" tabindex="-2" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Slip Gaji</h3>
+	</div>
+	<div id="slipBody" class="modal-body"></div>
+	<div class="modal-footer">
+		<button id="printPDFSlipGaji" class="btn btn-primary">Save</button>
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	</div>
+</div>
 <div class="body">
   <div class="content">
     <?php echo $this->session->flashdata('message'); ?>
@@ -93,6 +119,7 @@ $(document).ready(function(){
 		          <th rowspan="2">Grand</th>
 		          <th colspan="2">PPh</th>
 		          <th rowspan="2">Net</th>
+		          <th rowspan="2">Slip Gaji</th>
 		        </tr>
 		        <tr>
 		          <th>Absen</th>
@@ -121,6 +148,7 @@ $(document).ready(function(){
 		            <td><?php echo $row->pph_by_company == 'y'? number_format(get_total_monthly_tax($row->staff_id),0,',','.'):'-'; ?></td>
 		            <td><?php echo $row->pph_by_company == 'n'? number_format(get_total_monthly_tax($row->staff_id),0,',','.'):'-'; ?></td>
 		            <td><?php echo $row->pph_by_company == 'y'? number_format($grand,0,',','.'):number_format(($grand-get_total_monthly_tax($row->staff_id)),0,',','.'); ?></td>
+		            <td><a href="javascript:printSlipGaji('<?php echo $row->staff_id; ?>','<?php echo $this->input->get('period') == ''? $period_selected:$this->input->get('period');?>');" class="btn btn-primary">Cetak</a></td>
 		          </tr>
 		      <?php } ?>
 		      </tbody>

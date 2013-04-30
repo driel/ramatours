@@ -175,6 +175,22 @@ class Components extends CI_Controller {
       echo json_encode($components);
     }
 
+	public function slip_gaji($staff_id,$period,$to = null) {
+		$this->load->helper('report');
+		$this->load->model("Absensi_model", "absensi");
+		$staff = $this->absensi->get_staff("staff_id", $staff_id)->row();
+		$content = print_slip_gaji($staff,$period);
+		if ($this->input->get('to') == 'pdf') {
+			$this->load->library('html2pdf');
+
+			$this->html2pdf->filename = 'staff_component_slip.pdf';
+	    	$this->html2pdf->paper('a4', 'landscape');
+	    	$this->html2pdf->html($content);
+	    
+	    	$this->html2pdf->create();
+    	} else {echo $content;}
+	}
+
     public function report_detail($offset = 0) {
 		$this->load->helper(array('report','bulan'));
 

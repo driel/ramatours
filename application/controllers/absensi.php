@@ -5,6 +5,7 @@ class Absensi extends CI_Controller{
     parent::__construct();
     $this->load->model("Absensi_model", "absensi");
     $this->load->helper("staff");
+    //$this->output->enable_profiler(true);
   }
   
   function index(){
@@ -54,13 +55,38 @@ class Absensi extends CI_Controller{
   }
   
   function add(){
-    $data["kode_absen"] = array("name"=>"kode_absen", "id"=>"kode_absen");
-    $data["staff"] = array("id"=>"staff", "name"=>"staff_name");
-    $data["staff_id"] = array("staff_id"=>"");
-    $data["date"] = array("name"=>"date", "class"=>"datepicker");
-    $data["hari_masuk"] = array("name"=>"hari_masuk");
     $data["form_action"] = "absensi/create";
+    
     $data["id"] = null;
+    
+    // branch
+    $branch = new Branch();
+    $branch_list = $branch->list_drop();
+    $data["branch"] = form_dropdown("branch", $branch_list);
+    
+    // month
+    $month=array(
+    '01'=>'January',
+    '02'=>'February',
+    '03'=>'March',
+    '04'=>'April',
+    '05'=>'May',
+    '06'=>'June',
+    '07'=>'July',
+    '08'=>'August',
+    '09'=>'September',
+    '10'=>'October',
+    '11'=>'November',
+    '12'=>'December');
+    $data["periode"] = form_dropdown("periode", $month, date("m"));
+    
+    // year
+    $year = array();
+    for($t = 1980; $t <= (int)date("Y"); $t++){
+      $year[$t] = $t;
+    }
+    $data["year"] = form_dropdown("year", $year, date("Y"));
+    
     $this->load->view("absensi/form", $data);
   }
   
@@ -101,10 +127,8 @@ class Absensi extends CI_Controller{
       }
     }else{ // manual entry
       $this->form_validation->set_rules(array(
-        array("field"=>"staff_name", "label"=>"Staff Name", "rules"=>"required"),
-        array("field"=>"kode_absen", "label"=>"Kode Absen", "rules"=>"required"),
-        array("field"=>"date", "label"=>"Date", "rules"=>"required"),
-        array("field"=>"hari_masuk", "label"=>"Jumlah hari masuk", "rules"=>"required")
+        array("field"=>"periode", "label"=>"Periode", "rules"=>"required"),
+        array("field"=>"branch", "label"=>"Branch", "rules"=>"required")
       ));
       if($this->form_validation->run()===false){
         // form validation errors
@@ -118,6 +142,22 @@ class Absensi extends CI_Controller{
   function update(){
     $this->absensi->update();
     redirect("absensi/index");
+  }
+  
+  function staff_per_branch(){
+    $branch = $this->input->get("branch");
+    $staff = new Staff();
+    $staff_list = $staff->get_staff_per_branch($branch)->result();
+    echo json_encode($staff_list);
+  }
+  
+  function get_per_periode(){
+    $staff_id = $this->input->get("staff_id");
+    $periode = $this->input->get("periode");
+    $start = $periode."-01";
+    $end = $periode."-31";
+    $result = $this->absensi->get_periode($staff_id, $start, $end)->row();
+    echo json_encode($result);
   }
    
   function report(){

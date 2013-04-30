@@ -10,11 +10,11 @@
 <script type="text/javascript">
 $(document).ready(function(){
   	$("#printPDF").click(function() {
-  		document.location.href = '<?php echo base_url('assets_handover/report').'?'.$_SERVER['QUERY_STRING'].'&to=pdf'; ?>';
+  		document.location.href = '<?php echo site_url('assets_handover/report').'?'.$_SERVER['QUERY_STRING'].'&to=pdf'; ?>';
   	});
 
   	$("#printXLS").click(function() {
-  		document.location.href = '<?php echo base_url('assets_handover/report').'?'.$_SERVER['QUERY_STRING'].'&to=xls'; ?>';
+  		document.location.href = '<?php echo site_url('assets_handover/report').'?'.$_SERVER['QUERY_STRING'].'&to=xls'; ?>';
   	});
 });
 </script>

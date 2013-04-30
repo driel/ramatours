@@ -24,14 +24,18 @@ class Absensi_model extends CI_Model{
   }
   
   function add(){
-    $staff_id = $this->input->post("staff_id");
-    $date = $this->input->post("date");
-    $hari_masuk = $this->input->post("hari_masuk");
-    $this->db->insert("absensi", array(
-      "staff_id"=>$staff_id,
-      "date"=>$date,
-      "hari_masuk"=>$hari_masuk
-    ));
+    $periode = $this->input->post("periode");
+    $year = date("Y");
+    $periode = $year."-".$periode."-01";
+    $absen = $this->input->post("absensi");
+    foreach($absen as $a){
+      list($sid, $absen) = explode(";", $a);
+      $this->db->insert("absensi", array(
+        "staff_id"=>$sid,
+        "date"=>$periode,
+        "hari_masuk"=>$absen
+      ));
+    }
   }
   
   function add_csv($data){
@@ -39,11 +43,13 @@ class Absensi_model extends CI_Model{
     if($staff->num_rows() > 0){
       $staff = $staff->row();
       $staff_id = $staff->staff_id;
-      $date = date("c");
+      $periode = $this->input->post("periode");
+      $year = date("Y");
+      $periode = $year."-".$periode."-01";
       $hari_masuk = $data["hari_masuk"];
       $this->db->insert("absensi", array(
         "staff_id"=>$staff_id,
-        "date"=>$date,
+        "date"=>$periode,
         "hari_masuk"=>$hari_masuk
       ));
     }
@@ -63,6 +69,14 @@ class Absensi_model extends CI_Model{
   
   function get_staff($by, $staff_name){
     return $this->db->like($by, $staff_name)->get("staffs");
+  }
+  
+  function get_staff_absensi($staff_id,$period){
+    return $this->db->where("staff_id", $staff_id)->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period)->get("absensi");
+  }
+  
+  function get_periode($staff_id, $start, $end){
+    return $this->db->select("absen")->where("date BETWEEN '$start' AND '$end' AND staff_id='$staff_id'")->get("absensi");
   }
   
 }

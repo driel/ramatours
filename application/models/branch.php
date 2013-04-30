@@ -23,7 +23,7 @@ class Branch extends DataMapper {
         $branch = new Branch();
         $branch->get();
         foreach ($branch as $row) {
-            $data[''] = '[ Pilih Cabang ]';
+            $data[' '] = '[ Pilih Cabang ]';
             $data[$row->branch_name] = $row->branch_name;
         }
         return $data;

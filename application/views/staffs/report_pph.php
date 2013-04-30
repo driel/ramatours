@@ -44,11 +44,11 @@ $(document).ready(function(){
 	});
 
   	$("#printPDF").click(function() {
-  		document.location.href = '<?php echo base_url('staffs/report_pph').'?'.$_SERVER['QUERY_STRING'].'&to=pdf'; ?>';
+  		document.location.href = '<?php echo site_url('staffs/report_pph').'?'.$_SERVER['QUERY_STRING'].'&to=pdf'; ?>';
   	});
 
   	$("#printXLS").click(function() {
-  		document.location.href = '<?php echo base_url('staffs/report_pph').'?'.$_SERVER['QUERY_STRING'].'&to=xls'; ?>';
+  		document.location.href = '<?php echo site_url('staffs/report_pph').'?'.$_SERVER['QUERY_STRING'].'&to=xls'; ?>';
   	});
 });
 (function($){
