@@ -5,13 +5,26 @@ $(document).ready(function(){
 		if ($(this).val() == 'Monthly') {
 			$("#by_monthly").show();
 			$("#by_yearly").hide();
-			$("#filter_monthly").show();
 			$("#filter_yearly").hide();
+			$("#filter_branch").hide();
 		} else {
 			$("#by_monthly").hide();
 			$("#by_yearly").show();
-			$("#filter_monthly").hide();
 			$("#filter_yearly").show();
+
+			if ($("#yearly_by").val() == 'Staff') {
+				$("#filter_branch").show();
+			} else {
+				$("#filter_branch").hide();
+			}
+		}
+	});
+
+	$("#yearly_by").change(function() {
+		if ($(this).val() == 'Staff') {
+			$("#filter_branch").show();
+		} else {
+			$("#filter_branch").hide();
 		}
 	});
 
@@ -38,14 +51,14 @@ $(document).ready(function(){
     	<div class="span3">Period<br />
     	<?php echo $period_by; ?></div>
     	<div id="by_monthly" class="span3">Monthly<br />
-    	<?php echo $period; ?></div>
+    	<?php echo $period_month; ?>&nbsp;<?php echo $period_year; ?></div>
     	<div id="by_yearly" class="span3" style="display:none;">Yearly <br />
     	<?php echo $yearly; ?></div>
-    	<div id="filter_monthly" class="span3">Branch<br />
-    	<?php echo $branch; ?>
-    	</div>
     	<div id="filter_yearly" class="span3" style="display:none;">By<br />
     	<?php echo $yearly_by; ?>
+    	</div>
+    	<div id="filter_branch" class="span3" style="display:none;">Branch<br />
+    	<?php echo $branch; ?>
     	</div>
     	<div class="cl"></div>
     </form>

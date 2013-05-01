@@ -67,7 +67,7 @@ $(document).ready(function(){
     	<div class="span3">Period<br />
     	<?php echo $period_by; ?></div>
     	<div id="by_monthly" class="span3">Monthly<br />
-    	<?php echo $period; ?></div>
+    	<?php echo $period_month; ?>&nbsp;<?php echo $period_year; ?></div>
     	<div id="by_yearly" class="span3" style="display:none;">By <br />
     	<?php echo $yearly_by; ?></div>
     	<div id="filter1_monthly" class="span3">Branch<br />

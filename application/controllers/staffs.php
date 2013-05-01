@@ -803,6 +803,11 @@ class Staffs extends CI_Controller {
 			$staff_list->like('staff_name',$this->input->get("staff_name"));
 		}
 
+		if (strtolower($this->input->get("status")) != "on") {
+			$staff_list->where("date_out !=","0000-00-00");
+			$staff_list->where("contract_to <","DATE_FORMAT(NOW(),'%Y-%m-%d')");
+		}
+
         $staff_list->order_by($data['col'], $data['dir']);
         $data['staff_list'] = $staff_list
                         ->get($this->limit, $offset)->all;
@@ -1000,19 +1005,32 @@ class Staffs extends CI_Controller {
 
 		$data['period_by_selected'] = $period_by_selected;
 
+		// Year Period
+        $years = array();
+		for($i=date('Y'); $i>(date('Y')-5); $i--) {
+	  		$years[$i] = $i;
+	  	}
+
+        $period_year_selected = $this->input->get('period_year') == ''? date('Y'):$this->input->get('period_year');
+        $data['period_year'] = form_dropdown('period_year',
+                        $years,
+                        $period_year_selected);
+
+		$data['period_year_selected'] = $period_year_selected;
+
 		// Monthly Period
         $list_period = array();
 		for ($i=1; $i<=12; $i++) {
             if ($i < 10) { $i = '0'.$i; }
-            $list_period[date('Y').'-'.$i] = bulan(date('Y').'-'.$i).' '.(date('Y'));
+            $list_period[$i] = bulan_full($i);
         }
         
-        $period_selected = $this->input->get('period') == ''? date('Y-m'):$this->input->get('period');
-        $data['period'] = form_dropdown('period',
+        $period_month_selected = $this->input->get('period_month') == ''? date('m'):$this->input->get('period_month');
+        $data['period_month'] = form_dropdown('period_month',
                         $list_period,
-                        $period_selected);
+                        $period_month_selected);
 
-		$data['period_selected'] = $period_selected;
+		$data['period_month_selected'] = $period_month_selected;
 
 		// Yearly Period
         $years = array();
@@ -1077,9 +1095,9 @@ class Staffs extends CI_Controller {
 
 			if ($period_by_selected == 'Monthly') {
 				if ($this->input->get("period") != "") {
-					$this->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$this->input->get("period"));
+					$this->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$this->input->get("period_year").'-'.$this->input->get("period_month"));
 				} else {
-					$this->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period_selected);
+					$this->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period_year_selected.'-'.$period_month_selected);
 				}
 
 				if ($this->input->get("staff_cabang") != "") {

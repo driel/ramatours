@@ -255,8 +255,8 @@ if (!function_exists('print_slip_gaji')) {
 							$content .= "
      					<tr>
 				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".$comp->comp_name."</td>
-				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" width=\"10px\">".($comp->comp_type == 'Daily'? $staff_absensi->hari_masuk:'-')."</td>
-				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".($comp->comp_type == 'Daily'? number_format($comp_a->gaji_daily_value*$staff_absensi->hari_masuk,0,",","."):number_format($comp_a->gaji_amount_value,0,",","."))."</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" width=\"10px\">".($comp->comp_type == 'Daily'? $staff_absensi->hari_masuk:'-')."</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".($comp->comp_type == 'Daily'? number_format($comp_a->gaji_daily_value*$staff_absensi->hari_masuk,0,",","."):number_format($comp_a->gaji_amount_value,0,",","."))."</td>
           				</tr>";
           				}
           				$content .= "
@@ -278,8 +278,8 @@ if (!function_exists('print_slip_gaji')) {
 							$content .= "
      					<tr>
 				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".$comp->comp_name."</td>
-				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" width=\"10px\">".($comp->comp_type == 'Daily'? $staff_absensi->hari_masuk:'-')."</td>
-				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".($comp->comp_type == 'Daily'? number_format($comp_a->gaji_daily_value*$staff_absensi->hari_masuk,0,",","."):number_format($comp_a->gaji_amount_value,0,",","."))."</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" width=\"10px\">".($comp->comp_type == 'Daily'? $staff_absensi->hari_masuk:'-')."</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".($comp->comp_type == 'Daily'? number_format($comp_a->gaji_daily_value*$staff_absensi->hari_masuk,0,",","."):number_format($comp_a->gaji_amount_value,0,",","."))."</td>
           				</tr>";
           				}
           				$content .= "

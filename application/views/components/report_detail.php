@@ -23,7 +23,7 @@ $(document).ready(function(){
     </div>
     <form action="" method="post">
     	<div class="span3">Period<br />
-    	<?php echo $period; ?></div>
+    	<?php echo $period_month; ?>&nbsp;<?php echo $period_year; ?></div>
     	<div class="span3">Branch<br />
     	<?php echo $staff_cabang; ?></div>
     	<div class="span3">Department<br />

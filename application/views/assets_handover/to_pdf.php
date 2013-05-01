@@ -2,8 +2,8 @@
 <html lang="en">
 	<head>
 	<style type="text/css">
-		table {border-width: 0 0 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid;}
-		td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid;}
+		table {border-width: 1px 1px 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid; font-size:12px;}
+		td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid; font-size:10px;}
 		.site_name{float:left; font-size:22px;}
 		.date{float:right; font-size:10px;}
 		h2{margin-top: 0;}
@@ -20,8 +20,12 @@
 	</style>
 	</head>
     <body>
-    	<span class="site_name">Rama Tours</span>
-		<span class="date"><?php echo date("d/m/Y - H:i"); ?></span>
+    	<table style="border: 0;" width="100%">
+    		<tr>
+    			<td style="border: 0;" align="left"><span class="site_name">Rama Tours</span></td>
+    			<td style="border: 0;" align="right"><span class="date"><?php echo date("d/m/Y - H:i"); ?></span></td>
+    		</tr>
+    	</table>
 		<span class="cl"></span><br />
 		<h2 style="text-align:center">Daftar Serah Terima Asset</h2>
 		<center>
@@ -48,6 +52,7 @@
 		<table width="100%" align="center">
             <thead>
                 <tr>
+                    <th rowspan="2">No</th>
                     <th rowspan="2" width="15%">Date</th>
                     <th colspan="2">Staff</th>
                     <th rowspan="2">Document Number</th>
@@ -61,9 +66,14 @@
             </thead>
             <tbody>
             <?php
+	      	$odd = true;
+	      	$i=0;
             foreach ($assets_handover as $row) {
+		      	$i++;
+	        	$odd = !$odd;
             ?>
-                <tr>
+        		<tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?>>
+		            <td align="right"><?php echo $i; ?></td>
                     <td><?php echo date_format(new DateTime($row->trasset_date_time),'j M Y'); ?></td>
                     <td><?php $row_staff_from = $staff->where('staff_id', $row->trasset_staff_id_from)->get();echo $row_staff_from->staff_name; ?></td>
                     <td><?php $row_staff_to = $staff->where('staff_id', $row->trasset_staff_id_to)->get();

@@ -2,22 +2,27 @@
 <html lang="en">
 	<head>
 	<style type="text/css">
-	table {border-width: 0 0 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid;}
-	td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid;}
+	table {border-width: 1px 1px 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid; font-size:12px;}
+	td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid; font-size:10px;}
 	.site_name{float:left; font-size:22px;}
 	.date{float:right; font-size:10px;}
 	h2{margin-top: 0;}
 	</style>
 	</head>
     <body>
-    	<span class="site_name">Rama Tours</span>
-		<span class="date"><?php echo date("d/m/Y - H:i"); ?></span>
+    	<table style="border: 0;" width="100%">
+    		<tr>
+    			<td style="border: 0;" align="left"><span class="site_name">Rama Tours</span></td>
+    			<td style="border: 0;" align="right"><span class="date"><?php echo date("d/m/Y - H:i"); ?></span></td>
+    		</tr>
+    	</table>
 		<span class="cl"></span><br />
 		<h2 style="text-align:center">Detil Gaji Karyawan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
-		<h2 style="text-align:center">Periode : <?php echo $this->input->get("period") != FALSE ? bulan($this->input->get('period')).' '.date('Y'):"-"?></h2>
+		<h2 style="text-align:center">Periode : <?php echo ($this->input->get("period_year") != FALSE && $this->input->get("period_month") != FALSE) ? bulan_full($this->input->get('period_month')).' '.$this->input->get("period_year"):"-"?></h2>
 		<table width="100%" align="center">
 	      <thead>
 	        <tr>
+	          <th rowspan="2">No</th>
 	          <th rowspan="2">Cabang</th>
 	          <th rowspan="2">Staff</th>
 	          <th rowspan="2">Department</th>
@@ -40,22 +45,27 @@
 	      <tbody>
 	      <?php
 	      $branch = '';
+	      $odd = true;
+	      $i=0;
 	      foreach ($staff_branch->result() as $row) {
-	      ?>
-	          <tr>
+	      	$i++;
+        	$odd = !$odd;
+          ?>
+    		<tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?>>
+	            <td align="right"><?php echo $i; ?></td>
 	            <td><?php if ($row->staff_cabang == $branch) { echo '';} else { $branch = $row->staff_cabang; echo $row->staff_cabang;} ?></td>
 	            <td><?php echo $row->staff_name; ?></td>
-	            <td><?php echo $row->staff_cabang; ?></td>
+	            <td><?php echo $row->staff_departement; ?></td>
 	            <td><?php echo $row->staff_jabatan; ?></td>
-	            <td><?php echo $row->hari_masuk; ?></td>
-	            <td><?php echo floor((strtotime($row->date_end)-strtotime($row->date_start))/(60*60*24)); ?></td>
-	            <td><?php echo $row->izin_jumlah_hari; ?></td>
-	            <td><?php $total_a = get_total_component_a($row->staff_id,$this->input->get('period')); echo number_format($total_a,0,',','.'); ?></td>
-	            <td><?php $total_b = get_total_component_b($row->staff_id,$this->input->get('period')); echo number_format($total_b,0,',','.'); ?></td>
-	            <td><?php $grand = ($total_a+$total_b); echo $grand; ?></td>
-	            <td><?php echo $row->pph_by_company == 'y'? number_format(get_total_monthly_tax($row->staff_id),0,',','.'):'-'; ?></td>
-	            <td><?php echo $row->pph_by_company == 'n'? number_format(get_total_monthly_tax($row->staff_id),0,',','.'):'-'; ?></td>
-	            <td><?php echo $row->pph_by_company == 'y'? number_format($grand,0,',','.'):number_format(($grand-get_total_monthly_tax($row->staff_id)),0,',','.'); ?></td>
+	            <td align="right"><?php echo $row->hari_masuk; ?></td>
+	            <td align="right"><?php echo floor((strtotime($row->date_end)-strtotime($row->date_start))/(60*60*24)); ?></td>
+	            <td align="right"><?php echo $row->izin_jumlah_hari; ?></td>
+	            <td align="right"><?php $total_a = get_total_component_a($row->staff_id,$this->input->get('period_year').'-'.$this->input->get('period_month')); echo number_format($total_a,0,',','.'); ?></td>
+	            <td align="right"><?php $total_b = get_total_component_b($row->staff_id,$this->input->get('period_year').'-'.$this->input->get('period_month')); echo number_format($total_b,0,',','.'); ?></td>
+	            <td align="right"><?php $grand = ($total_a+$total_b); echo $grand; ?></td>
+	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format(get_total_monthly_tax($row->staff_id),0,',','.'):'-'; ?></td>
+	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format(get_total_monthly_tax($row->staff_id),0,',','.'):'-'; ?></td>
+	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($grand,0,',','.'):number_format(($grand-get_total_monthly_tax($row->staff_id)),0,',','.'); ?></td>
 	          </tr>
 	      <?php } ?>
 	      </tbody>
