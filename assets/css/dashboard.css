@@ -16,6 +16,11 @@ body, html{
   height: 100%
 }
 
+#preview{
+	border: 1px solid #e0e0e0;
+	padding: 5px;
+}
+
 form .span1, form .span2, form .span3, form .span4, form .span5, form .span6{
   margin-left: 0;
 }

@@ -795,6 +795,10 @@ class Staffs extends CI_Controller {
 			$staff_list->where("DATE_FORMAT(staff_birthdate,'%m-%d')",$birthdate);
 		}
 
+		if ($this->input->get("marital_status") != "") {
+			$staff_list->like('staff_status_nikah',$this->input->get("marital_status"));
+		}
+
 		if ($this->input->get("staff_name") != "") {
 			$staff_list->like('staff_name',$this->input->get("staff_name"));
 		}
@@ -833,7 +837,7 @@ class Staffs extends CI_Controller {
 
 		$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
 
-    if ($this->input->get('to') == 'pdf') {
+    	if ($this->input->get('to') == 'pdf') {
 			$this->load->library('html2pdf');
 
 			$this->html2pdf->filename = 'staff_list_report.pdf';
@@ -846,16 +850,16 @@ class Staffs extends CI_Controller {
     		$param['content_sheet'] = $this->load->view('staffs/list_to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
 		} else if($this->input->get('to') == 'print'){
-        	$this->load->view('staffs/plain', $data);
-        }else{
-          $config['base_url'] = site_url("staffs/index");
-          $config['total_rows'] = $total_rows;
-          $config['per_page'] = $this->limit;
-          $config['uri_segment'] = $uri_segment;
-          $this->pagination->initialize($config);
-          $data['pagination'] = $this->pagination->create_links();
+        	$this->load->view('staffs/list_to_pdf', $data);
+        } else {
+          	$config['base_url'] = site_url("staffs/index");
+          	$config['total_rows'] = $total_rows;
+          	$config['per_page'] = $this->limit;
+          	$config['uri_segment'] = $uri_segment;
+          	$this->pagination->initialize($config);
+          	$data['pagination'] = $this->pagination->create_links();
           
-          $this->load->view('staffs/report_list', $data);
+          	$this->load->view('staffs/report_list', $data);
         }
     }
 
@@ -968,7 +972,9 @@ class Staffs extends CI_Controller {
     		$param['file_name'] = 'sisa_cuti_staff_report.xls';
     		$param['content_sheet'] = $this->load->view('staffs/cuti_to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
-		} else {
+		} else if($this->input->get('to') == 'print'){
+        	$this->load->view('staffs/cuti_to_pdf', $data);
+        } else {
 	        $config['base_url'] = site_url("staffs/report_cuti");
 	        $config['total_rows'] = $total_rows;
 	        $config['per_page'] = $this->limit;
@@ -1113,7 +1119,9 @@ class Staffs extends CI_Controller {
     		$param['file_name'] = 'pph_staff_report.xls';
     		$param['content_sheet'] = $this->load->view('staffs/pph_to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
-		} else {
+		} else if($this->input->get('to') == 'print'){
+        	$this->load->view('staffs/pph_to_pdf', $data);
+        } else {
 	        $config['base_url'] = site_url("staffs/report_pph");
 	        $config['total_rows'] = $total_rows;
 	        $config['per_page'] = $this->limit;

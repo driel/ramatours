@@ -238,7 +238,9 @@ class Cuti extends CI_Controller{
 		$param['file_name'] = 'cuti_report.xls';
 		$param['content_sheet'] = $this->load->view('cuti/to_pdf', $data, true);
 		$this->load->view('to_excel',$param);
-	} else {
+	} else if($this->input->get('to') == 'print'){
+    	$this->load->view('cuti/to_pdf', $data);
+    } else {
 	    $config['base_url'] = site_url("cuti/index");
 	    $config['total_rows'] = $total_rows;
 	    $config['per_page'] = $this->limit;

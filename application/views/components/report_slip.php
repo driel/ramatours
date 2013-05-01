@@ -1,21 +1,7 @@
 <?php get_header(); ?>
 <script type="text/javascript">
 $(document).ready(function(){
-	$("#period_by").change(function() {
-		if ($(this).val() == 'Monthly') {
-			$("#by_monthly").show();
-			$("#by_yearly").hide();
-			$("#filter_monthly").show();
-			$("#filter_yearly").hide();
-		} else {
-			$("#by_monthly").hide();
-			$("#by_yearly").show();
-			$("#filter_monthly").hide();
-			$("#filter_yearly").show();
-		}
-	});
-
-  	$(".proc").on("click", function(e){
+	$(".proc").on("click", function(e){
 		e.preventDefault();
 		var data = $("form").serialize();
 		var target = $(this).attr("target") == "_blank" ? "_blank":"_self";
@@ -31,22 +17,14 @@ $(document).ready(function(){
         <span class="ico-coins"></span>
       </div>
       <h1>Salary
-      <small>Salary Recapitulation Report</small>
+      <small>Slip Gaji</small>
       </h1>
     </div>
     <form action="" method="post">
     	<div class="span3">Period<br />
-    	<?php echo $period_by; ?></div>
-    	<div id="by_monthly" class="span3">Monthly<br />
     	<?php echo $period; ?></div>
-    	<div id="by_yearly" class="span3" style="display:none;">Yearly <br />
-    	<?php echo $yearly; ?></div>
-    	<div id="filter_monthly" class="span3">Branch<br />
-    	<?php echo $branch; ?>
-    	</div>
-    	<div id="filter_yearly" class="span3" style="display:none;">By<br />
-    	<?php echo $yearly_by; ?>
-    	</div>
+    	<div class="span3">Staff<br />
+    	<?php echo $staff_list; ?></div>
     	<div class="cl"></div>
     </form>
     <div style="margin: 10px 0; border-bottom:1px solid #e0e0e0;"></div>

@@ -263,7 +263,9 @@ class Assets extends CI_Controller {
     		$param['file_name'] = 'asset_list_report.xls';
     		$param['content_sheet'] = $this->load->view('assets/to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
-		} else {
+		} else if($this->input->get('to') == 'print'){
+        	$this->load->view('assets/to_pdf', $data);
+        } else {
 	        $config['base_url'] = site_url("assets/index");
 	        $config['total_rows'] = $total_rows;
 	        $config['per_page'] = $this->limit;

@@ -2,68 +2,21 @@
 <html lang="en">
 	<head>
 	<style type="text/css">
-		table {
-			border-width: 0 0 1px 1px;
-			border-spacing: 0;
-			border-collapse: collapse;
-			border-style: solid;
-		}
- 
-		td, th {
-			margin: 0;
-			padding: 4px;
-			border-width: 1px 1px 0 0;
-			border-style: solid;
-		}
+	table {border-width: 0 0 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid;}
+	td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid;}
+	.site_name{float:left; font-size:22px;}
+	.date{float:right; font-size:10px;}
+	h2{margin-top: 0;}
 	</style>
 	</head>
     <body>
-    	<center>
-    		<h3>Salary Recapitulation Report</h3>
-    	</center>
-      	<table width="50%" align="center">
-      		<?php
-      		if ($this->input->get('period_by') == 'Monthly') {
-      		if ($this->input->get('period') != "") {
-      		?>
-  			<tr>
-  				<td>Period</td>
- 				<td><?php echo bulan($this->input->get('period')).' '.date('Y'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('branch') != "") {
-      		?>
-  			<tr>
-  				<td>Branch</td>
- 				<td><?php echo $this->input->get('branch'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		} else {
-			if ($this->input->get('yearly') != "") {
-			?>
-			<tr>
-  				<td>Tahun</td>
- 				<td><?php echo $this->input->get('yearly'); ?></td>
-			</tr>
-			<?php
-			}
-			if ($this->input->get('yearly_by') == "") {
-			?>
-			<tr>
-  				<td>By</td>
- 				<td><?php echo $this->input->get('yearly_by'); ?></td>
-			</tr>
-			<?php
-			}
-      		}
-      		?>
-      	</table>
-    	<br />
     	<?php
     	if ($this->input->get('period_by') == 'Monthly') {
     	?>
+		<span class="site_name">Rama Tours</span>
+		<span class="date"><?php echo date("d/m/Y - H:i"); ?></span>
+		<span class="cl"></span><br />
+		<h2 style="text-align:center">Rekap Gaji Bulanan Karyawan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
 		<table width="100%" align="center">
 	      <thead>
 	        <tr>
@@ -100,6 +53,10 @@
 	    } else if ($period_by_selected == 'Yearly') {
     		if ($yearly_by_selected == 'Branch') {
 		?>
+		<span class="site_name">Rama Tours</span>
+		<span class="date"><?php echo date("d/m/Y - H:i"); ?></span>
+		<span class="cl"></span><br />
+		<h2 style="text-align:center">Rekap Gaji Tahunan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
 		<table width="100%" align="center">
 	      <thead>
 	        <tr>
@@ -186,6 +143,10 @@
 		<?php
    			} else {
 		?>
+		<span class="site_name">Rama Tours</span>
+		<span class="date"><?php echo date("d/m/Y - H:i"); ?></span>
+		<span class="cl"></span><br />
+		<h2 style="text-align:center">Rekap Gaji Tahunan Karyawan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
 		<table width="100%" align="center">
 	      <thead>
 	        <tr>

@@ -2,19 +2,11 @@
 <html lang="en">
 	<head>
 	<style type="text/css">
-		table {
-			border-width: 0 0 1px 1px;
-			border-spacing: 0;
-			border-collapse: collapse;
-			border-style: solid;
-		}
- 
-		td, th {
-			margin: 0;
-			padding: 4px;
-			border-width: 1px 1px 0 0;
-			border-style: solid;
-		}
+		table {border-width: 0 0 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid;}
+		td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid;}
+		.site_name{float:left; font-size:22px;}
+		.date{float:right; font-size:10px;}
+		h2{margin-top: 0;}
 
 		table.no_border {
 			border-style: none;
@@ -28,30 +20,32 @@
 	</style>
 	</head>
     <body>
-    	<center>
-    		<h3>Asset List</h3>
-	    	<br />
+    	<span class="site_name">Rama Tours</span>
+		<span class="date"><?php echo date("d/m/Y - H:i"); ?></span>
+		<span class="cl"></span><br />
+		<h2 style="text-align:center">Daftar Serah Terima Asset</h2>
+		<center>
 	    	<table align="center" class="no_border">
 	            <tr>
-	                <td class="no_border" width="20%">Name</td>
-	                <td class="no_border"><div class="span3"> : <?php echo $asset_name; ?></div></td>
+	                <td class="no_border" width="50%">Name</td>
+	                <td class="no_border"><?php echo $asset->asset_name; ?></td>
 	            </tr>
 	            <tr>
-	                <td class="no_border" width="20%">Code</td>
-	                <td class="no_border"><div class="span2"> : <?php echo $asset_code; ?></div></td>
+	                <td class="no_border" width="50%">Code</td>
+	                <td class="no_border"><?php echo $asset->asset_code; ?></td>
 	            </tr>
 	            <tr>
 	                <td class="no_border">Status</td>
-	                <td class="no_border"><div class="span2"> : <?php echo $asset_status; ?></div></td>
+	                <td class="no_border"><?php echo $asset->asset_status; ?></td>
 	            </tr>
 	            <tr>
 	            	<td class="no_border">Description</td>
-	            	<td class="no_border"><div class="span6"> : <?php echo $description; ?></div></td>
+	            	<td class="no_border"><?php echo $asset->description; ?></td>
 	            </tr>
 	        </table>
     	</center>
 		<br />
-		<table align="center">
+		<table width="100%" align="center">
             <thead>
                 <tr>
                     <th rowspan="2" width="15%">Date</th>

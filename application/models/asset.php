@@ -24,6 +24,15 @@ class Asset extends DataMapper {
         $this->db->delete($this->table);
     }
 
+    function list_drop() {
+        $asset = new Asset();
+        $asset->get();
+        foreach ($asset as $row) {
+            $data[$row->asset_name] = $row->asset_name;
+        }
+        return $data;
+    }
+
 }
 
 ?>

@@ -175,12 +175,13 @@ class Components extends CI_Controller {
       echo json_encode($components);
     }
 
-	public function slip_gaji($staff_id,$period,$to = null) {
-		$this->load->helper('report');
+	public function report_slip() {
+		$this->load->helpers(array('report','bulan'));
 		$this->load->model("Absensi_model", "absensi");
-		$staff = $this->absensi->get_staff("staff_id", $staff_id)->row();
-		$content = print_slip_gaji($staff,$period);
 		if ($this->input->get('to') == 'pdf') {
+			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff"))->row();
+			$content = print_slip_gaji($staff,$this->input->get("period"));
+
 			$this->load->library('html2pdf');
 
 			$this->html2pdf->filename = 'staff_component_slip.pdf';
@@ -188,7 +189,41 @@ class Components extends CI_Controller {
 	    	$this->html2pdf->html($content);
 	    
 	    	$this->html2pdf->create();
-    	} else {echo $content;}
+    	} else if ($this->input->get('to') == 'xls') {
+			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff"))->row();
+			$content = print_slip_gaji($staff,$this->input->get("period"));
+
+    		$param['file_name'] = 'staff_component_slip.xls';
+    		$param['content_sheet'] = $content;
+    		$this->load->view('to_excel',$param);
+    	} else if($this->input->get('to') == 'print'){
+			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff"))->row();
+			$content = print_slip_gaji($staff,$this->input->get("period"));
+
+        	$data['content'] = $content;
+        	$this->load->view('components/slip_to_pdf', $data);
+        } else {
+        	//Staff
+	        $staff = new Staff();
+	        $list_staff = $staff->list_drop();
+	        $staff_selected = $this->input->get('staff');
+	        $data['staff_list'] = form_dropdown('staff',
+	                        $list_staff,
+	                        $staff_selected);
+        	// Period
+	        $list_period = array();
+			for ($i=1; $i<=12; $i++) {
+	            if ($i < 10) { $i = '0'.$i; }
+	            $list_period[date('Y').'-'.$i] = bulan(date('Y').'-'.$i).' '.(date('Y'));
+	        }
+        
+	        $period_selected = $this->input->get('period') == ''? date('Y-m'):$this->input->get('period');
+	        $data['period'] = form_dropdown('period',
+	                        $list_period,
+	                        $period_selected);
+
+        	$this->load->view('components/report_slip', $data);
+		}
 	}
 
     public function report_detail($offset = 0) {
@@ -284,7 +319,9 @@ class Components extends CI_Controller {
     		$param['file_name'] = 'detail_staff_component_report.xls';
     		$param['content_sheet'] = $this->load->view('components/detail_to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
-		} else {
+		} else if($this->input->get('to') == 'print'){
+        	$this->load->view('components/detail_to_pdf', $data);
+        } else {
 	        $config['base_url'] = site_url("components/report_detail");
 	        $config['total_rows'] = $total_rows;
 	        $config['per_page'] = $this->limit;
@@ -386,7 +423,9 @@ class Components extends CI_Controller {
     		$param['file_name'] = strtolower($period_by_selected).'_'.strtolower($period_by_selected == 'Yearly' && $yearly_by_selected == 'Branch'? 'branch_':'').'recap_component_report.xls';
     		$param['content_sheet'] = $this->load->view('components/recap_to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
-		} else {
+		} else if($this->input->get('to') == 'print'){
+        	$this->load->view('components/recap_to_pdf', $data);
+        } else {
 	        $config['base_url'] = site_url("components/report_recap");
 	        $config['total_rows'] = $total_rows;
 	        $config['per_page'] = $this->limit;

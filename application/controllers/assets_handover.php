@@ -280,22 +280,6 @@ class Assets_Handover extends CI_Controller {
         $this->detail_id = $this->uri->segment(5);
 
         $asset = new Asset();
-        $rs = $asset->where('asset_id', $this->asset_id)->get();
-        $data['id'] = $rs->asset_id;
-        $data['asset_name'] = $rs->asset_name;
-        $data['asset_code'] = $rs->asset_code;
-        $data['asset_status'] = $rs->asset_status == '1'? 'Enable':'Disable';
-
-        $date = new DateTime($rs->date);
-        $data['date_handover'] = ($rs->date == '0000-00-00' || $rs->date == '0000-00-00 00:00:00')? '':$date->format('d-m-Y');
-        $data['description'] = $rs->discription;
-
-        // Staffs
-        $staff = new Staff();
-        $used_by = $staff->where('staff_id',$rs->staff_id)->get();
-        $data['staff_name'] = $used_by->staff_name;
-
-        $data['date'] = array('name' => 'date', 'id' => 'date', 'value' => $rs->date);
 
         $asset_handover = new Asset_Handover();
         $data['staff'] = new Staff();
@@ -304,33 +288,25 @@ class Assets_Handover extends CI_Controller {
         $this->uri_segment = $this->uri->segment(5);
         $this->detail_id = $this->uri->segment(5);
 
-		$data['asset_id'] = $this->asset_id;
-		$data['detail_id'] = $this->detail_id;
+		if ($this->input->get("asset_name") != "") {
+	 		$asset = new Asset();
+	        $data['asset'] = $asset->where('asset_name', $this->input->get("asset_name"))->get();
 
-        $asset_handover->where('trasset_asset_id', $this->asset_id)->order_by('trasset_id', 'ASC');
+	        $data['assets_handover'] = $asset_handover
+	                        ->where('trasset_asset_id', $data['asset']->asset_id)
+	                        ->order_by('trasset_id', 'ASC')
+	                        ->get()->all;
+		}
 
-        $total_rows = $asset_handover->count();
-        $data['asset_id'] = $this->asset_id;
-        $data['title'] = "Assets Handover";
-        $data['btn_home'] = anchor('assets/', 'Home', array('class' => 'btn'));
-
-        $offset = $this->uri->segment($this->uri_segment);
-
-        $data['assets_handover'] = $asset_handover
-                        ->where('trasset_asset_id', $this->asset_id)
-                        ->order_by('trasset_id', 'ASC')
-                        ->get($this->limit, $offset)->all;
+		// Asset
+        $asset = new Asset();
+        $list_asset = $asset->list_drop();
+        $asset_selected = $this->input->get('asset_name');
+        $data['asset_list'] = form_dropdown('asset_name',
+                        $list_asset,
+                        $asset_selected);
 
 		if ($this->input->get('to') == 'pdf') {
-			$data['id'] = $rs->asset_id;
-	        $data['asset_name'] = $rs->asset_name;
-	        $data['asset_code'] = $rs->asset_code;
-	        $data['asset_status'] = $rs->asset_status == '1'? 'Enable':'Disable';
-
-	        $date = new DateTime($rs->date);
-	        $data['date_handover'] = ($rs->date == '0000-00-00' || $rs->date == '0000-00-00 00:00:00')? '':$date->format('d-m-Y');
-	        $data['description'] = $rs->discription;
-
 			$this->load->library('html2pdf');
 
 			$this->html2pdf->filename = 'detail_asset_handover_report.pdf';
@@ -339,26 +315,12 @@ class Assets_Handover extends CI_Controller {
 	    
 	    	$this->html2pdf->create();
 		} else if ($this->input->get('to') == 'xls') {
-			$data['id'] = $rs->asset_id;
-	        $data['asset_name'] = $rs->asset_name;
-	        $data['asset_code'] = $rs->asset_code;
-	        $data['asset_status'] = $rs->asset_status == '1'? 'Enable':'Disable';
-
-	        $date = new DateTime($rs->date);
-	        $data['date_handover'] = ($rs->date == '0000-00-00' || $rs->date == '0000-00-00 00:00:00')? '':$date->format('d-m-Y');
-	        $data['description'] = $rs->discription;
-
 			$param['file_name'] = 'detail_asset_handover_report.xls';
     		$param['content_sheet'] = $this->load->view('assets_handover/to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
-		} else {
-	        $config['base_url'] = site_url('assets/' . $this->asset_id . '/handover/detail');
-	        $config['total_rows'] = $total_rows;
-	        $config['per_page'] = $this->limit;
-	        $config['uri_segment'] = $this->uri_segment;
-	        $this->pagination->initialize($config);
-	        $data['pagination'] = $this->pagination->create_links();
-
+		} else if($this->input->get('to') == 'print'){
+        	$this->load->view('assets_handover/to_pdf', $data);
+        } else {
 	        $this->load->view('assets_handover/report', $data);
         }
     }

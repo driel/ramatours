@@ -74,7 +74,7 @@ class Users extends CI_Controller {
         $staff = new Staff();
         $list_staff = $staff->list_drop();
         $staff_selected = '';
-        $data['form_action'] = '';
+        $data['form_action'] = site_url('users/save_user');
         $data['staff_id'] = form_dropdown('staff_id', $list_staff, $staff_selected);
 
         // Role
@@ -95,6 +95,10 @@ class Users extends CI_Controller {
             'value' => 'Sign Up',
             'class' => 'btn btn-primary'
         );
+        
+        $data["avatar"] = "";
+        
+        $data["edit"] = false;
 
         $this->load->view('users/sign_up', $data);
     }
@@ -344,15 +348,108 @@ class Users extends CI_Controller {
             redirect('users/sign_up');
         }
     }
+    
+    function _editData($id){
+      $users = new User();
+      $user = $users->where("id", $id)->get();
+      
+      $staff = new Staff();
+      $list_staff = $staff->list_drop();
+      $staff_selected = $user->staff_id;
+      $data['form_action'] = site_url('users/update_user')."/".$this->uri->segment(3);
+      $data['staff_id'] = form_dropdown('staff_id', $list_staff, $staff_selected);
+      
+      // Role
+      $role = new Role();
+      $list_role = $role->list_drop();
+      $role_selected = $user->role_id;
+      $data['role_id'] = form_dropdown('role_id', $list_role, $role_selected);
+      
+      $data['username'] = array('name' => 'username',
+          'value'=>$user->username,
+          'placeholder' => 'Username',
+          'class' => 'input-block-level',
+          'readonly'=>'readonly'
+      );
+      
+      $data['password'] = array('name' => 'password',
+          'placeholder' => 'current password',
+          'class' => 'input-block-level'
+      );
+      
+      $data['btn_sign_up'] = array('name' => 'btn_sign_up',
+          'value' => 'Update',
+          'class' => 'btn btn-primary'
+      );
+      
+      $data["avatar"] = $user->avatar;
+      
+      $data["edit"] = true;
+      return $data;
+    }
+    
+    function edit($id){
+      $data = $this->_editData($id);
+      $this->load->view('users/sign_up', $data);
+    }
+    
+    function update_user(){
+      $user = new User();
+      $id = $this->uri->segment(3);
+      $staff_id = $this->input->post("staff_id");
+      $role_id = $this->input->post("role_id");
+      $new_pass = $this->input->post("new_pass");
+      $new_pass_retype = $this->input->post("new_pass_retype");
+      $current_password = $this->input->post("password");
+      $username = $this->input->post("username");
+      $this->form_validation->set_rules(array(
+          array("field"=>"staff_id", "label"=>"Staff", "rules"=>"required"),
+          array("field"=>"role_id", "label"=>"Role", "rules"=>"required")
+      ));
+      if($this->form_validation->run() === false){
+        $data = $this->_editData($id);
+        $this->load->view("users/sign_up", $data);
+      }else{
+        if(strlen($new_pass) > 0){
+          if($new_pass == $new_pass_retype){
+            $check = $user->where(array("username"=>$username, "password"=>md5($current_password)));
+            //die(var_dump($check->count()));
+            if($check->count() > 0){
+              $user->where("id", $id)->update(array(
+                  "staff_id"=>$staff_id,
+                  "role_id"=>$role_id,
+                  "password"=>md5($new_pass)
+              ));
+              redirect("users/index");
+            }else{
+              // bad current password
+              $data = $this->_editData($id);
+              $this->session->set_flashdata("error", "Current password incorrect!");
+              $this->load->view("users/sign_up", $data);
+            }
+          }else{
+            // new password not match
+            $data = $this->_editData($id);
+            $this->session->set_flashdata("error", "New password did not match!");
+            $this->load->view("users/sign_up", $data);
+          }
+        }else{
+          $user->where("id", $id)->update(array(
+              "staff_id"=>$staff_id,
+              "role_id"=>$role_id
+          ));
+          redirect("users/index");
+        }
+      }
+    }
+    
 
     function logout() {
         $this->session->sess_destroy();
         redirect('users/sign_in');
     }
     
-    function edit(){
-          
-    }
+    
 
     function delete($id) {
         $user = new User();

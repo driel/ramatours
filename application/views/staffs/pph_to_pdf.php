@@ -2,92 +2,21 @@
 <html lang="en">
 	<head>
 	<style type="text/css">
-		table {
-			border-width: 0 0 1px 1px;
-			border-spacing: 0;
-			border-collapse: collapse;
-			border-style: solid;
-		}
- 
-		td, th {
-			margin: 0;
-			padding: 4px;
-			border-width: 1px 1px 0 0;
-			border-style: solid;
-		}
+	table {border-width: 0 0 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid;}
+	td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid;}
+	.site_name{float:left; font-size:22px;}
+	.date{float:right; font-size:10px;}
+	h2{margin-top: 0;}
 	</style>
 	</head>
     <body>
-    	<center>
-    		<h3>PPh 21 Report</h3>
-    	</center>
-      	<table width="50%" align="center">
-      		<?php
-      		if ($this->input->get('period_by') == 'Monthly') {
-      		if ($this->input->get('period') != "") {
-      		?>
-  			<tr>
-  				<td>Period</td>
- 				<td><?php echo bulan($this->input->get('period')).' '.date('Y'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('staff_cabang') != "") {
-      		?>
-  			<tr>
-  				<td>Branch</td>
- 				<td><?php echo $this->input->get('staff_cabang'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('staff_departement') != "") {
-      		?>
-  			<tr>
-  				<td>Department</td>
- 				<td><?php echo $this->input->get('staff_departement'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('staff_jabatan') != "") {
-      		?>
-  			<tr>
-  				<td>Title</td>
- 				<td><?php echo $this->input->get('staff_jabatan'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('staff_name') != "") {
-      		?>
-  			<tr>
-  				<td>Name</td>
- 				<td><?php echo $this->input->get('staff_name'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		} else {
-			if ($this->input->get('yearly') != "") {
-			?>
-			<tr>
-  				<td>Tahun</td>
- 				<td><?php echo $this->input->get('yearly'); ?></td>
-			</tr>
-			<?php
-			}
-			if ($this->input->get('yearly_by') == "") {
-			?>
-			<tr>
-  				<td>By</td>
- 				<td><?php echo $this->input->get('yearly_by'); ?></td>
-			</tr>
-			<?php
-			}
-      		}
-      		?>
-      	</table>
-    	<br />
-		<?php
+    	<?php
     	if ($this->input->get('period_by') == 'Monthly') {
     	?>
+		<span class="site_name">Rama Tours</span>
+		<span class="date"><?php echo date("d/m/Y - H:i"); ?></span>
+		<span class="cl"></span><br />
+		<h2 style="text-align:center">Daftar PPh 21 Bulanan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
 		<table width="100%" align="center">
 	      <thead>
 	        <tr>
@@ -113,9 +42,11 @@
 	      <tbody>
 	      <?php
 	      $branch = '';
+	      $odd = true;
 	      foreach ($staff_branch->result() as $row) {
+        	$odd = !$odd;
 	      ?>
-	          <tr>
+	          <tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?>>
 	            <td><?php if ($row->staff_cabang == $branch) { echo '';} else { $branch = $row->staff_cabang; echo $row->staff_cabang;} ?></td>
 	            <td><?php echo $row->staff_name; ?></td>
 	            <td><?php echo $row->staff_cabang; ?></td>
@@ -137,6 +68,10 @@
 	    } else if ($period_by_selected == 'Yearly') {
     		if ($yearly_by_selected == 'Branch') {
 		?>
+		<span class="site_name">Rama Tours</span>
+		<span class="date"><?php echo date("d/m/Y - H:i"); ?></span>
+		<span class="cl"></span><br />
+		<h2 style="text-align:center">Rekapitulasi PPh 21 Cabang (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
 		<table width="100%" align="center">
 	      <thead>
 	        <tr>
@@ -223,7 +158,11 @@
 		<?php
    			} else {
    		?>
-   		<table width="100%" align="center">
+   		<span class="site_name">Rama Tours</span>
+		<span class="date"><?php echo date("d/m/Y - H:i"); ?></span>
+		<span class="cl"></span><br />
+		<h2 style="text-align:center">Rekapitulasi PPh 21 Karyawan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
+		<table width="100%" align="center">
 	      <thead>
 	        <tr>
 	          <th rowspan="2">Cabang</th>
@@ -316,6 +255,7 @@
 	    </table>
 		<?php	
    			}
+		}
 		?>
 	</body>
 </html>

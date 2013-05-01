@@ -191,3 +191,105 @@ if (!function_exists('get_branch_total_monthly_tax')) {
 		return $total;
     }
 }
+
+if (!function_exists('print_slip_gaji')) {
+
+    function print_slip_gaji($staff,$period) {
+    	$staff_id = $staff->staff_id;
+    	$ci = &get_instance();
+    	$ci->load->model("Absensi_model", "absensi");
+    	$content = "
+		<table width=\"500px\" border=\"0\" align=\"center\">
+			<tr>
+				<td colspan=\"3\" align=\"center\">PT Rama Tours</td>
+			</tr>
+			<tr>
+				<td colspan=\"3\" align=\"center\">Slip Gaji</td>
+			</tr>
+			<tr>
+				<td colspan=\"3\" align=\"center\">&nbsp;</td>
+			</tr>
+			<tr>
+				<td width=\"20%\">Nama</td>
+				<td width=\"5px\" align=\"center\">:</td>
+				<td>".$staff->staff_name."</td>
+			</tr>
+			<tr>
+				<td width=\"20%\">Departemen</td>
+				<td width=\"5px\" align=\"center\">:</td>
+				<td>".$staff->staff_departement."</td>
+			</tr>
+			<tr>
+				<td width=\"20%\">Jabatan</td>
+				<td width=\"5px\" align=\"center\">:</td>
+				<td>".$staff->staff_jabatan."</td>
+			</tr>
+			<tr>
+				<td width=\"20%\">Cabang</td>
+				<td width=\"5px\" align=\"center\">:</td>
+				<td>".$staff->staff_cabang."</td>
+			</tr>
+			<tr>
+				<td colspan=\"3\" align=\"center\">&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan=\"3\" align=\"center\">
+					<table width=\"500px;\" style=\"border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse; border-style: solid;\">
+     					<tr>
+				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">Jenis</td>
+				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" width=\"10px\">Jml Hari</td>
+				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">Jumlah</td>
+          				</tr>";
+
+				    	$ci->db->select('*');
+				    	$ci->db->join("salary_components_a","components.comp_id=salary_components_a.gaji_component_id");
+				    	$ci->db->order_by("comp_id","ASC");
+				    	$ci->db->where("comp_type !=","Yearly");
+				    	$ci->db->where("staff_id",$staff_id);
+				  		$compsa = $ci->db->get("components");
+
+						foreach($compsa->result() as $comp) {
+							$staff_absensi = $ci->absensi->get_staff_absensi($staff_id,$period)->row();
+							$comp_a = $ci->db->where("staff_id",$staff_id)->where("gaji_component_id",$comp->comp_id)->get("salary_components_a")->row();
+							
+							$content .= "
+     					<tr>
+				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".$comp->comp_name."</td>
+				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" width=\"10px\">".($comp->comp_type == 'Daily'? $staff_absensi->hari_masuk:'-')."</td>
+				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".($comp->comp_type == 'Daily'? number_format($comp_a->gaji_daily_value*$staff_absensi->hari_masuk,0,",","."):number_format($comp_a->gaji_amount_value,0,",","."))."</td>
+          				</tr>";
+          				}
+          				$content .= "
+     					<tr>
+				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" colspan=\"3\">Lainnya</td>
+          				</tr>";
+
+				    	$ci->db->select('*');
+				    	$ci->db->join("salary_components_b","components.comp_id=salary_components_b.gaji_component_id");
+				    	$ci->db->order_by("comp_id","ASC");
+				    	$ci->db->where("comp_type !=","Yearly");
+				    	$ci->db->where("staff_id",$staff_id);
+				  		$compsb = $ci->db->get("components");
+
+						foreach($compsb->result() as $comp) {
+							$staff_absensi = $ci->absensi->get_staff_absensi($staff_id,$period)->row();
+							$comp_a = $ci->db->where("staff_id",$staff_id)->where("gaji_component_id",$comp->comp_id)->get("salary_components_b")->row();
+						
+							$content .= "
+     					<tr>
+				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".$comp->comp_name."</td>
+				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" width=\"10px\">".($comp->comp_type == 'Daily'? $staff_absensi->hari_masuk:'-')."</td>
+				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".($comp->comp_type == 'Daily'? number_format($comp_a->gaji_daily_value*$staff_absensi->hari_masuk,0,",","."):number_format($comp_a->gaji_amount_value,0,",","."))."</td>
+          				</tr>";
+          				}
+          				$content .= "
+				    </table>
+				</td>
+			</tr>
+	    </table>";
+	    
+	    $content .= "<input type=\"hidden\" id=\"staff_id\" value=\"".$staff_id."\" /><input type=\"hidden\" id=\"staff_period\" value=\"".$period."\" />";
+	    
+	    return $content;
+    }
+}

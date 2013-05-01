@@ -106,6 +106,7 @@
                           	<li><?php echo anchor('components/report_slip', 'Slip Gaji'); ?></li>
                           	<li><?php echo anchor('staffs/report_pph', 'Rekap PPh Karyawan'); ?></li>
                         	<li><?php echo anchor('assets/report_list', 'List Asset'); ?></li>
+                        	<li><?php echo anchor('assets_handover/report', 'Asset Detail'); ?></li>
                         	<li><?php echo anchor('staffs/report_cuti', 'Sisa Cuti'); ?></li>
                         	<li><?php echo anchor('staffs/report_expired_doc', 'Expired Document'); ?></li>
                         	<li><?php echo anchor('absensi/report', 'Absensi'); ?></li>

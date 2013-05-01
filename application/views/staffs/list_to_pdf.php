@@ -2,70 +2,18 @@
 <html lang="en">
 	<head>
 	<style type="text/css">
-		table {
-			border-width: 0 0 1px 1px;
-			border-spacing: 0;
-			border-collapse: collapse;
-			border-style: solid;
-		}
- 
-		td, th {
-			margin: 0;
-			padding: 4px;
-			border-width: 1px 1px 0 0;
-			border-style: solid;
-		}
+	table {border-width: 0 0 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid;}
+	td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid;}
+	.site_name{float:left; font-size:22px;}
+	.date{float:right; font-size:10px;}
+	h2{margin-top: 0;}
 	</style>
 	</head>
     <body>
-    	<center>
-    		<h3>Report Staff List</h3>
-    	</center>
-      	<table width="50%" align="center">
-      		<?php
-      		if ($this->input->get('staff_cabang') != "") {
-      		?>
-  			<tr>
-  				<td>Branch</td>
- 				<td><?php echo $this->input->get('staff_cabang'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('$staff_departement') != "") {
-      		?>
-  			<tr>
-  				<td>Department</td>
- 				<td><?php echo $this->input->get('$staff_departement'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('staff_jabatan') != "") {
-      		?>
-  			<tr>
-  				<td>Title</td>
- 				<td><?php echo $this->input->get('staff_jabatan'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('staff_birthdate') != "") {
-      		?>
-  			<tr>
-  				<td>Birth Date</td>
- 				<td><?php echo date_format(new DateTime($this->input->get('staff_birthdate')),'j M Y'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('staff_name') != "") {
-      		?>
-  			<tr>
-  				<td>Name</td>
- 				<td><?php echo $this->input->get('staff_name'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		?>
-      	</table>
-      	<br />
+    	<span class="site_name">Rama Tours</span>
+		<span class="date"><?php echo date("d/m/Y - H:i"); ?></span>
+		<span class="cl"></span><br />
+		<h2 style="text-align:center">Daftar Karyawan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
 		<table width="100%" align="center">
 	      <thead>
 	        <tr>
@@ -94,9 +42,11 @@
 	      </thead>
 	      <tbody>
 	      <?php
+	      $odd = true;
 	      foreach ($staff_list as $row) {
+        	$odd = !$odd;
 	      ?>
-	          <tr>
+	          <tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?>>
 	            <td><?php echo $row->staff_name; ?></td>
 	            <td><?php echo $row->staff_cabang; ?></td>
 	            <td><?php echo $row->staff_departement; ?></td>
