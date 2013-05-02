@@ -2,8 +2,8 @@
 <script>
 $(document).ready(function(){
 	$("#status").iphoneStyle({
-		checkedLabel: "Disable",
-		uncheckedLabel: "Enable",
+		checkedLabel: "Enable",
+		uncheckedLabel: "Disable",
 		onChange: function(e, checked){
 			if(checked){
 				$(e).attr("checked", "checked");
@@ -42,7 +42,7 @@ $(document).ready(function(){
     	<?php echo $marital; ?>
     	</div>
     	<div class="span3">Status <br />
-    	<input type="checkbox" name="status" id="status" /></div>
+    	<input type="checkbox" name="status" id="status" checked /></div>
     	<div class="cl"></div>
     </form>
     <div style="margin: 10px 0; border-bottom:1px solid #e0e0e0;"></div>

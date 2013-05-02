@@ -33,7 +33,7 @@
 	          <th>Home Phone</th>
 	          <th>Cellular Phone</th>
 	          <th>Start</th>
-	          <th>Ulang Tahun Ke</th>
+	          <th>Umur</th>
 	          <th>Marital</th>
 	          <th>Status</th>
 	          <th>Active</th>
@@ -48,6 +48,12 @@
         	$odd = !$odd;
         	$date_out = date_format(new DateTime($row->date_out),'j M Y');
 			$contract_to = $row->contract_to;
+			
+			$born = new DateTime($row->staff_birthdate);
+			$now = new DateTime();
+			$interval = $now->diff($born);
+			$age = $interval->y;
+			
 			$staff_status = ($date_out != '' && $contract_to < date('Y-m-d')? 'Active':'Inactive');
 	      ?>
 	          <tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?> <?php echo $staff_status == 'Inactive'? 'style="font-style: italic;"':''; ?>>
@@ -63,7 +69,7 @@
 	            <td align="center"><?php echo $row->staff_phone_home; ?></td>
 	            <td align="center"><?php echo $row->staff_phone_hp; ?></td>
 	            <td align="center"><?php date_format(new DateTime($row->mulai_kerja),'j M Y'); ?></td>
-	          	<td align="right"><?php $birthyear = date('Y', strtotime($row->staff_birthdate)); echo date('m', strtotime($row->staff_birthdate)) == date('m')? intval(date('Y')-intval($birthyear)):'-'; ?></td>
+	          	<td align="right"><?php echo $age;?></td>
 	            <td><?php echo $row->staff_status_nikah; ?></td>
 	            <td><?php echo $row->staff_status_karyawan; ?></td>
 	            <td align="center"><?php echo $staff_status; ?></td>

@@ -15,7 +15,7 @@ var Handsontable = { //class namespace
   helper: {} //helper namespace
 };
 
-var deleted_data;
+var deleted_row;
 
 (function ($, window, Handsontable) {
   "use strict";
@@ -215,7 +215,7 @@ Handsontable.Core = function (rootElement, settings) {
       if (typeof index !== 'number') {
         index = -amount;
       }
-      priv.settings.data.splice(index, amount);
+      deleted_row = priv.settings.data.splice(index, amount);
       self.forceFullRender = true; //used when data was changed
     },
 
@@ -378,6 +378,7 @@ Handsontable.Core = function (rootElement, settings) {
      * @param {Number} amount
      */
     alter: function (action, index, amount) {
+    	if(action == "remove_row" && amount > 1) amount = 1; // di edit ku aing, setan teh matak lieur amount 2 wae >,<
       var oldData, newData, changes, r, rlen, c, clen, delta;
       oldData = $.extend(true, [], datamap.getAll());
 
@@ -448,7 +449,6 @@ Handsontable.Core = function (rootElement, settings) {
       }
       fireEvent("datachange.handsontable", [changes, 'alter']);
       grid.keepEmptyRows(); //makes sure that we did not add rows that will be removed in next refresh
-      deleted_data = oldData[r-1];
     },
 
     /**

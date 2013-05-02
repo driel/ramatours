@@ -18,7 +18,7 @@
   if($component_a){
     foreach($component_a->result() as $gaji){
       $component = get_components($gaji->gaji_component_id);
-      $comp_a_data .= '["'.$component->comp_name.'", "'.$component->comp_type.'", "'.$gaji->gaji_daily_value.'", "'.number_format($gaji->gaji_amount_value, 2, ".", ",").'", "'.$gaji->gaji_id.'", "'.$gaji->gaji_component_id.'"],';
+      $comp_a_data .= '["'.$component->comp_name.'", "'.$component->comp_type.'", "'.number_format($gaji->gaji_daily_value, 2, ".", ",").'", "'.number_format($gaji->gaji_amount_value, 2, ".", ",").'", "'.$gaji->gaji_id.'", "'.$gaji->gaji_component_id.'"],';
     }
     $comp_a_data = substr($comp_a_data, 0, (strlen($comp_a_data)-1));
   }
@@ -309,6 +309,17 @@
         <div class="one_half">
           <h5>Component A</h5>
           <div id="salary_component_a"></div>
+          <div id="total_a">
+            <h5>Total Component A</h5>
+          	<div>
+          	  <span><b>Daily : </b></span>
+          	  <span id="total_a_daily"></span>
+          	</div>
+          	<div>
+          	  <span><b>Monthly : </b></span>
+          	  <span id="total_a_monthly"></span>
+          	</div>
+          </div>
         </div>
         <div class="one_half lastcolumn">
           <h5>Component B</h5>

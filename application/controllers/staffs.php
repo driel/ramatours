@@ -147,7 +147,7 @@ class Staffs extends CI_Controller {
 
 
         $data['staff_photo'] = array('name' => 'staff_photo');
-        $data['staff_birthdate'] = array('name' => 'staff_birthdate', 'id' => 'staff_birthdate', "placeholder"=>"Date");
+        $data['staff_birthdate'] = array('name' => 'staff_birthdate', 'class'=>'datepicker', 'id' => 'staff_birthdate', "placeholder"=>"Date");
         $data['staff_birthplace'] = array('name' => 'staff_birthplace', "placeholder"=>"Place");
 
         $options_sex = array(
@@ -246,7 +246,7 @@ class Staffs extends CI_Controller {
 
 
         $data['staff_photo'] = array('name' => 'staff_photo', 'value' => $staff->staff_photo);
-        $data['staff_birthdate'] = array('name' => 'staff_birthdate', 'id' => 'staff_birthdate', 'value' => $staff->staff_birthdate);
+        $data['staff_birthdate'] = array('name' => 'staff_birthdate', 'class'=>'datepicker', 'id' => 'staff_birthdate', 'value' => $staff->staff_birthdate);
         $data['staff_birthplace'] = array('name' => 'staff_birthplace', 'value' => $staff->staff_birthplace);
 
         $options_sex = array(

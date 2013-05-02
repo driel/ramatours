@@ -7,16 +7,12 @@
 */
 var errors = 0;
 $(document).ready(function(){
-  $("#staff_birthdate" ).datepicker({
-    dateFormat: "yy-mm-dd"
-  });
-  var relation = ["Suami", "Istri", "Anak Ke-1", "Anak Ke-2", "Anak Ke-3", "Anak Ke-4", "Anak Ke-5", "Bapak", "Ibu"];
   
   $("#family_table").handsontable({
     colHeaders: ["Name", "Birthplace", "Birthdate", "Sex", "Relation", ""], // hidden col for ID and edit flag
     startCols: 6,
     startRows: 3,
-    minSpareRows: 1,
+    //minSpareRows: 1,
     contextMenu: true,
     colWidths: [120, 80, 80, 60, 120],
     onChange: function(update, source){
@@ -38,17 +34,16 @@ $(document).ready(function(){
       
       // delete row ajax
       if(source == "alter"){
-        var id = deleted_data[5];
+        var id = deleted_row[0][5];
         var url = "<?php echo $url.'/families/ajax_delete/'; ?>"+id;
         $.get(url, function(data){
-          console.log(data);
         });
       }
     },
     columns: [
       {},
       {},
-      {type:'date'},
+      {type:'date', yearRange: '1970:2013'},
       {
         type: "autocomplete",
         source: ["Laki - laki", "Perempuan"],
@@ -56,7 +51,7 @@ $(document).ready(function(){
       },
       {
         type: "autocomplete",
-        source: relation,
+        source: ["Suami", "Istri", "Anak Ke-1", "Anak Ke-2", "Anak Ke-3", "Anak Ke-4", "Anak Ke-5", "Bapak", "Ibu"],
         options:{
           items: 9
         }
@@ -159,11 +154,11 @@ $(document).ready(function(){
       
       // delete row ajax
       if(source == "alter"){
-        var id = deleted_data[3];
+        /*var id = deleted_data[3];
         var url = "<?php echo $url.'/educations/ajax_delete/'; ?>"+id;
         $.get(url, function(data){
           console.log(data);
-        });
+        });*/
       }
     }
   });
@@ -194,6 +189,7 @@ $(document).ready(function(){
       {type: "numeric", format: "0,0.00"}
     ],
     onChange: function(update, source){
+      calculate_comp_a($("#salary_component_a"));
       if(source=="edit" && update[0][1]==0){
         var url = "<?php echo $url.'/components/get_where_component'; ?>/"+update[0][3];
         $.getJSON(url, function(data){
@@ -205,8 +201,6 @@ $(document).ready(function(){
             $("#salary_component_a").handsontable("setDataAtCell", update[0][0], 3, "0");
           }
         });
-        
-        calculate_comp_a($("#salary_component_a"));
       }
       if(source != "alter" && update){
         var row = update[0][0];
@@ -431,17 +425,20 @@ function readURL(input) {
 }
 
 function calculate_comp_a($instance){
-	  $instance.handsontable("alter", "insert_row");
-	  var rows = $instance.handsontable("countRows");
-	  var data = $instance.handsontable("getData");
-	  var total_daily = 0;
-	  var total_monthly = 0;
-	  
-	  for(i = 0; i < data.length-1; i++){
-		  total_daily += data[i][2] == null ? 0:parseInt(data[i][2].replace(/,/g, ""));
-		  total_monthly += data[i][3] == null ? 0:parseInt(data[i][3].replace(/,/g, ""));
-	  }
-	  $instance.handsontable("setDataAtCell", (rows - 1), 1, "Total");
-	  $instance.handsontable("setDataAtCell", (rows - 1), 2, total_daily);
-	  $instance.handsontable("setDataAtCell", (rows - 1), 3, total_monthly);
+  console.log("masuk ke component a");
+  var rows = $instance.handsontable("countRows");
+  var data = $instance.handsontable("getData");
+  var total_daily = 0;
+  var total_monthly = 0;
+  
+  for(i = 0; i < data.length; i++){
+	  total_daily += data[i][2] == null ? 0:parseInt(data[i][2].toString().replace(/,/g, ""));
+	  total_monthly += data[i][3] == null ? 0:parseInt(data[i][3].toString().replace(/,/g, ""));
   }
+  $("#total_a_daily").html(accounting.formatMoney(total_daily, "Rp. "));
+  $("#total_a_monthly").html(accounting.formatMoney(total_monthly, "Rp. "));
+}
+
+function calculate_comp_b($instance){
+  
+}
