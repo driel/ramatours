@@ -546,7 +546,7 @@ class Staffs extends CI_Controller {
             $family->staff_fam_name = $name;
             $family->staff_fam_birthdate = $birthdate;
             $family->staff_fam_birthplace = $birthplace;
-            $family->staff_fam_sex = $sex;
+            $family->staff_fam_sex = str_replace(" ", "", strtolower($sex));
             $family->staff_fam_relation = $relation;
             $family->save();
           }

@@ -39,7 +39,7 @@
   $families = '';
   if($family){
     foreach($family->result() as $f){
-      $families .= '["'.$f->staff_fam_name.'", "'.$f->staff_fam_birthdate.'", "'.$f->staff_fam_birthplace.'", "'.$f->staff_fam_sex.'", "'.$f->staff_fam_relation.'", "'.$f->staff_fam_id.'"],';
+      $families .= '["'.$f->staff_fam_name.'", "'.$f->staff_fam_birthplace.'", "'.$f->staff_fam_birthdate.'", "'.$f->staff_fam_sex.'", "'.$f->staff_fam_relation.'", "'.$f->staff_fam_id.'"],';
     }
     $families = substr($families, 0, (strlen($families)-1));
   }
@@ -95,6 +95,10 @@
         }      
       }  
     });
+    
+    //
+    var $salary_comp_a = $("#salary_component_a");
+    calculate_comp_a($salary_comp_a);
   });
 </script>
 <div class="body">
@@ -114,9 +118,9 @@
       <h3>Photo</h3>
       <div class="form-signin">
         <?php if(isset($staff_photo["value"])): ?>
-          <img src="<?php echo strlen($staff_photo['value']) ? assets_url('upload/' . $staff_photo['value']) : assets_url('images/User-icon.png'); ?>" alt="" id="preview" />
+          <img src="<?php echo strlen($staff_photo['value']) ? assets_url('upload/' . $staff_photo['value']) : assets_url('images/User-icon.png'); ?>" alt="" id="_preview" />
         <?php else: ?>
-          <img src="<?php echo assets_url('images/User-icon.png'); ?>" alt="" id="preview" />
+          <img src="<?php echo assets_url('images/User-icon.png'); ?>" alt="" id="_preview"/>
         <?php endif; ?>
       </div>
       <div class="input-append file">
@@ -138,7 +142,7 @@
         </tr>
         <tr>
           <td>Name</td>
-          <td><div class="span2"><?php echo form_input($staff_name); ?></div></td>
+          <td><div class="span3"><?php echo form_input($staff_name); ?></div></td>
         </tr>
         <tr>
           <td>Birthdate</td>

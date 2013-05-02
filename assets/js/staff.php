@@ -10,16 +10,10 @@ $(document).ready(function(){
   $("#staff_birthdate" ).datepicker({
     dateFormat: "yy-mm-dd"
   });
-  var staff_sex = $("#staff_sex").val() == "laki-laki" ? "Istri":"Suami";
-  $("#staff_sex").on("change", function(e){
-    var sex = $(this).val();
-    if(sex == "laki-laki") relation[0] = "Istri";
-    else relation[0] = "Suami";
-  });
-  var relation = [staff_sex, "Ayah", "Ibu", "Anak Ke-1", "Anak Ke-2", "Anak Ke-3", "Anak Ke-4", "Anak Ke-5"];
+  var relation = ["Suami", "Istri", "Anak Ke-1", "Anak Ke-2", "Anak Ke-3", "Anak Ke-4", "Anak Ke-5", "Bapak", "Ibu"];
   
   $("#family_table").handsontable({
-    colHeaders: ["Name", "Birthdate", "Birthplace", "Sex", "Relation", ""], // hidden col for ID and edit flag
+    colHeaders: ["Name", "Birthplace", "Birthdate", "Sex", "Relation", ""], // hidden col for ID and edit flag
     startCols: 6,
     startRows: 3,
     minSpareRows: 1,
@@ -33,8 +27,8 @@ $(document).ready(function(){
         $.post(url, {
           id: data[5],
           name: data[0],
-          birthdate: data[1],
-          birthplace: data[2],
+          birthdate: data[2],
+          birthplace: data[1],
           sex: data[3],
           relation: data[4]  
         }, function(data){
@@ -44,17 +38,17 @@ $(document).ready(function(){
       
       // delete row ajax
       if(source == "alter"){
-        /*var id = deleted_data[5];
+        var id = deleted_data[5];
         var url = "<?php echo $url.'/families/ajax_delete/'; ?>"+id;
         $.get(url, function(data){
           console.log(data);
-        });*/
+        });
       }
     },
     columns: [
       {},
-      {type:'date'},
       {},
+      {type:'date'},
       {
         type: "autocomplete",
         source: ["Laki - laki", "Perempuan"],
@@ -63,7 +57,9 @@ $(document).ready(function(){
       {
         type: "autocomplete",
         source: relation,
-        strict: true
+        options:{
+          items: 9
+        }
       }
     ]
   });
@@ -94,11 +90,11 @@ $(document).ready(function(){
       
       // delete row ajax
       if(source == "alter"){
-        /*var id = deleted_data[2];
+        var id = deleted_data[2];
         var url = "<?php echo $url.'/medical_histories/ajax_delete/'; ?>"+id;
         $.get(url, function(data){
           console.log(data);
-        });*/
+        });
       }
     }
   });
@@ -128,11 +124,11 @@ $(document).ready(function(){
       
       // delete row ajax
       if(source == "alter"){
-        /*var id = deleted_data[2];
+        var id = deleted_data[2];
         var url = "<?php echo $url.'/work_histories/ajax_delete/'; ?>"+id;
         $.get(url, function(data){
           console.log(data);
-        });*/
+        });
       }
     }
   });
@@ -163,11 +159,11 @@ $(document).ready(function(){
       
       // delete row ajax
       if(source == "alter"){
-        /*var id = deleted_data[3];
+        var id = deleted_data[3];
         var url = "<?php echo $url.'/educations/ajax_delete/'; ?>"+id;
         $.get(url, function(data){
           console.log(data);
-        });*/
+        });
       }
     }
   });
@@ -177,7 +173,6 @@ $(document).ready(function(){
     contextMenu: true,
     startCols: 6,
     startRows: 3,
-    minSpareRows: 1,
     colHeaders: ["Component", "Type", "Daily value (Rp)", "Monthly value (Rp)", "", ""], // ID, FLAG, COMPONENT ID
     colWidths: [150, 80, 100, 120],
     columns: [
@@ -210,6 +205,8 @@ $(document).ready(function(){
             $("#salary_component_a").handsontable("setDataAtCell", update[0][0], 3, "0");
           }
         });
+        
+        calculate_comp_a($("#salary_component_a"));
       }
       if(source != "alter" && update){
         var row = update[0][0];
@@ -221,17 +218,19 @@ $(document).ready(function(){
           daily: data[2],
           amount: data[3],
         }, function(data){
-          console.log(data);
+          //
         });
       }
     },
     onBeforeChange: function(update){
       if(update[0][1] == 2){
-        var type = $("#salary_component_a").handsontable("getDataAtCell", update[0][0], 1);
-        if(type.toLowerCase() != "daily"){
-          update[0][3] = 0;
-        }else{
-          return true;
+        var t = $("#salary_component_a").handsontable("getDataAtCell", update[0][0], 1);
+        if(t != null){
+          if(t.toLowerCase() != "daily" && t.toLowerCase() != "total"){
+            update[0][3] = 0;
+          }else{
+            return true;
+          }
         }
       }
     }
@@ -291,11 +290,13 @@ $(document).ready(function(){
     },
     onBeforeChange: function(update){
       if(update[0][1] == 2){
-        var type = $("#salary_component_b").handsontable("getDataAtCell", update[0][0], 1); // get type
-        if(type.toLowerCase() != "daily"){
-          update[0][3] = 0;
-        }else{
-          return true;
+        var t = $("#salary_component_b").handsontable("getDataAtCell", update[0][0], 1); // get type
+        if(t != null){
+          if(t.toLowerCase() != "daily"){
+            update[0][3] = 0;
+          }else{
+            return true;
+          }
         }
       }
     }
@@ -334,7 +335,7 @@ function getFamilies(){
     data[i][2]!=null && 
     data[i][3]!=null && 
     data[i][4]!=null){
-      families += '<input type="hidden" name="families[]" value="'+data[i][0]+';'+data[i][1]+';'+data[i][2]+';'+data[i][3]+';'+data[i][4]+';'+data[i][5]+'">'; 
+      families += '<input type="hidden" name="families[]" value="'+data[i][0]+';'+data[i][2]+';'+data[i][1]+';'+data[i][3]+';'+data[i][4]+';'+data[i][5]+'">'; 
     }else{
       errors++;
     }
@@ -423,8 +424,24 @@ function readURL(input) {
     var reader = new FileReader();
 
     reader.onload = function (e) {
-        $('#preview').attr('src', e.target.result);
+        $('#_preview').attr('src', e.target.result);
     }
     reader.readAsDataURL(input.files[0]);
   }
 }
+
+function calculate_comp_a($instance){
+	  $instance.handsontable("alter", "insert_row");
+	  var rows = $instance.handsontable("countRows");
+	  var data = $instance.handsontable("getData");
+	  var total_daily = 0;
+	  var total_monthly = 0;
+	  
+	  for(i = 0; i < data.length-1; i++){
+		  total_daily += data[i][2] == null ? 0:parseInt(data[i][2].replace(/,/g, ""));
+		  total_monthly += data[i][3] == null ? 0:parseInt(data[i][3].replace(/,/g, ""));
+	  }
+	  $instance.handsontable("setDataAtCell", (rows - 1), 1, "Total");
+	  $instance.handsontable("setDataAtCell", (rows - 1), 2, total_daily);
+	  $instance.handsontable("setDataAtCell", (rows - 1), 3, total_monthly);
+  }

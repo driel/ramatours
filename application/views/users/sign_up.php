@@ -49,7 +49,7 @@
     </div>
     <div class="span4">
       <div id="preview">
-        <img src="<?php echo strlen($avatar) > 0 ? $avatar:assets_url("images/User-icon.png"); ?>" id="image" />
+        <img src="<?php echo strlen($avatar) > 0 ? assets_url("upload/".$avatar):assets_url("images/default-avatar.png"); ?>" id="image" />
       </div>
       <div class="input-append file">
         <input type="file" name="file" style="display: none;">

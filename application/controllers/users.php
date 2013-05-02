@@ -327,11 +327,22 @@ class Users extends CI_Controller {
     function save_user() {
         $user = new User();
         $staff = new Staff();
+        
+        // upload avatar
+        $config["upload_path"] = "./assets/upload";
+        $config["allowed_types"] = "png|jpg|gif|bmp";
+        $this->load->library("upload");
+        $avatar = false;
+        if($this->upload->do_upload("file")){
+          $avatar = $this->upload->data();
+        }
+        $avatar_path = $avatar != false ? $avatar["file_name"]:"images/default-avatar.png";
 
         $user->staff_id = $this->input->post('staff_id');
         $user->role_id = $this->input->post('role_id');
         $user->username = $this->input->post('username');
         $user->password = md5($this->input->post('password'));
+        $user->avatar = $avatar_path;
         $user->created_at = date('c');
         $user->updated_at = date('c');
 
@@ -410,6 +421,18 @@ class Users extends CI_Controller {
         $data = $this->_editData($id);
         $this->load->view("users/sign_up", $data);
       }else{
+        // upload avatar
+        $config["upload_path"] = "./assets/upload";
+        $config["allowed_types"] = "png|jpg|gif|bmp";
+        $this->load->library("upload", $config);
+        $avatar = false;
+        if($this->upload->do_upload("file")){
+          $avatar = $this->upload->data();
+        }
+        $avatar_path = $avatar != false ? $avatar["file_name"]:$user->avatar;
+        
+        //die(var_dump($avatar));
+        
         if(strlen($new_pass) > 0){
           if($new_pass == $new_pass_retype){
             $check = $user->where(array("username"=>$username, "password"=>md5($current_password)));
@@ -418,7 +441,8 @@ class Users extends CI_Controller {
               $user->where("id", $id)->update(array(
                   "staff_id"=>$staff_id,
                   "role_id"=>$role_id,
-                  "password"=>md5($new_pass)
+                  "password"=>md5($new_pass),
+                  "avatar"=>$avatar_path
               ));
               redirect("users/index");
             }else{
@@ -436,7 +460,8 @@ class Users extends CI_Controller {
         }else{
           $user->where("id", $id)->update(array(
               "staff_id"=>$staff_id,
-              "role_id"=>$role_id
+              "role_id"=>$role_id,
+              "avatar"=>$avatar_path
           ));
           redirect("users/index");
         }
