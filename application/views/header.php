@@ -79,6 +79,7 @@
                           <a href="#" class="blblue">Master</a>
                           <div class="open"></div>
                           <ul>
+                            <li><?php echo anchor('accounts', 'Chart of Account'); ?></li>
                           	<li><?php echo anchor('assets', 'Assets'); ?></li>
                           	<li><?php echo anchor('branches', 'Branch'); ?></li>
                           	<li><?php echo anchor('departments', 'Departments'); ?></li>
