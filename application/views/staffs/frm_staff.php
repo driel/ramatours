@@ -87,6 +87,8 @@
     $("#works_table").handsontable("loadData", work);
     $("#edu_table").handsontable("loadData", edu);
     $("#status_pph").iphoneStyle({
+      checkedLabel:"Company",
+      uncheckedLabel:"Personal",
       onChange: function(e, checked){
         if(checked){
           $(e).attr("checked", "checked");        
@@ -95,10 +97,18 @@
         }      
       }  
     });
+
+    $("#status").iphoneStyle({
+      checkedLabel: "Enable",
+      uncheckedLabel: "Disable",
+      onChange: function(e, checked){
+    	  $(".hideme").toggle();
+      }
+    });
     
     //
-    var $salary_comp_a = $("#salary_component_a");
-    calculate_comp_a($salary_comp_a);
+    calculate_comp_a($("#salary_component_a"));
+    calculate_comp_b($("#salary_component_b"));
   });
 </script>
 <div class="body">
@@ -243,12 +253,6 @@
         	</div></td>
         </tr>
         <tr>
-        	<td>PPh by company</td>
-        	<td>
-        	 <input type="checkbox" name="status_pph" id="status_pph"<?php echo $pph_by_company == 'y' ? ' checked':''; ?> />
-        	</td>
-        </tr>
-        <tr>
         	<td>Mulai kerja</td>
         	<td><div class="span2"><?php echo form_input($mulai_kerja); ?></div></td>
         </tr>
@@ -265,10 +269,22 @@
         	<td><div class="span2"><?php echo form_input($contract_to); ?></div></td>
         </tr>
         <tr>
+        	<td>PPh by</td>
+        	<td>
+        	 <input type="checkbox" name="status_pph" id="status_pph"<?php echo $pph_by_company == 'y' ? ' checked':''; ?> />
+        	</td>
+        </tr>
+        <tr>
+        	<td>Status</td>
+        	<td>
+        	 <input type="checkbox" name="status" id="status" checked />
+        	</td>
+        </tr>
+        <tr style="display: none;" class="hideme">
         	<td>Tgl Keluar</td>
         	<td><div class="span2"><?php echo form_input($date_out); ?></div></td>
         </tr>
-        <tr>
+        <tr style="display: none;" class="hideme">
         	<td>Alasan keluar</td>
         	<td><div class="span2"><?php echo form_textarea($out_note); ?></div></td>
         </tr>
@@ -324,6 +340,17 @@
         <div class="one_half lastcolumn">
           <h5>Component B</h5>
           <div id="salary_component_b"></div>
+          <div id="total_b">
+            <h5>Total Component B</h5>
+          	<div>
+          	  <span><b>Daily : </b></span>
+          	  <span id="total_b_daily"></span>
+          	</div>
+          	<div>
+          	  <span><b>Monthly : </b></span>
+          	  <span id="total_b_monthly"></span>
+          	</div>
+          </div>
         </div>
       </div>
       <div class="tab-pane" id="salary_history">

@@ -272,7 +272,7 @@ class Staffs extends CI_Controller {
         $data["saldo_cuti"] = array("name"=>"saldo_cuti", "value"=>$staff->saldo_cuti);
         
         $data["mulai_kerja"] = array("name"=>"mulai_kerja", "class"=>"datepicker", "value"=>$staff->mulai_kerja);
-        $data["no_contract"] = array("name"=>"no_contract", "value"=>$staff->no_contract);
+        $data["no_contract"] = array("name"=>"no_contract", "value"=>$staff->contract_number);
         $data["contract_from"] = array("name"=>"contract_from", "class"=>"datepicker", "value"=>$staff->contract_from);
         $data["contract_to"] = array("name"=>"contract_to", "class"=>"datepicker", "value"=>$staff->contract_to);
         
@@ -312,6 +312,7 @@ class Staffs extends CI_Controller {
         $staff->no_kitas = $this->input->post("no_kitas");
         $staff->kitas_expired = $this->input->post("kitas_expired");
         $staff->mulai_kerja = $this->input->post("mulai_kerja");
+        $staff->contract_number = $this->input->post("no_contract");
         $staff->contract_from = $this->input->post("contract_from");
         $staff->contract_to = $this->input->post("contract_to");
         $staff->date_out = $this->input->post("date_out");
@@ -323,9 +324,6 @@ class Staffs extends CI_Controller {
         if ($this->upload->do_upload("photo")) {
             $data = $this->upload->data();
             $staff->staff_photo = $data["file_name"];
-        } else {
-            //$this->staff_photo = "";
-            print_r($this->upload->display_errors());
         }
 
         if ($staff->save()) {
@@ -357,7 +355,7 @@ class Staffs extends CI_Controller {
             $comp_b = new Salary_Component_B();
             $this->_saveCompB($comp_b, $staff_id);
             
-            //redirect('staffs/');
+            redirect('staffs/');
         } else {
 // Failed
             $staff->error_message('custom', 'Field required');
@@ -405,6 +403,7 @@ class Staffs extends CI_Controller {
                     'no_kitas'=>$this->input->post("no_kitas"),
                     'kitas_expired'=>$this->input->post("kitas_expired"),
                     'mulai_kerja'=>$this->input->post("mulai_kerja"),
+                    'contract_number'=>$this->input->post("no_contract"),
                     'contract_from'=>$this->input->post("contract_from"),
                     'contract_to'=>$this->input->post("contract_to"),
                     'date_out'=>$this->input->post("date_out"),
@@ -710,6 +709,14 @@ class Staffs extends CI_Controller {
          "gaji_daily_value"=>$daily,
          "gaji_amount_value"=>$amount
        ));
+    }
+    
+    function delete_compa($id){
+      $this->db->delete("salary_components_a", array("gaji_id"=>$id));
+    }
+    
+    function delete_compb($id){
+      $this->db->delete("salary_components_b", array("gaji_id"=>$id));
     }
 
     public function report_list($offset = 0) {

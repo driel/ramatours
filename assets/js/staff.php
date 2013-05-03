@@ -12,7 +12,7 @@ $(document).ready(function(){
     colHeaders: ["Name", "Birthplace", "Birthdate", "Sex", "Relation", ""], // hidden col for ID and edit flag
     startCols: 6,
     startRows: 3,
-    //minSpareRows: 1,
+    minSpareRows: 1,
     contextMenu: true,
     colWidths: [120, 80, 80, 60, 120],
     onChange: function(update, source){
@@ -36,8 +36,7 @@ $(document).ready(function(){
       if(source == "alter"){
         var id = deleted_row[0][5];
         var url = "<?php echo $url.'/families/ajax_delete/'; ?>"+id;
-        $.get(url, function(data){
-        });
+        $.get(url);
       }
     },
     columns: [
@@ -78,18 +77,14 @@ $(document).ready(function(){
           id: data[2],
           date: data[0],
           description: data[1]
-        }, function(data){
-          console.log(data);
         });
       }
       
       // delete row ajax
       if(source == "alter"){
-        var id = deleted_data[2];
+        var id = deleted_row[0][2];
         var url = "<?php echo $url.'/medical_histories/ajax_delete/'; ?>"+id;
-        $.get(url, function(data){
-          console.log(data);
-        });
+        $.get(url);
       }
     }
   });
@@ -101,7 +96,7 @@ $(document).ready(function(){
     minSpareRows: 1,
     colHeaders: ["Date", "Description", ""],
     colWidths: [50, 500],
-    columns: [{type: 'date'}, {}],
+    columns: [{type: 'date', yearRange:'1980:2013'}, {}],
     contextMenu: true,
     onChange: function(update, source){
       if(source != "alter" && update){ // there's no changes on columns, no need to flag 1
@@ -112,18 +107,14 @@ $(document).ready(function(){
           id: data[2],
           date: data[0],
           description: data[1]
-        }, function(data){
-          console.log(data);
         });
       }
       
       // delete row ajax
       if(source == "alter"){
-        var id = deleted_data[2];
+        var id = deleted_row[0][2];
         var url = "<?php echo $url.'/work_histories/ajax_delete/'; ?>"+id;
-        $.get(url, function(data){
-          console.log(data);
-        });
+        $.get(url);
       }
     }
   });
@@ -147,18 +138,14 @@ $(document).ready(function(){
           date: data[0],
           gelar: data[1],
           name: data[2]
-        }, function(data){
-          console.log(data);
         });
       }
       
       // delete row ajax
       if(source == "alter"){
-        /*var id = deleted_data[3];
+        var id = deleted_row[0][3];
         var url = "<?php echo $url.'/educations/ajax_delete/'; ?>"+id;
-        $.get(url, function(data){
-          console.log(data);
-        });*/
+        $.get(url);
       }
     }
   });
@@ -168,6 +155,7 @@ $(document).ready(function(){
     contextMenu: true,
     startCols: 6,
     startRows: 3,
+    minSpareRows: 1,
     colHeaders: ["Component", "Type", "Daily value (Rp)", "Monthly value (Rp)", "", ""], // ID, FLAG, COMPONENT ID
     colWidths: [150, 80, 100, 120],
     columns: [
@@ -211,9 +199,14 @@ $(document).ready(function(){
           comp_id: data[5],
           daily: data[2],
           amount: data[3],
-        }, function(data){
-          //
         });
+      }
+      
+      // delete row ajax
+      if(source == "alter"){
+        var id = deleted_row[0][4];
+        var url = "<?php echo $url.'/staffs/delete_compa/'; ?>"+id;
+        $.get(url);
       }
     },
     onBeforeChange: function(update){
@@ -256,6 +249,7 @@ $(document).ready(function(){
       {type: "numeric", format: "0,0.00"}
     ],
     onChange: function(update, source){
+      calculate_comp_b($("#salary_component_b"));
       if(source=="edit" && update[0][1]==0){
         var url = "<?php echo $url.'/components/get_where_component'; ?>/"+update[0][3];
         $.getJSON(url, function(data){
@@ -280,6 +274,13 @@ $(document).ready(function(){
         }, function(data){
           console.log(data);
         });
+      }
+      
+      // delete row ajax
+      if(source == "alter"){
+        var id = deleted_row[0][4];
+        var url = "<?php echo $url.'/staffs/delete_compb/'; ?>"+id;
+        $.get(url);
       }
     },
     onBeforeChange: function(update){
@@ -425,7 +426,6 @@ function readURL(input) {
 }
 
 function calculate_comp_a($instance){
-  console.log("masuk ke component a");
   var rows = $instance.handsontable("countRows");
   var data = $instance.handsontable("getData");
   var total_daily = 0;
@@ -440,5 +440,15 @@ function calculate_comp_a($instance){
 }
 
 function calculate_comp_b($instance){
+  var rows = $instance.handsontable("countRows");
+  var data = $instance.handsontable("getData");
+  var total_daily = 0;
+  var total_monthly = 0;
   
+  for(i = 0; i < data.length; i++){
+	  total_daily += data[i][2] == null ? 0:parseInt(data[i][2].toString().replace(/,/g, ""));
+	  total_monthly += data[i][3] == null ? 0:parseInt(data[i][3].toString().replace(/,/g, ""));
+  }
+  $("#total_b_daily").html(accounting.formatMoney(total_daily, "Rp. "));
+  $("#total_b_monthly").html(accounting.formatMoney(total_monthly, "Rp. "));
 }

@@ -9,42 +9,6 @@ class Absensi extends CI_Controller{
   }
   
   function index(){
-   /* switch ($this->input->get('c')) {
-      case "1":
-          $data['col'] = "staff_id";
-          break;
-      case "2":
-          $data['col'] = "date";
-          break;
-      case "3":
-          $data['col'] = "hari_masuk";
-          break;
-      default:
-          $data['col'] = "staff_id";
-    }
-
-    if ($this->input->get('d') == "1") {
-        $data['dir'] = "DESC";
-    } else {
-        $data['dir'] = "ASC";
-    }
-    $total_rows = $this->absensi->get_all()->num_rows();
-    $data['title'] = "Absensi";
-    $data['btn_add'] = anchor('absensi/add', 'Add New', array('class' => 'btn btn-primary'));
-    $data['btn_home'] = anchor(base_url(), 'Home', array('class' => 'btn'));
-
-    $uri_segment = 3;
-    $offset = $this->uri->segment($uri_segment);
-    $data['absensi'] = $this->absensi->get_all();
-
-    $config['base_url'] = site_url("absensi/index");
-    $config['total_rows'] = $total_rows;
-    $config['per_page'] = $this->limit;
-    $config['uri_segment'] = $uri_segment;
-    $this->pagination->initialize($config);
-    $data['pagination'] = $this->pagination->create_links();
-    
-    $this->load->view("absensi/index", $data);*/
     $this->add();
   }
   

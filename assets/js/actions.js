@@ -61,6 +61,20 @@ $(document).ready(function(){
         
     });
     
+    $(".navigation li ul li a").click(function(){
+        var li = $(this).parent('li');
+        if(li.find('ul').length > 0){
+            
+            if(li.hasClass('active'))
+                li.removeClass('active');
+            else
+                li.addClass('active');
+            
+            return false;
+        }
+        
+    });
+    
     $(".navButton a, .sidebar .close").click(function(){        
         if($(".sidebar").is(":visible"))
             $(".sidebar").slideUp();

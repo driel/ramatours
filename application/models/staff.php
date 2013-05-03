@@ -222,7 +222,11 @@ class Staff extends DataMapper {
     }
     
     function get_staff_per_branch($branch){
-      return $this->db->order_by("staff_name")->get_where("staffs", array("staff_cabang"=>$branch));
+      if($branch){
+        return $this->db->order_by("staff_name")->get_where("staffs", array("staff_cabang"=>$branch));
+      }else{
+        return $this->db->order_by("staff_name")->get("staffs");
+      }
     }
     
     function get_staff_detail($id){

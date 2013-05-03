@@ -26,7 +26,7 @@
                   	  }
               	    }
             	    });
-            		  staffs.push({"name": v.staff_name, "cabang": v.staff_cabang, "dept": v.staff_departement, "title": v.staff_jabatan, "absen": absen, "sid": v.staff_id});
+            		  staffs.push({"name": v.staff_name, "nik":v.staff_nik, "kode_absen":v.staff_kode_absen, "cabang": v.staff_cabang, "dept": v.staff_departement, "title": v.staff_jabatan, "absen": absen, "sid": v.staff_id});
             	  });
             	  generateHT(staffs);
               });
@@ -51,10 +51,13 @@
     function generateHT(data){
       $("#ht").handsontable({
     	  data: data,
-    	  startCols: 6,
-    	  colWidths: [180, 100, 100, 100, 50, 1],
-    	  colHeaders: ["Name", "Branch", "Department", "Title", "Absen", ""],
+    	  startCols: 8,
+    	  colWidths: [180, 100, 100, 100, 100, 100, 50, 1],
+    	  columnSorting: true,
+    	  colHeaders: ["Name", "Nik", "Kode Absen", "Branch", "Department", "Title", "Absen", ""],
     	  columns: [{data:"name", readOnly:true},
+    	          {data:"nik", readOnly:true},
+    	          {data:"kode_absen", readOnly:true},
     	      	  {data:"cabang", readOnly:true},
     	      	  {data:"dept", readOnly:true},
     	      	  {data:"title", readOnly:true},

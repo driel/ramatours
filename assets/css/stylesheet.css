@@ -43,7 +43,7 @@ form{margin: 0px;}
         /* eof simple navigation */
         
         /* bordered navigation */
-        .sidebar .navigation.bordered{width: 218px; margin: 10px 0px 20px; padding: 0px; list-style: none; display: block; float: left; border: 1px solid #1A1A1A; border-bottom: 0px; border-left: 0px;}
+        .sidebar .navigation.bordered{width: 218px; margin: 10px 0px 20px; padding: 0px; list-style: none; display: block; float: left; border: 1px solid #1A1A1A; border-bottom: 0px; border-left: 0px; overflow: hidden;}
             .sidebar .navigation.bordered > li{position: relative; width: 218px; float: left; display: block;}
                 .sidebar .navigation.bordered > li > a{font-size: 16px; color: #C9C9C9; display: block; float: left; width: 200px; line-height: 16px; border-left: 3px solid #111;
                                                        border-bottom: 1px solid #1A1A1A; padding: 12px 8px 11px 7px; text-decoration: none; background: #222222; margin: 0px;}
@@ -61,7 +61,19 @@ form{margin: 0px;}
                         .sidebar .navigation.bordered li ul > li a{font-size: 14px; line-height: 16px; padding: 10px 8px 9px 17px; text-decoration: none; display: block;
                                                            float: left; border-bottom: 1px solid #1A1A1A; width: 190px; color: #C9C9C9; border-left: 3px solid #222;}
                         .sidebar .navigation.bordered li ul > li a:hover,
-                        .sidebar .navigation.bordered li ul > li.active a{background: transparent; color: #FFF;}                        
+                        .sidebar .navigation.bordered li ul > li.active a{background: transparent; color: #FFF;}        
+                        
+                /*SECOND LEVEL*/
+                .sidebar .navigation.bordered > li > ul > li > a{font-size: 16px; color: #C9C9C9; display: block; float: left; width: 200px; line-height: 16px; border-left: 3px solid #111;
+                                                       border-bottom: 1px solid #1A1A1A; padding: 12px 8px 11px 7px; text-decoration: none; background: #0c0c0c; margin: 0px; padding-left: 20px;}
+                .sidebar .navigation.bordered li.active ul li ul{width: 220px; float: left; display: none; list-style: none; padding: 0px; margin: 0px;}
+                 .sidebar .navigation.bordered > li ul li .open{width: 38px; height: 39px; position: absolute; right: 0px; top: 0px; background: #222222; 
+                                                 border: 1px solid #1A1A1A; border-width: 0px 0px 1px 1px; cursor: pointer; background: url('../img/navb_plus.png') center center no-repeat!important;}
+                 .sidebar .navigation.bordered > li.active ul li.active .open{border-bottom-color: #191818; background: url('../img/navb_minus.png') center center no-repeat #191818!important;}
+                 .sidebar .navigation.bordered li.active ul li.active ul{display: block;}
+                .sidebar .navigation.bordered li ul > li.active a{background: #0c0c0c; color: #FFF;}
+                .sidebar .navigation.bordered li ul > li.active ul li a{background: transparent; color: #FFF; padding-left: 30px;}
+                /*END SECOND LEVEL*/                
         /* eof bordered navigation */
         
         .sidebar .widget{width: 220px; float: left;}
