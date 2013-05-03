@@ -7,7 +7,33 @@ class Airline extends CI_Controller{
   }
 
   function index(){
-    $this->load->view("airline/index");
+    // view to page
+    $tp = $this->input->get("to_page");
+    if(strlen($tp)){
+      $this->session->set_userdata(array("to_page"=>$tp));
+    }
+    $this->perpage = ($this->session->userdata("to_page") > 0 ? $this->session->userdata("to_page"):10);
+    // order by
+    $order_by = $this->input->get("order_by");
+    $order = $this->input->get("order");
+    $q = $this->input->get("q");
+    $by = $this->input->get("search_by");
+    $this->offset = $this->uri->segment(3);
+    if(strlen($q)){
+      if(strlen($by)){
+        $data["airline"] = $this->airline->search($by, $q);
+      }else{
+        $data["airline"] = $this->airline->get_all($order_by, strtoupper($order), $this->perpage, $this->offset);
+      }
+    }else{
+      $data["airline"] = $this->airline->get_all($order_by, strtoupper($order), $this->perpage, $this->offset);
+      $config = init_paginate(base_url("airline/index"), $this->airline->get_all()->num_rows(), $this->perpage);
+      $config["suffix"] = '?'.http_build_query($_GET, '', "&");
+      $this->pagination->initialize($config);
+    }
+    // toggle order ASC DESC
+    $data["order"] = ($order == "asc" ? "desc":"asc");
+    $this->load->view("airline/index", $data);
   }
 
   private function _addData(){

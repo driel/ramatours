@@ -129,6 +129,13 @@
                         </li>
                       </ul>
                       </li>
+                      <li>
+                      	<a href="#" class="blred">Ticketing</a>
+                      	<div class="open"></div>
+                      	<ul>
+                      		<li><?php echo anchor('airline/index', 'Airlines'); ?></li>
+                      	</ul>
+                      </li>
                       <li><a href="<?php echo site_url('users/logout'); ?>" class="blred">Logout</a></li>
                     </ul>
                 </div><!-- // nContainer -->

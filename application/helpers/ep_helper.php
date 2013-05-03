@@ -273,6 +273,18 @@ function search_form($search_by){
   <?php
 }
 
+function sorter_link($link, $order_by, $desc, $text){
+  $ci = &get_instance();
+  $ob = $ci->input->get("order_by");
+  if($order_by == $ob){
+    $text = $text.'<span class="'.$desc.'"></span>';
+    echo anchor($link."?order_by=".$order_by."&order=".$desc, $text);
+  }else{
+    $text = $text.'<span class="asc_desc"></span>';
+    echo anchor($link."?order_by=".$order_by."&order=desc", $text);
+  }
+}
+
 function btn_action($edit_url = "#", $edit_title = "Untitled", $delete_url = "#"){
   ?>
   <div class="btn-group">
