@@ -18,7 +18,7 @@
 			<?php echo header_btn_group("#", "airline/add"); ?>
 		</div>
 		<div id="search_bar" class="widget-header">
-			<?php search_form(array("" => "By", "asset_name" => "Name")); ?>
+			<?php search_form(array("" => "By", "name" => "Name")); ?>
 		</div>
 
 		<table class="fpTable table table-hover">
@@ -39,31 +39,37 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($airline->result() as $row): ?>
-				<tr>
-					<td><?php echo $row->name; ?></td>
-					<td><?php echo $row->address; ?></td>
-					<td><?php echo $row->phone; ?></td>
-					<td><?php echo $row->fax; ?></td>
-					<td><?php echo $row->email; ?></td>
-					<td style="text-align: center;"><?php echo anchor("#", "CP", array("class"=>"show_cp btn btn-primary", "data-id"=>$row->id))?>
-					</td>
-					<td>
-						<div class="btn-group">
-							<a href="#" data-toggle="dropdown"
-								class="btn btn-mini dropdown-toggle"> <i class="icon-cog"></i> <span
-								class="caret"></span>
-							</a>
-							<ul class="dropdown-menu pull-right">
-								<li><?php echo anchor('airline/edit/' . $row->id, '<i class="icon-pencil"></i> Edit'); ?>
-								</li>
-								<li><?php echo anchor('airline/delete/' . $row->id, '<i class="icon-trash"></i> Delete', array("class"=>"delete")); ?>
-								</li>
-							</ul>
-						</div>
-					</td>
-				</tr>
-				<?php endforeach; ?>
+				<?php if($airline->num_rows() > 0) :?>
+  				<?php foreach($airline->result() as $row): ?>
+  				<tr>
+  					<td><?php echo $row->name; ?></td>
+  					<td><?php echo $row->address; ?></td>
+  					<td><?php echo $row->phone; ?></td>
+  					<td><?php echo $row->fax; ?></td>
+  					<td><?php echo $row->email; ?></td>
+  					<td style="text-align: center;"><?php echo anchor("#", "CP", array("class"=>"show_cp btn btn-primary", "data-id"=>$row->id))?>
+  					</td>
+  					<td>
+  						<div class="btn-group">
+  							<a href="#" data-toggle="dropdown"
+  								class="btn btn-mini dropdown-toggle"> <i class="icon-cog"></i> <span
+  								class="caret"></span>
+  							</a>
+  							<ul class="dropdown-menu pull-right">
+  								<li><?php echo anchor('airline/edit/' . $row->id, '<i class="icon-pencil"></i> Edit'); ?>
+  								</li>
+  								<li><?php echo anchor('airline/delete/' . $row->id, '<i class="icon-trash"></i> Delete', array("class"=>"delete")); ?>
+  								</li>
+  							</ul>
+  						</div>
+  					</td>
+  				</tr>
+  				<?php endforeach; ?>
+				<?php else: ?>
+  				<tr>
+  					<td colspan="7" class="no-data">No Data yet</td>
+  				</tr>
+				<?php endif; ?>
 			</tbody>
 			<tfoot class="foot_pagi">
 				<tr>

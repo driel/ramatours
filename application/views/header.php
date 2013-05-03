@@ -79,7 +79,6 @@
                           <a href="#" class="blblue">Master</a>
                           <div class="open"></div>
                           <ul>
-                            <li><?php echo anchor('accounts', 'Chart of Account'); ?></li>
                           	<li><?php echo anchor('assets', 'Assets'); ?></li>
                           	<li><?php echo anchor('branches', 'Branch'); ?></li>
                           	<li><?php echo anchor('departments', 'Departments'); ?></li>
@@ -134,6 +133,7 @@
                       	<a href="#" class="blred">Ticketing</a>
                       	<div class="open"></div>
                       	<ul>
+                      	  <li><?php echo anchor('accounts/index', 'GL Account'); ?></li>
                       		<li><?php echo anchor('airline/index', 'Airlines'); ?></li>
                       	</ul>
                       </li>

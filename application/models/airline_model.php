@@ -10,6 +10,10 @@ class Airline_model extends CI_Model{
     return $bank;
   }
   
+  function search($k, $v){
+    return $this->db->like($k, $v)->order_by($k, "asc")->get("airline");
+  }
+  
   function add(){
     $this->db->insert("airline", array(
         "name"=>$this->input->post("name"),
