@@ -4,7 +4,26 @@
 ));?>
 <script type="text/javascript">
     $(document).ready(function(){
-        /*$("#glacc_parent_stat").change(function() {
+    	if ($("#glacc_parent").val() == '0') {
+    		$("#parent").hide();
+    	} else {
+    		$("#parent").show();
+    	}
+
+        $("#glacc_parent_stat").iphoneStyle({
+			checkedLabel: "Yes",
+			uncheckedLabel: "No",
+			onChange: function(e, checked){
+				if(checked){
+					$(e).attr("checked", "checked");
+					$("#parent").hide();
+				}else{
+					$(e).removeAttr("checked");
+					$("#parent").show();
+				}
+			}
+		});
+	/*$("#glacc_parent_stat").change(function() {
       		if ($(this).is(":checked")) {
       			$("#glacc_parent").attr("disabled","true");
       		} else {
@@ -29,7 +48,7 @@
                 <td>Parent Status</td>
                 <td><?php echo $glacc_parent_stat; ?></td>
             </tr>
-            <tr>
+            <tr id="parent">
                 <td width="20%">Parent</td>
                 <td><div class="span2"><?php echo $glacc_parent; ?></div></td>
             </tr>
