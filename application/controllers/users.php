@@ -115,10 +115,13 @@ class Users extends CI_Controller {
             if ($this->check_user($username, $password) == TRUE) {
                 $user = new User();
                 $rs = $user->where('username', $username)->get();
+                $staff = new Staff();
+                $staff = $staff->where('staff_id', $rs->staff_id)->get();
                 $userdata = array(
                     'username' => $username,
                     'sess_role_id' => $rs->role_id,
                     'sess_staff_id' => $rs->staff_id,
+                    'branch'=>$staff->staff_cabang,
                     'logged_in' => TRUE
                 );
                 $this->session->set_userdata($userdata);
