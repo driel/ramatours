@@ -132,9 +132,25 @@
                       <li>
                       	<a href="#" class="blyellow">Ticketing</a>
                       	<div class="open"></div>
-                      	<ul>
-                      	  <li><?php echo anchor('accounts/index', 'GL Account'); ?></li>
+                        <ul>
+                        <li>
+                          <a href="#" class="blblue">Master</a>
+                          <div class="open"></div>
+                          <ul>
+                      	  	<li><?php echo anchor('accounts/index', 'GL Account'); ?></li>
+                      	  	<li><?php echo anchor('fiscal/index', 'Kurs Pajak'); ?></li>
                       		<li><?php echo anchor('airline/index', 'Airlines'); ?></li>
+                          </ul>
+                        <li>
+                          <a href="#" class="blyellow">Transaction</a>
+                          <div class="open"></div>
+                          <ul>
+                          	<li><?php echo anchor('journal/index', 'Jurnal')?></li>
+                          </ul>
+                        </li>
+                        </li>
+                        </ul>
+                      	<ul>
                       	</ul>
                       </li>
                       <li><a href="<?php echo site_url('users/logout'); ?>" class="blred">Logout</a></li>
