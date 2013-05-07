@@ -72,9 +72,9 @@ function HeaderLink($value, $key, $col, $dir) {
             <thead>
                 <tr>
                     <th width="25%"><?php echo HeaderLink("Account No", "glacc_no", $col, $dir); ?></th>
-                    <th width="10%"><?php echo HeaderLink("Parent", "glacc_parent", $col, $dir); ?></th>
+                    <th width="25%"><?php echo HeaderLink("Parent", "glacc_parent", $col, $dir); ?></th>
                     <th width="10%">Parent Status</th>
-                    <th width="10%"><?php echo HeaderLink("Account Name", "glacc_name", $col, $dir); ?></th>
+                    <th width="35%"><?php echo HeaderLink("Account Name", "glacc_name", $col, $dir); ?></th>
                     <th width="5%">Action</th>
                 </tr>
             </thead>

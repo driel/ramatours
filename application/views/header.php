@@ -130,7 +130,7 @@
                       </ul>
                       </li>
                       <li>
-                      	<a href="#" class="blred">Ticketing</a>
+                      	<a href="#" class="blyellow">Ticketing</a>
                       	<div class="open"></div>
                       	<ul>
                       	  <li><?php echo anchor('accounts/index', 'GL Account'); ?></li>
