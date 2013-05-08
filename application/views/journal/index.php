@@ -12,34 +12,34 @@
             <div class="icon">
                 <span class="ico-tag"></span>
             </div>
-            <h1>Kurs Pajak
-                <small>Manage Kurs Pajak</small>
+            <h1>Entry Journal
+                <small>Manage Entry Journal</small>
             </h1>
         </div>
         <br class="cl" />
         <div class="head blue">
-            <?php echo header_btn_group("#", "fiscal/add"); ?>
+            <?php echo header_btn_group("#", "journal/add"); ?>
         </div>
         <div id="search_bar" class="widget-header">
-            <?php search_form(array("" => "By", "kurs_date" => "Kurs Date")); ?>
+            <?php search_form(array("" => "By", "gltr_date" => "Date")); ?>
         </div>
         <table class="table fpTable table-hover">
             <thead>
                 <tr>
-                    <th width="25%"><?php sorter_link("fiscal/index", "kurs_date", $order, "Kurs Date"); ?></th>
-                    <th>Kurs US</th>
-                    <th>Kurs Yen</th>
+                    <th width="25%"><?php sorter_link("journal/index", "gltr_date", $order, "Date"); ?></th>
+                    <th>Voucher</th>
+                    <th>Status</th>
                     <th width="5%">Action</th>
                 </tr>
             </thead>
             <tbody>
             <?php
-            foreach ($fiscal->result() as $row) {
+            foreach ($journal->result() as $row) {
             ?>
                 <tr>
-                    <td><?php echo date_format(new DateTime($row->kurs_date),'j M Y'); ?></td>
-                    <td><?php echo number_format($row->kurs_us_rp,0,"","."); ?></td>
-                    <td><?php echo number_format($row->kurs_yen_rp,0,"","."); ?></td>
+                    <td><?php echo date_format(new DateTime($row->gltr_date),'j M Y'); ?></td>
+                    <td><?php echo $row->gltr_voucher; ?></td>
+                    <td><?php echo $row->gltr_status; ?></td>
                     <td>
                         <div class="btn-group">
                             <a href="#" data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
@@ -47,8 +47,8 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><?php echo anchor('fiscal/edit/' . $row->kurs_id, '<i class="icon-pencil"></i> Edit'); ?></li>
-                                <li><?php echo anchor('fiscal/delete/' . $row->kurs_id, '<i class="icon-trash"></i> Delete', array('onclick' => "return confirm('Are you sure want to delete?')")); ?></li>
+                                <li><?php echo anchor('journal/edit/' . $row->gltr_id, '<i class="icon-pencil"></i> Edit'); ?></li>
+                                <li><?php echo anchor('journal/delete/' . $row->gltr_id, '<i class="icon-trash"></i> Delete', array('onclick' => "return confirm('Are you sure want to delete?')")); ?></li>
                             </ul>
                         </div>
                     </td>

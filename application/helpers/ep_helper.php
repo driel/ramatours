@@ -208,6 +208,20 @@ function header_btn_group($download_url = "#", $add_url = "#"){
   <?php
 }
 
+function header_btn_group_detail(){
+  ?>
+  <div class="btn-group float-right">
+    <a href="<?php echo base_url('dashboard/index'); ?>" class="btn btn-primary bootstrap-tooltip" data-placement="top" data-title="Back to Dashboard">
+      <span class="icon-home icon-white"></span>
+    </a>
+    <a id="add-detail" class="btn btn-primary bootstrap-tooltip" data-placement="top" data-title="Add New">
+      <span class="icon-plus icon-white"></span>
+    </a>
+  </div>
+  <br class="cl" />
+  <?php
+}
+
 function header_btn_group_report(){
   ?>
   <script type="text/javascript">
