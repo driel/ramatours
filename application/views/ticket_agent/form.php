@@ -22,7 +22,7 @@ $(document).ready(function(){
 			</h1>
 		</div>
 		<br class="cl" />
-		<?php echo form_open(); ?>
+		<?php echo form_open($form_action); ?>
 		<table width="100%">
 			<tr>
 				<td width="20%">Code</td>
@@ -58,27 +58,38 @@ $(document).ready(function(){
 				<td>Status</td>
 				<td><input type="checkbox" id="status" checked />
 					<div id="disable_on" style="display: none;">
-						<div class="span2"><?php echo form_input($disable_date); ?></div>
+						<div class="span2">
+							<?php echo form_input($disable_date); ?>
+						</div>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>Credit limit (Rp)</td>
-				<td><div class="span2"><?php echo form_input($limit_rp); ?></div></td>
+				<td><div class="input-prepend span2">
+						<span class="btn">Rp. </span><?php echo form_input($limit_rp); ?>
+					</div></td>
 			</tr>
 			<tr>
 				<td>Credit limit (US$)</td>
-				<td><div class="span2"><?php echo form_input($limit_us); ?></div></td>
+				<td><div class="input-prepend span2">
+						<span class="btn">US$. </span><?php echo form_input($limit_us); ?>
+					</div></td>
 			</tr>
 			<tr>
-				<td>GL Account DR</td>
-				<td></td>
+				<td>GL Account No DR</td>
+				<td><div class="span2">
+						<?php echo $glacc_dr; ?>
+					</div></td>
 			</tr>
 			<tr>
-				<td>GL Account CR</td>
-				<td></td>
+				<td>GL Account No CR</td>
+				<td><div class="span2">
+						<?php echo $glacc_cr; ?>
+					</div></td>
 			</tr>
 		</table>
+		<?php echo $submit.' '.$back; ?>
 		<?php echo form_close(); ?>
 	</div>
 </div>

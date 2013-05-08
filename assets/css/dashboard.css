@@ -621,6 +621,10 @@ div#search{
 }
 
 /*override*/
+.input-prepend > span.btn{
+	margin: 5px 0;
+}
+
 .select2-container{
   min-width: 180px;
 }
