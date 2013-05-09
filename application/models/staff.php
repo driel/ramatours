@@ -223,9 +223,9 @@ class Staff extends DataMapper {
     
     function get_staff_per_branch($branch){
       if($branch){
-        return $this->db->order_by("staff_name")->get_where("staffs", array("staff_cabang"=>$branch));
+        return $this->db->join("branches","branches.branch_id=staffs.staff_cabang")->join("departments","departments.dept_id=staffs.staff_departement")->join("titles","titles.title_id=staffs.staff_jabatan")->order_by("staff_name")->get_where("staffs", array("staff_cabang"=>$branch));
       }else{
-        return $this->db->order_by("staff_name")->get("staffs");
+        return $this->db->join("branches","branches.branch_id=staffs.staff_cabang")->join("departments","departments.dept_id=staffs.staff_departement")->join("titles","titles.title_id=staffs.staff_jabatan")->order_by("staff_name")->get("staffs");
       }
     }
     

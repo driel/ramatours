@@ -24,7 +24,7 @@ class Department extends DataMapper {
         $dept->get();
         foreach ($dept as $row) {
             $data[''] = '[ Pilih Departement ]';
-            $data[$row->dept_name] = $row->dept_name;
+            $data[$row->dept_id] = $row->dept_name;
         }
         return $data;
     }

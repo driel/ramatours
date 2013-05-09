@@ -1094,8 +1094,8 @@ class Staffs extends CI_Controller {
 
     		$data['branches'] = $branches;
 		} else {
-	    	$this->db->select('staffs.staff_id,staffs.staff_name,staffs.staff_cabang,staffs.staff_departement,staffs.staff_jabatan,staffs.pph_by_company,absensi.hari_masuk,cuti.date_start,cuti.date_end,izin.izin_jumlah_hari');
-	    	$this->db->join('branches','branches.branch_name=staffs.staff_cabang');
+	    	$this->db->select('staffs.staff_id,staffs.staff_name,staffs.staff_cabang,branches.branch_name,staffs.staff_departement,staffs.staff_jabatan,staffs.pph_by_company,absensi.hari_masuk,cuti.date_start,cuti.date_end,izin.izin_jumlah_hari');
+	    	$this->db->join('branches','branches.branch_id=staffs.staff_cabang');
 	    	$this->db->join('absensi','absensi.staff_id=staffs.staff_id','left');
 	    	$this->db->join('cuti','cuti.staff_id=staffs.staff_id AND `cuti`.`status` =  \'approve\'','left');
 	    	$this->db->join('izin','izin.izin_staff_id=staffs.staff_id','left');

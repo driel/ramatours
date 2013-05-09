@@ -301,8 +301,8 @@ class Components extends CI_Controller {
 
 		$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
 
-    	$this->db->select('staffs.staff_id,staffs.staff_name,staffs.staff_cabang,staffs.staff_departement,staffs.staff_jabatan,staffs.pph_by_company,absensi.hari_masuk,cuti.date_start,cuti.date_end,izin.izin_jumlah_hari');
-    	$this->db->join('branches','branches.branch_name=staffs.staff_cabang');
+    	$this->db->select('staffs.staff_id,staffs.staff_name,branches.branch_name,staffs.staff_departement,staffs.staff_jabatan,staffs.pph_by_company,absensi.hari_masuk,cuti.date_start,cuti.date_end,izin.izin_jumlah_hari');
+    	$this->db->join('branches','branches.branch_id=staffs.staff_cabang');
     	$this->db->join('absensi','absensi.staff_id=staffs.staff_id','left');
     	$this->db->join('cuti','cuti.staff_id=staffs.staff_id AND `cuti`.`status` =  \'approve\'','left');
     	$this->db->join('izin','izin.izin_staff_id=staffs.staff_id','left');
@@ -428,7 +428,7 @@ class Components extends CI_Controller {
 		$data['yearly_by_selected'] = $yearly_by_selected;
 
 		if ($period_by_selected == 'Yearly' && $yearly_by_selected == 'Staff') {
-    		$this->db->join('branches','branches.branch_name=staffs.staff_cabang','left');
+    		$this->db->join('branches','branches.branch_id=staffs.staff_cabang','left');
 			$this->db->order_by('branches.branch_name', 'ASC');
 	    	$this->db->limit($this->limit, $offset);
 	    	$staff_branch = $this->db->get('staffs');

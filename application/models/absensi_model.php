@@ -10,7 +10,7 @@ class Absensi_model extends CI_Model{
 
   function list_where($where = null, $limit = 10, $offset = 0){
   	$this->db->join('staffs','staffs.staff_id=absensi.staff_id');  	
-  	$this->db->join('branches','branches.branch_name=staffs.staff_cabang');  	
+  	$this->db->join('branches','branches.branch_id=staffs.staff_cabang');  	
 
 	foreach($where as $key=>$value) {
 		if ((isset($key) && isset($value)) && (($key != '0' || $key != '') && $value != '')) {

@@ -25,7 +25,7 @@ class Marital extends DataMapper {
 
         foreach ($marital as $row) {
             $data[''] = '[ Pilih Status Nikah ]';
-            $data[$row->sn_name] = $row->sn_name;
+            $data[$row->sn_id] = $row->sn_name;
         }
         return $data;
     }

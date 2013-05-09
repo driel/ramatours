@@ -28,7 +28,7 @@ class Tax_Employee extends DataMapper {
         $te->get();
         foreach ($te as $row) {
             $data[''] = '[ Pilih Pajak karyawan ]';
-            $data[$row->sp_status] = $row->sp_status;
+            $data[$row->sp_id] = $row->sp_status;
         }
         return $data;
     }

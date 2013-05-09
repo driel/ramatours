@@ -53,7 +53,7 @@
           ?>
     		<tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?>>
 	            <td align="right"><?php echo $i; ?></td>
-	            <td><?php if ($row->staff_cabang == $branch) { echo '';} else { $branch = $row->staff_cabang; echo $row->staff_cabang;} ?></td>
+	            <td><?php if ($row->branch_name == $branch) { echo '';} else { $branch = $row->branch_name; echo $row->branch_name;} ?></td>
 	            <td><?php echo $row->staff_name; ?></td>
 	            <td><?php echo $row->staff_departement; ?></td>
 	            <td><?php echo $row->staff_jabatan; ?></td>

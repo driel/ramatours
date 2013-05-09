@@ -186,19 +186,6 @@ CREATE TABLE `departments` (
 
 insert  into `departments`(`dept_id`,`dept_name`) values (1,'Accounting'),(2,'Marketing'),(3,'Reservation'),(4,'Operation'),(5,'Ticketing'),(6,'Transportation');
 
-/*Table structure for table `detail_chart_of_account` */
-
-DROP TABLE IF EXISTS `detail_chart_of_account`;
-
-CREATE TABLE `detail_chart_of_account` (
-  `glacc_period` char(6) DEFAULT NULL,
-  `glacc_saldo` decimal(10,0) DEFAULT NULL,
-  `glaccd_dr` int(11) DEFAULT NULL,
-  `glaccd_cr` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `detail_chart_of_account` */
-
 /*Table structure for table `educations` */
 
 DROP TABLE IF EXISTS `educations`;
@@ -244,11 +231,11 @@ CREATE TABLE `families` (
   `staff_fam_sex` enum('laki-laki','perempuan') NOT NULL,
   `staff_fam_relation` varchar(10) NOT NULL,
   PRIMARY KEY (`staff_fam_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 /*Data for the table `families` */
 
-insert  into `families`(`staff_fam_id`,`staff_fam_staff_id`,`staff_fam_order`,`staff_fam_name`,`staff_fam_birthdate`,`staff_fam_birthplace`,`staff_fam_sex`,`staff_fam_relation`) values (3,21,'','dad','2018-09-30','a','perempuan','Ibu'),(5,23,'','Muhamad Kamaludin','2023-01-27','Bandung','laki-laki','Ayah'),(6,23,'','Yayah Rodiah','2013-04-02','Ciamis','perempuan','Ibu'),(7,23,'','Muhamad Dzulfikar','2013-04-25','Bandung','laki-laki','Anak Ke-1');
+insert  into `families`(`staff_fam_id`,`staff_fam_staff_id`,`staff_fam_order`,`staff_fam_name`,`staff_fam_birthdate`,`staff_fam_birthplace`,`staff_fam_sex`,`staff_fam_relation`) values (3,21,'','dad','2018-09-30','a','perempuan','Ibu'),(5,23,'','Muhamad Kamaludin','2023-01-27','Bandung','laki-laki','Ayah'),(6,23,'','Yayah Rodiah','2013-04-02','Ciamis','perempuan','Ibu'),(7,23,'','Muhamad Dzulfikar','2013-04-25','Bandung','laki-laki','Anak Ke-1'),(8,32,'','Max Syat','1970-05-05','Medan','laki-laki','Bapak');
 
 /*Table structure for table `fiscals` */
 
@@ -278,22 +265,6 @@ CREATE TABLE `izin` (
 
 insert  into `izin`(`izin_id`,`izin_staff_id`,`izin_date`,`izin_jumlah_hari`,`izin_note`) values (1,2,'2013-04-22',2,'jalan2');
 
-/*Table structure for table `kurs_pajak` */
-
-DROP TABLE IF EXISTS `kurs_pajak`;
-
-CREATE TABLE `kurs_pajak` (
-  `kurs_id` int(11) NOT NULL AUTO_INCREMENT,
-  `kurs_date` date NOT NULL,
-  `kurs_us_rp` decimal(10,0) NOT NULL,
-  `kurs_yen_rp` decimal(10,0) NOT NULL,
-  PRIMARY KEY (`kurs_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
-/*Data for the table `kurs_pajak` */
-
-insert  into `kurs_pajak`(`kurs_id`,`kurs_date`,`kurs_us_rp`,`kurs_yen_rp`) values (1,'2013-05-15','9590','2839');
-
 /*Table structure for table `maritals_status` */
 
 DROP TABLE IF EXISTS `maritals_status`;
@@ -318,11 +289,11 @@ CREATE TABLE `medical_histories` (
   `medic_date` date NOT NULL,
   `medic_description` text NOT NULL,
   PRIMARY KEY (`medic_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 /*Data for the table `medical_histories` */
 
-insert  into `medical_histories`(`medic_id`,`staff_id`,`medic_date`,`medic_description`) values (3,2,'2010-01-01','Flur'),(4,6,'2013-03-07','wahahah'),(5,6,'2013-03-29','Enak aja luh'),(6,6,'2013-03-28','gue cape tau!'),(7,7,'2013-03-25','Tipes'),(8,7,'2013-03-25','Maag'),(9,9,'2013-04-16','Masuk rumah sakit karena sakit'),(10,10,'2013-04-16','Masuk rumah sakit karena sakit'),(11,12,'2013-04-02','asd'),(12,13,'2013-04-02','asd'),(13,14,'2013-04-02','asd'),(14,19,'2013-04-18','asdasdasd'),(15,21,'2013-04-02','asdasd'),(16,22,'2013-04-02','asdasd'),(17,23,'2013-12-12','Flue wae');
+insert  into `medical_histories`(`medic_id`,`staff_id`,`medic_date`,`medic_description`) values (3,2,'2010-01-01','Flur'),(4,6,'2013-03-07','wahahah'),(5,6,'2013-03-29','Enak aja luh'),(6,6,'2013-03-28','gue cape tau!'),(7,7,'2013-03-25','Tipes'),(8,7,'2013-03-25','Maag'),(9,9,'2013-04-16','Masuk rumah sakit karena sakit'),(10,10,'2013-04-16','Masuk rumah sakit karena sakit'),(11,12,'2013-04-02','asd'),(12,13,'2013-04-02','asd'),(13,14,'2013-04-02','asd'),(14,19,'2013-04-18','asdasdasd'),(15,21,'2013-04-02','asdasd'),(16,22,'2013-04-02','asdasd'),(17,23,'2013-12-12','Flue wae'),(18,32,'2013-05-08','Sakit pilek');
 
 /*Table structure for table `module` */
 
@@ -416,12 +387,12 @@ CREATE TABLE `staffs` (
   `staff_email_alternatif` varchar(30) NOT NULL,
   `staff_phone_home` varchar(20) NOT NULL,
   `staff_phone_hp` varchar(20) NOT NULL,
-  `staff_status_pajak` varchar(10) NOT NULL,
-  `staff_status_nikah` varchar(10) NOT NULL,
-  `staff_status_karyawan` varchar(10) NOT NULL,
-  `staff_cabang` varchar(20) NOT NULL,
-  `staff_departement` varchar(20) NOT NULL,
-  `staff_jabatan` varchar(20) NOT NULL,
+  `staff_status_pajak` int(11) NOT NULL,
+  `staff_status_nikah` int(11) NOT NULL,
+  `staff_status_karyawan` int(11) NOT NULL,
+  `staff_cabang` int(11) NOT NULL,
+  `staff_departement` int(11) NOT NULL,
+  `staff_jabatan` int(11) NOT NULL,
   `staff_photo` varchar(30) NOT NULL,
   `staff_birthdate` date NOT NULL,
   `staff_birthplace` varchar(20) NOT NULL,
@@ -434,16 +405,17 @@ CREATE TABLE `staffs` (
   `no_kitas` int(11) NOT NULL,
   `kitas_expired` date NOT NULL,
   `mulai_kerja` date NOT NULL,
+  `contract_number` int(11) NOT NULL,
   `contract_from` date NOT NULL,
   `contract_to` date NOT NULL,
   `date_out` date NOT NULL,
   `out_note` varchar(255) NOT NULL,
   PRIMARY KEY (`staff_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 
 /*Data for the table `staffs` */
 
-insert  into `staffs`(`staff_id`,`staff_nik`,`staff_kode_absen`,`staff_name`,`staff_address`,`staff_email`,`staff_email_alternatif`,`staff_phone_home`,`staff_phone_hp`,`staff_status_pajak`,`staff_status_nikah`,`staff_status_karyawan`,`staff_cabang`,`staff_departement`,`staff_jabatan`,`staff_photo`,`staff_birthdate`,`staff_birthplace`,`staff_sex`,`staff_password`,`pph_by_company`,`saldo_cuti`,`no_passport`,`passport_expired`,`no_kitas`,`kitas_expired`,`mulai_kerja`,`contract_from`,`contract_to`,`date_out`,`out_note`) values (1,6305280,'3101','Budi Setiawan','Jl. RE. Martadinata No. 15','budi@gmail.com','budi@gmail.com','541000000','082116914774','K1','Married','Tetap','Bandung','Transportation','Supervisor','-','1985-03-13','Bandung','','','n',0,0,'0000-00-00',0,'0000-00-00','0000-00-00','0000-00-00','0000-00-00','0000-00-00',''),(2,6305281,'3102','Puteri Berlianty','Komp. Margahayu Kencana Blok I 1 No. 19','jasmine@gmail.com','jasmine@gmail.com','541000000','08512121212','K2','Single','Tetap','Bandung','Accounting','Manager','','2011-03-21','Bandung','','','y',0,0,'0000-00-00',0,'0000-00-00','0000-00-00','0000-00-00','0000-00-00','0000-00-00',''),(23,9874,'63052','Dariel pratama','Test','dr.iel_pra@yahoo.co.id','dr.iel_pra@yahoo.co.id','6285721558525','6285721558525','TK','Married','Tetap','Bandung','Accounting','Manager','2012-10-27_14.09_.34_1.jpg','2013-04-02','ciamis','laki-laki','d41d8cd98f00b204e9800998ecf8427e','n',10,0,'0000-00-00',0,'0000-00-00','2013-04-01','0000-00-00','0000-00-00','0000-00-00','');
+insert  into `staffs`(`staff_id`,`staff_nik`,`staff_kode_absen`,`staff_name`,`staff_address`,`staff_email`,`staff_email_alternatif`,`staff_phone_home`,`staff_phone_hp`,`staff_status_pajak`,`staff_status_nikah`,`staff_status_karyawan`,`staff_cabang`,`staff_departement`,`staff_jabatan`,`staff_photo`,`staff_birthdate`,`staff_birthplace`,`staff_sex`,`staff_password`,`pph_by_company`,`saldo_cuti`,`no_passport`,`passport_expired`,`no_kitas`,`kitas_expired`,`mulai_kerja`,`contract_number`,`contract_from`,`contract_to`,`date_out`,`out_note`) values (1,6305280,'3101','Budi Setiawan','Jl. RE. Martadinata No. 15','budi@gmail.com','budi@gmail.com','541000000','082116914774',3,2,2,0,6,3,'-','1985-03-13','Bandung','laki-laki','d41d8cd98f00b204e9800998ecf8427e','y',0,0,'2013-05-08',0,'0000-00-00','0000-00-00',0,'0000-00-00','0000-00-00','0000-00-00',''),(2,6305281,'3102','Puteri Berlianty','Komp. Margahayu Kencana Blok I 1 No. 19','jasmine@gmail.com','jasmine@gmail.com','541000000','08512121212',4,1,2,0,1,1,'','2011-03-21','Bandung','','','y',0,0,'0000-00-00',0,'0000-00-00','0000-00-00',0,'0000-00-00','0000-00-00','0000-00-00',''),(23,9874,'63052','Dariel pratama','Test','dr.iel_pra@yahoo.co.id','dr.iel_pra@yahoo.co.id','6285721558525','6285721558525',1,2,2,1,1,1,'2012-10-27_14.09_.34_1.jpg','2013-04-02','ciamis','laki-laki','d41d8cd98f00b204e9800998ecf8427e','y',10,0,'0000-00-00',0,'0000-00-00','2013-04-01',0,'0000-00-00','0000-00-00','0000-00-00',''),(25,6305280,'3104','Sunil Watir','Jl. RE. Martadinata No. 15','budi@gmail.com','budi@gmail.com','541000000','082116914774',3,2,2,0,6,3,'-','1985-03-13','Bandung','','','y',0,0,'0000-00-00',0,'0000-00-00','0000-00-00',0,'0000-00-00','0000-00-00','0000-00-00',''),(26,6305281,'3103','Michael Kurap','Komp. Margahayu Kencana Blok I 1 No. 19','jasmine@gmail.com','jasmine@gmail.com','541000000','08512121212',4,1,2,0,1,1,'','2011-03-21','Bandung','','','y',0,0,'0000-00-00',0,'0000-00-00','0000-00-00',0,'0000-00-00','0000-00-00','0000-00-00',''),(27,9874,'3105','Eman Si Pasi','Test','dr.iel_pra@yahoo.co.id','dr.iel_pra@yahoo.co.id','6285721558525','6285721558525',1,2,2,0,1,1,'2012-10-27_14.09_.34_1.jpg','2013-04-02','ciamis','laki-laki','d41d8cd98f00b204e9800998ecf8427e','y',10,0,'0000-00-00',0,'0000-00-00','2013-04-01',0,'0000-00-00','0000-00-00','0000-00-00',''),(28,6305280,'3106','Sanda','Jl. RE. Martadinata No. 15','budi@gmail.com','budi@gmail.com','541000000','082116914774',3,2,2,0,6,3,'-','1985-03-13','Bandung','','','y',0,0,'0000-00-00',0,'0000-00-00','0000-00-00',0,'0000-00-00','0000-00-00','0000-00-00',''),(29,6305281,'3107','Bara patirajawane','Komp. Margahayu Kencana Blok I 1 No. 19','jasmine@gmail.com','jasmine@gmail.com','541000000','08512121212',4,1,2,0,1,1,'','2011-03-21','Bandung','','','y',0,0,'0000-00-00',0,'0000-00-00','0000-00-00',0,'0000-00-00','0000-00-00','0000-00-00',''),(30,9874,'3108','Asep Balon','Test','dr.iel_pra@yahoo.co.id','dr.iel_pra@yahoo.co.id','6285721558525','6285721558525',1,2,2,0,1,1,'2012-10-27_14.09_.34_1.jpg','2013-04-02','ciamis','laki-laki','d41d8cd98f00b204e9800998ecf8427e','y',10,0,'0000-00-00',0,'0000-00-00','2013-04-01',0,'0000-00-00','0000-00-00','0000-00-00',''),(31,125788,'3109','Eyang Subur','Jakarta','suburban@suburjayamotor.com','','081212345678','081212345678',1,1,2,0,6,1,'','2011-07-28','Bandung','laki-laki','d41d8cd98f00b204e9800998ecf8427e','n',10,0,'0000-00-00',0,'0000-00-00','2009-09-15',1458,'2009-09-15','2013-09-15','0000-00-00',''),(32,56565,'3322','Daniel Sembarang','Jln Pelicin 66 Denpasar','daniel.s@onewaymail.com','-','05625541','0598527441',1,1,1,4,5,5,'','1983-05-15','Bukit Asam','laki-laki','d41d8cd98f00b204e9800998ecf8427e','n',0,0,'0000-00-00',0,'0000-00-00','2013-05-01',0,'2013-05-01','2013-11-01','0000-00-00','');
 
 /*Table structure for table `sub_salaries` */
 
@@ -462,18 +434,6 @@ CREATE TABLE `sub_salaries` (
 /*Data for the table `sub_salaries` */
 
 insert  into `sub_salaries`(`sub_id`,`salary_id`,`salary_periode`,`salary_component_id`,`salary_daily_value`,`salary_amount_value`) values (1,2,'2013-01-01',2013,'9000','1500000'),(6,2,'2010-01-01',4,'0','2350000');
-
-/*Table structure for table `tahun_fiskal` */
-
-DROP TABLE IF EXISTS `tahun_fiskal`;
-
-CREATE TABLE `tahun_fiskal` (
-  `fiskal_date` char(6) DEFAULT NULL,
-  `fiskal_status` enum('Open','Close') DEFAULT NULL,
-  `fiskal_retained_earning` decimal(10,0) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `tahun_fiskal` */
 
 /*Table structure for table `taxes_employees` */
 
@@ -557,7 +517,7 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`staff_id`,`username`,`password`,`avatar`,`role_id`,`created_at`,`updated_at`) values (1,1,'admin','d8578edf8458ce06fbc5bb76a58c5ca4','-',1,'2013-03-13 08:26:00','2013-03-13 08:26:00'),(2,1,'budi','d8578edf8458ce06fbc5bb76a58c5ca4','',1,'2013-03-19 08:57:32','2013-03-19 08:57:32');
+insert  into `users`(`id`,`staff_id`,`username`,`password`,`avatar`,`role_id`,`created_at`,`updated_at`) values (1,1,'admin','d8578edf8458ce06fbc5bb76a58c5ca4','-',2,'2013-03-13 08:26:00','2013-03-13 08:26:00'),(2,1,'budi','d8578edf8458ce06fbc5bb76a58c5ca4','',1,'2013-03-19 08:57:32','2013-03-19 08:57:32');
 
 /*Table structure for table `work_histories` */
 
@@ -569,11 +529,11 @@ CREATE TABLE `work_histories` (
   `history_date` date NOT NULL,
   `history_description` text NOT NULL,
   PRIMARY KEY (`history_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 
 /*Data for the table `work_histories` */
 
-insert  into `work_histories`(`history_id`,`staff_id`,`history_date`,`history_description`) values (10,2,'2013-09-09','Web Developer'),(11,1,'2000-03-21','EDP Bank BRI'),(12,1,'0000-00-00','0'),(13,1,'2012-03-21','Manager Marketing Garuda Travel'),(14,3,'2013-04-03','IT Manager at PT.Waybe Home Appliance'),(15,9,'2013-04-01','SDT Krida Nusantara'),(16,10,'2013-04-01','SDT Krida Nusantara'),(22,21,'2013-04-17','adasdasd'),(23,22,'2013-04-17','adasdasd'),(24,23,'2013-04-30','41Studio Inc');
+insert  into `work_histories`(`history_id`,`staff_id`,`history_date`,`history_description`) values (10,2,'2013-09-09','Web Developer'),(11,1,'2000-03-21','EDP Bank BRI'),(12,1,'0000-00-00','0'),(13,1,'2012-03-21','Manager Marketing Garuda Travel'),(14,3,'2013-04-03','IT Manager at PT.Waybe Home Appliance'),(15,9,'2013-04-01','SDT Krida Nusantara'),(16,10,'2013-04-01','SDT Krida Nusantara'),(22,21,'2013-04-17','adasdasd'),(23,22,'2013-04-17','adasdasd'),(24,23,'2013-04-30','41Studio Inc'),(25,32,'2012-05-01','magang');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

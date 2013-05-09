@@ -50,9 +50,9 @@ class Welcome extends CI_Controller {
         $staff = new Staff();
 
         $cabang = array();
-        $query = $this->db->query("SELECT COUNT( staffs.staff_departement ) AS JML, staffs.staff_cabang AS Cabang, staffs.staff_departement AS Dept
+        $query = $this->db->query("SELECT COUNT( staffs.staff_departement ) AS JML, branches.branch_name AS Cabang, staffs.staff_departement AS Dept
                             FROM staffs
-                            INNER JOIN branches ON branches.branch_name = staffs.staff_cabang
+                            INNER JOIN branches ON branches.branch_id = staffs.staff_cabang
                             GROUP BY Cabang, Dept");
         foreach ($query->result() as $row) {
             $rs = $staff->where('staff_cabang', $row->Cabang)

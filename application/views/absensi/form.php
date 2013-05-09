@@ -26,7 +26,7 @@
                   	  }
               	    }
             	    });
-            		  staffs.push({"name": v.staff_name, "nik":v.staff_nik, "kode_absen":v.staff_kode_absen, "cabang": v.staff_cabang, "dept": v.staff_departement, "title": v.staff_jabatan, "absen": absen, "sid": v.staff_id});
+            		  staffs.push({"name": v.staff_name, "nik":v.staff_nik, "kode_absen":v.staff_kode_absen, "cabang": v.branch_name, "dept": v.dept_name, "title": v.title_name, "absen": absen, "sid": v.staff_id});
             	  });
             	  generateHT(staffs);
               });

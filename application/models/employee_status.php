@@ -24,7 +24,7 @@ class Employee_Status extends DataMapper {
         $es->get();
         foreach ($es as $row) {
             $data[''] = '[ Pilih Status Karyawan ]';
-            $data[$row->sk_name] = $row->sk_name;
+            $data[$row->sk_id] = $row->sk_name;
         }
         return $data;
     }

@@ -101,8 +101,8 @@ if (!function_exists('get_branch_recap_component_a')) {
     	$ci->db->join('components','components.comp_id=salary_components_a.gaji_component_id');
     	$ci->db->join('absensi','absensi.staff_id=salary_components_a.staff_id');
     	$ci->db->join('staffs','absensi.staff_id=staffs.staff_id');
-    	$ci->db->join('branches','staffs.staff_cabang=branches.branch_name');
-    	$ci->db->where('branches.branch_name',$branch);
+    	$ci->db->join('branches','staffs.staff_cabang=branches.branch_id');
+    	$ci->db->where('branches.branch_id',$branch);
     	$ci->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period);
   		$comp_b = $ci->db->get("salary_components_a");
 		foreach($comp_b->result() as $sal_b) {
@@ -127,8 +127,8 @@ if (!function_exists('get_branch_recap_component_b')) {
     	$ci->db->join('components','components.comp_id=salary_components_b.gaji_component_id');
     	$ci->db->join('absensi','absensi.staff_id=salary_components_b.staff_id');
     	$ci->db->join('staffs','absensi.staff_id=staffs.staff_id');
-    	$ci->db->join('branches','staffs.staff_cabang=branches.branch_name');
-    	$ci->db->where('branches.branch_name',$branch);
+    	$ci->db->join('branches','staffs.staff_cabang=branches.branch_id');
+    	$ci->db->where('branches.branch_id',$branch);
     	$ci->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period);
   		$comp_b = $ci->db->get("salary_components_b");
 		foreach($comp_b->result() as $sal_b) {
@@ -164,8 +164,8 @@ if (!function_exists('get_branch_total_monthly_tax')) {
     	$ci->db->join('taxes_employees','staffs.staff_status_pajak=taxes_employees.sp_status');
     	$ci->db->join('salary_components_a','salary_components_a.staff_id=staffs.staff_id');
     	$ci->db->join('components','components.comp_id=salary_components_a.gaji_component_id');
-    	$ci->db->join('branches','staffs.staff_cabang=branches.branch_name');
-    	$ci->db->where('branches.branch_name',$branch);
+    	$ci->db->join('branches','staffs.staff_cabang=branches.branch_id');
+    	$ci->db->where('branches.branch_id',$branch);
     	$ci->db->where('staffs.pph_by_company',$by_company);
     	$ci->db->where('components.comp_type','Monthly');
   		$staff_tax = $ci->db->get("staffs");

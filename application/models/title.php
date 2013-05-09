@@ -24,7 +24,7 @@ class Title extends DataMapper {
         $title->get();
         foreach ($title as $row) {
             $data[''] = '[ Title ]';
-            $data[$row->title_name] = $row->title_name;
+            $data[$row->title_id] = $row->title_name;
         }
         return $data;
     }
