@@ -122,6 +122,20 @@ CREATE TABLE `chart_of_account` (
 
 insert  into `chart_of_account`(`glacc_id`,`glacc_parent`,`glacc_no`,`glacc_parent_stat`,`glacc_name`) values (1,0,'11100','y','Kas'),(2,0,'21000','y','Hutang Lancar');
 
+/*Table structure for table `chart_of_account_detail` */
+
+DROP TABLE IF EXISTS `chart_of_account_detail`;
+
+CREATE TABLE `chart_of_account_detail` (
+  `glacc_period` char(6) NOT NULL,
+  `glacc_saldo` decimal(10,0) NOT NULL,
+  `glaccd_dr` decimal(10,0) NOT NULL,
+  `glaccd_cr` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`glacc_period`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `chart_of_account_detail` */
+
 /*Table structure for table `components` */
 
 DROP TABLE IF EXISTS `components`;
@@ -264,6 +278,51 @@ CREATE TABLE `izin` (
 /*Data for the table `izin` */
 
 insert  into `izin`(`izin_id`,`izin_staff_id`,`izin_date`,`izin_jumlah_hari`,`izin_note`) values (1,2,'2013-04-22',2,'jalan2');
+
+/*Table structure for table `journal` */
+
+DROP TABLE IF EXISTS `journal`;
+
+CREATE TABLE `journal` (
+  `gltr_id` int(11) NOT NULL AUTO_INCREMENT,
+  `gltr_date` date NOT NULL,
+  `gltr_voucher` varchar(100) NOT NULL,
+  `gltr_status` enum('New','Post') NOT NULL DEFAULT 'New',
+  PRIMARY KEY (`gltr_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `journal` */
+
+/*Table structure for table `journal_detail` */
+
+DROP TABLE IF EXISTS `journal_detail`;
+
+CREATE TABLE `journal_detail` (
+  `gltr_id` int(11) NOT NULL,
+  `gltr_accno` varchar(100) NOT NULL,
+  `gltr_rti` varchar(100) DEFAULT NULL,
+  `gltr_keterangan` varchar(255) NOT NULL,
+  `gltr_dr` decimal(10,0) NOT NULL,
+  `gltr_cr` decimal(10,0) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `journal_detail` */
+
+/*Table structure for table `kurs_pajak` */
+
+DROP TABLE IF EXISTS `kurs_pajak`;
+
+CREATE TABLE `kurs_pajak` (
+  `kurs_id` int(11) NOT NULL AUTO_INCREMENT,
+  `kurs_date` date NOT NULL,
+  `kurs_us_rp` decimal(10,0) NOT NULL,
+  `kurs_yen_rp` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`kurs_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+/*Data for the table `kurs_pajak` */
+
+insert  into `kurs_pajak`(`kurs_id`,`kurs_date`,`kurs_us_rp`,`kurs_yen_rp`) values (1,'2013-05-15','9590','2839');
 
 /*Table structure for table `maritals_status` */
 
@@ -434,6 +493,18 @@ CREATE TABLE `sub_salaries` (
 /*Data for the table `sub_salaries` */
 
 insert  into `sub_salaries`(`sub_id`,`salary_id`,`salary_periode`,`salary_component_id`,`salary_daily_value`,`salary_amount_value`) values (1,2,'2013-01-01',2013,'9000','1500000'),(6,2,'2010-01-01',4,'0','2350000');
+
+/*Table structure for table `tahun_fiskal` */
+
+DROP TABLE IF EXISTS `tahun_fiskal`;
+
+CREATE TABLE `tahun_fiskal` (
+  `fiskal_date` char(6) DEFAULT NULL,
+  `fiskal_status` enum('Open','Close') DEFAULT NULL,
+  `fiskal_retained_earning` decimal(10,0) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `tahun_fiskal` */
 
 /*Table structure for table `taxes_employees` */
 
