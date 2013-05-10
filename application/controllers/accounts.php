@@ -153,5 +153,10 @@ class Accounts extends CI_Controller {
         $this->session->set_flashdata('message', 'Chart of Account successfully deleted!');
         redirect('accounts/');
     }
+    
+    function get_account_number($key){
+      $account = new Account();
+      echo json_encode($account->get_account_number($key)->result());
+    }
 
 }

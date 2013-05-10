@@ -572,7 +572,7 @@ div.tagsinput div input{line-height: 20px; height: 20px; font-size: 11px; margin
     .head ul.buttons > li.active > .dropdown-menu li a{color: #333 !important;}
         .head ul.buttons > li.active > .dropdown-menu li a:hover{color: #FFF !important;}
 
-.login{width: 300px; position: absolute; left: 50%; margin-left: -150px; top: 50%; margin-top: -125px;}
+.login{width: 300px; position: absolute; left: 50%; margin-left: -150px; top: 50%; margin-top: -125px; background: #fff; padding: 20px; border:1px solid #A0A0A0}
     .login .row-form{padding: 5px 0px; width: 300px;}
     
 .icon-arrow-back{background: url('../img/back_dark.png') left top no-repeat !important;}

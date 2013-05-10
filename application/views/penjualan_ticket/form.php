@@ -42,7 +42,7 @@ $(document).ready(function(){
 				<span class="ico-tag"></span>
 			</div>
 			<h1>
-				Airline <small>Add airline</small>
+				Penjualan ticket <small>Add penjualan ticket</small>
 			</h1>
 		</div>
 		<br class="cl" />

@@ -95,6 +95,8 @@ Class User extends DataMapper {
     function _delete($id) {
         $this->db->where('id', $id);
         $this->db->delete($this->table);
+        
+        $this->db->delete("user_roled", array("role_id"=>$id));
     }
     
     function get_user_detail($id){

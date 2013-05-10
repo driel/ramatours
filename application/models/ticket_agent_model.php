@@ -14,6 +14,10 @@ class Ticket_Agent_Model extends CI_Model{
     return $this->db->get_where("ticket_agent", array("tixa_id"=>$id));
   }
   
+  function search($by, $key){
+    return $this->db->like($by, $key)->get("ticket_agent");
+  }
+  
   function populate(){
     $agents = $this->db->select("tixa_name AS name")->get("ticket_agent");
     $list[""] = "[Select agent]";
@@ -40,5 +44,25 @@ class Ticket_Agent_Model extends CI_Model{
         "tixa_glacc_dr"=>$this->input->post("glacc_dr"),
         "tixa_glacc_cr"=>$this->input->post("glacc_cr")
     ));
+  }
+  
+  function update(){
+    $id = $this->input->post("id");
+    $this->db->update("ticket_agent", array(
+        "tixa_code"=>$this->input->post("code"),
+        "tixa_name"=>$this->input->post("name"),
+        "tixa_address"=>$this->input->post("address"),
+        "tixa_city"=>$this->input->post("city"),
+        "tixa_since"=>$this->input->post("since"),
+        "tixa_disable_date"=>$this->input->post("disable_date"),
+        "tixa_credit_limit_rp"=>str_replace(",", "", $this->input->post("limit_rp")),
+        "tixa_credit_limit_us"=>str_replace(",", "", $this->input->post("limit_us")),
+        "tixa_glacc_dr"=>$this->input->post("glacc_dr"),
+        "tixa_glacc_cr"=>$this->input->post("glacc_cr")
+    ), array("tixa_id"=>$id));
+  }
+  
+  function delete($id){
+    $this->db->delete("ticket_agent", array("tixa_id"=>$id));
   }
 }

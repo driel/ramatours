@@ -123,6 +123,9 @@ $route["users/roles/(:num)/role_details/delete/(:num)"] = "role_details/delete";
 $route["users/roles/(:num)/role_details/save"] = "role_details/save";
 $route["users/roles/(:num)/role_details/update"] = "role_details/update";
 
+// print penjualan ticket
+$route["penjualan_ticket/print/(:num)"] = "penjualan_ticket/cetak";
+
 
 //Config Controller
 

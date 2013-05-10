@@ -96,6 +96,8 @@ $(window).load(function(){
 								</li>
 								<li><?php echo anchor('penjualan_ticket/delete/' . $row->tix_id, '<i class="icon-trash"></i> Delete', array("class"=>"delete")); ?>
 								</li>
+								<li><?php echo anchor('penjualan_ticket/print/' . $row->tix_id, '<i class="icon-print"></i> Print'); ?>
+								</li>
 							</ul>
 						</div>
 					</td>

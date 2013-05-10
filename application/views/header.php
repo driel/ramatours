@@ -45,7 +45,6 @@ echo load_js(array(
     "plugins/jquery.jstree.js",
     "accounting.js",
     "plugins.js",
-    //            "charts.js",
     "actions.js",
     "custom.js"
 ));
@@ -69,17 +68,13 @@ echo load_js(array(
 					$setting = new Setting();
 					?>
 					<div>
-						<img
-							src="<?php echo assets_url('upload/' . $setting->get_val('logo')) ?>"
-							style="width: 216px; height: 100px;" />
+						<img src="<?php echo assets_url('upload/' . $setting->get_val('logo')) ?>" style="display: block; margin: 0 auto" />
 					</div>
-					<div
-						style="font-size: 20px; padding: 5px; color: #fff; font-weight: bold;">
+					<!-- <div style="font-size: 20px; padding: 5px; color: #fff; font-weight: bold;">
 						<?php echo $setting->get_val('company_name'); ?>
-					</div>
+					</div> -->
 					<form action="<?php echo site_url('searches')?> " method="get">
-						<input autofocus="autofocus" type="text" name="q"
-							placeholder="Search Advance" style="width: 215px;">
+						<input autofocus="autofocus" type="text" name="q" placeholder="Search Advance" style="width: 215px;">
 					</form>
 				</div>
 				<ul class="navigation">

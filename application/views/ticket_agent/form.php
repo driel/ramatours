@@ -8,6 +8,40 @@ $(document).ready(function(){
 		  $("#disable_on").toggle();
 	  }
 	});
+	$("#glacc_dr").autocomplete({
+	  source: function(query, proses){
+		  var q = query.term;
+		  var url = "<?php echo site_url('accounts/get_account_number'); ?>/"+q;
+		  $.getJSON(url, function(data){
+			  var items = [];
+			  $.each(data, function(i, v){
+				  var item = {label:v.glacc_no, id:v.glacc_id};
+				  items.push(item);
+			  });
+			  proses(items);
+		  });
+	  },
+	  select: function(e, ui){
+		  $("#glacc_dr_hidden").val(ui.item.id);
+	  }
+	});
+	$("#glacc_cr").autocomplete({
+		  source: function(query, proses){
+			  var q = query.term;
+			  var url = "<?php echo site_url('accounts/get_account_number'); ?>/"+q;
+			  $.getJSON(url, function(data){
+				  var items = [];
+				  $.each(data, function(i, v){
+					  var item = {label:v.glacc_no, id:v.glacc_id};
+					  items.push(item);
+				  });
+				  proses(items);
+			  });
+		  },
+		  select: function(e, ui){
+			  $("#glacc_cr_hidden").val(ui.item.id);
+		  }
+		});
 });
 </script>
 <div class="body">
@@ -23,6 +57,7 @@ $(document).ready(function(){
 		</div>
 		<br class="cl" />
 		<?php echo form_open($form_action); ?>
+		<?php echo $id; ?>
 		<table width="100%">
 			<tr>
 				<td width="20%">Code</td>
@@ -73,19 +108,19 @@ $(document).ready(function(){
 			<tr>
 				<td>Credit limit (US$)</td>
 				<td><div class="input-prepend span2">
-						<span class="btn">US$. </span><?php echo form_input($limit_us); ?>
+						<span class="btn">US. </span><?php echo form_input($limit_us); ?>
 					</div></td>
 			</tr>
 			<tr>
 				<td>GL Account No DR</td>
 				<td><div class="span2">
-						<?php echo $glacc_dr; ?>
+						<?php echo $glacc_dr.$glacc_dr_hidden; ?>
 					</div></td>
 			</tr>
 			<tr>
 				<td>GL Account No CR</td>
 				<td><div class="span2">
-						<?php echo $glacc_cr; ?>
+						<?php echo $glacc_cr.$glacc_cr_hidden; ?>
 					</div></td>
 			</tr>
 		</table>

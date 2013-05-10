@@ -1,4 +1,8 @@
 $(document).ready(function(){
+		// mark row
+		$(".table tbody tr").on("click", function(){
+			$(this).toggleClass("marked");
+		});
         // styling select box
         $("select").select2({
             dropdownCssClass: 'noSearch'

@@ -93,6 +93,12 @@ class Penjualan_Ticket extends CI_Controller{
     redirect("penjualan_ticket/index");
   }
   
+  function cetak(){
+    $id = $this->uri->segment(3);
+    $data["penjualan"] = $this->penjualan->get($id)->row();
+    $this->load->view("penjualan_ticket/print", $data);
+  }
+  
   // private functions
   private function _addData(){
     $kurs = $this->fiscal->get_last();
@@ -138,6 +144,8 @@ class Penjualan_Ticket extends CI_Controller{
     $penjualan = $this->penjualan->get($id)->row();
     $agent = $this->agent->get($penjualan->tix_agent_id)->row();
     
+    $agent_name = $agent ? $agent->tixa_name:"";
+    
     $data["tix_id"] = form_hidden("tix_id", $penjualan->tix_id);
     
     $data["branch"] = form_hidden('branch', $penjualan->tix_branch_id);
@@ -146,7 +154,7 @@ class Penjualan_Ticket extends CI_Controller{
     $data["invoice_no"] = array("name"=>"invoice_no", "value"=>$penjualan->tix_invoice_no);
     $data["date"] = array("name"=>"date", "class"=>"datepicker", "value"=>$penjualan->tix_date_time);
     $data["agent_id"] = form_input(array("type"=>"hidden", "name"=>"agent_id", "id"=>"agent_id", "value"=>$penjualan->tix_agent_id));
-    $data["agent"] = form_input(array("id"=>"agent", "value"=>$agent->tixa_name));
+    $data["agent"] = form_input(array("id"=>"agent", "value"=>$agent_name));
     $data["name"] = form_input(array("name"=>"name", "value"=>$penjualan->tix_name));
     $data["address"] = form_textarea(array("name"=>"address", "value"=>$penjualan->tix_address));
     $data["due_date"] = form_input(array("name"=>"due_date", "class"=>"datepicker", "value"=>$penjualan->tix_due_date));

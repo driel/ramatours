@@ -1,7 +1,7 @@
 <?php
 class Module_model extends CI_Model{
   function get_all(){
-    return $this->db->get("module");  
+    return $this->db->select()->get("module");  
   }
   
   function get_by($field, $val){

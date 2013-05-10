@@ -441,6 +441,7 @@ class Users extends CI_Controller {
             $check = $user->where(array("username"=>$username, "password"=>md5($current_password)));
             //die(var_dump($check->count()));
             if($check->count() > 0){
+              $this->session->set_userdata("sess_role_id", $role_id);
               $user->where("id", $id)->update(array(
                   "staff_id"=>$staff_id,
                   "role_id"=>$role_id,
@@ -461,6 +462,7 @@ class Users extends CI_Controller {
             $this->load->view("users/sign_up", $data);
           }
         }else{
+          $this->session->set_userdata("sess_role_id", $role_id);
           $user->where("id", $id)->update(array(
               "staff_id"=>$staff_id,
               "role_id"=>$role_id,

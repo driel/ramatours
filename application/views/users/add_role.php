@@ -29,7 +29,7 @@
             if(_module.length > 0){ // check if module name is not empty, if so then don't do anything
               var attr = $(this).children().attr("name");
               if(typeof attr != "undefined"){ // skip unnamed checkbox, eg. check-all checkbox
-                _module = _module.replace(/ /g, "_");
+                _module = _module.replace(/\s/g, "_");
                 $(this).children().attr("name", attr+"_"+_module);               
               }        
             }          

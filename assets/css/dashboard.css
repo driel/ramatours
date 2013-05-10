@@ -130,6 +130,10 @@ td.valign{
   vertical-align: top;
 }
 
+tr.marked td{
+	background: #FFFFCB!important;
+}
+
 .custom-fieldset{
   border:1px solid #ccc;
   width: 95%;

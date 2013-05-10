@@ -1,8 +1,22 @@
+<?php 
+$setting = new Setting();
+$bg = $setting->get_val("login_page_bg");
+$company_name = $setting->get_val("company_name");
+?>
 <!DOCTYPE html>
 <html>
     <title>User Sign In</title>
     <head>
         <?php echo load_css(array("stylesheets.css")); ?>
+        <?php echo load_js(array("plugins/jquery/jquery-1.9.1.min.js","jquery.ez-bg-resize.js")); ?>
+        <script>
+        $(document).ready(function(){
+            $("body").ezBgResize({
+            	img : "<?php echo assets_url("upload/".$bg); ?>",
+            	center: true
+            });
+        });
+        </script>
     </head>
     <body>
         <?php echo $this->session->flashdata('message'); ?>
@@ -12,7 +26,7 @@
                     <div class="icon">
                         <span class="ico-arrow-right"></span>
                     </div>
-                    <h1>Login <small>Rama Tours</small></h1>
+                    <h1>Login <small><?php echo $company_name?></small></h1>
                 </div>
                 <div class="row-fluid">
                     <div class="row-form">

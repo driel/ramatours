@@ -1,7 +1,7 @@
 <?php
 function get_roled($role_id, $module_id){
   $ci = &get_instance();
-  $roled = $ci->db->get_where("user_roled", array(
+  $roled = $ci->db->group_by("module_id")->get_where("user_roled", array(
     "role_id"=>$role_id,
     "module_id"=>$module_id
   ));
@@ -50,61 +50,69 @@ function filter_access($controller, $method, $onDenied = "redirect"){
 // check if user role can see the content
 function _isList($_instance, $module, $role_id){
   $module = $_instance->db->get_where("module", array("name"=>$module))->row();
-  $roles = $_instance->db->get_where("user_roled", array("module_id"=>$module->id, "role_id"=>$role_id));
-  if($roles->num_rows()){
-    $role = $roles->row();
-    if($role->roled_view == "1"){
-      return true;    
+  if($module){
+    $roles = $_instance->db->get_where("user_roled", array("module_id"=>$module->id, "role_id"=>$role_id));
+    if($roles->num_rows()){
+      $role = $roles->row();
+      if($role->roled_view == "1"){
+        return true;
+      }else{
+        return false; // can't see
+      }
     }else{
-      return false; // can't see    
-    }  
-  }else{
-    return false; // error, module not exists
+      return false; // error, module not exists
+    }
   }
 }
 
 function _isAdd($_instance, $module, $role_id){
   $module = $_instance->db->get_where("module", array("name"=>$module))->row();
-  $roles = $_instance->db->get_where("user_roled", array("module_id"=>$module->id, "role_id"=>$role_id));
-  if($roles->num_rows()){
-    $role = $roles->row();
-    if($role->roled_add == "1"){
-      return true;    
+  if($module){
+    $roles = $_instance->db->get_where("user_roled", array("module_id"=>$module->id, "role_id"=>$role_id));
+    if($roles->num_rows()){
+      $role = $roles->row();
+      if($role->roled_add == "1"){
+        return true;
+      }else{
+        return false; // can't see
+      }
     }else{
-      return false; // can't see    
-    }  
-  }else{
-    return false; // error, module not exists
+      return false; // error, module not exists
+    }
   }
 }
 
 function _isEdit($_instance, $module, $role_id){
   $module = $_instance->db->get_where("module", array("name"=>$module))->row();
-  $roles = $_instance->db->get_where("user_roled", array("module_id"=>$module->id, "role_id"=>$role_id));
-  if($roles->num_rows()){
-    $role = $roles->row();
-    if($role->roled_edit == "1"){
-      return true;    
+  if($module){
+    $roles = $_instance->db->get_where("user_roled", array("module_id"=>$module->id, "role_id"=>$role_id));
+    if($roles->num_rows()){
+      $role = $roles->row();
+      if($role->roled_edit == "1"){
+        return true;
+      }else{
+        return false; // can't see
+      }
     }else{
-      return false; // can't see    
-    }  
-  }else{
-    return false; // error, module not exists
+      return false; // error, module not exists
+    }
   }
 }
 
 function _isDelete($_instance, $module, $role_id){
   $module = $_instance->db->get_where("module", array("name"=>$module))->row();
-  $roles = $_instance->db->get_where("user_roled", array("module_id"=>$module->id, "role_id"=>$role_id));
-  if($roles->num_rows()){
-    $role = $roles->row();
-    if($role->roled_delete == "1"){
-      return true;    
+  if($module){
+    $roles = $_instance->db->get_where("user_roled", array("module_id"=>$module->id, "role_id"=>$role_id));
+    if($roles->num_rows()){
+      $role = $roles->row();
+      if($role->roled_delete == "1"){
+        return true;
+      }else{
+        return false; // can't see
+      }
     }else{
-      return false; // can't see    
-    }  
-  }else{
-    return false; // error, module not exists
+      return false; // error, module not exists
+    }
   }
 }
 
