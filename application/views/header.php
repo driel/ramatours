@@ -50,14 +50,26 @@ echo load_js(array(
 ));
 ?>
 
-<script
-	src="<?php echo base_url(); ?>assets/js/fullcalendar/fullcalendar.js"
-	type="text/javascript"></script>
-<script
-	src="<?php echo base_url(); ?>assets/js/fullcalendar/fullcalendar.min.js"
-	type="text/javascript"></script>
-<link rel="stylesheet" type="text/css"
-	href="<?php echo base_url(); ?>assets/docs.css" />
+<script src="<?php echo base_url(); ?>assets/js/fullcalendar/fullcalendar.js" type="text/javascript"></script>
+<script src="<?php echo base_url(); ?>assets/js/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/docs.css" />
+<script>
+$(window).load(function(){
+	setBodyHeight();
+	/*$(window).resize(function(){
+		setBodyHeight();
+		console.log("resized");
+	});*/
+});
+
+function setBodyHeight(){
+	var bHeight = $(".body").innerHeight();
+	var wHeight = $(window).innerHeight();
+	if(bHeight < wHeight){
+		$(".body").css("height", wHeight+"px");
+	}
+}
+</script>
 </head>
 <body>
 	<div class="wrapper">

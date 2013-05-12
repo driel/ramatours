@@ -74,7 +74,14 @@ class Branches extends CI_Controller {
         $data['link_back'] = anchor('branches/', 'Back', array('class' => 'btn btn-danger'));
 
         $data['id'] = '';
+        
         $data['branch_name'] = array('name' => 'branch_name');
+        $data['branch_number_invoice_ticketing'] = array('name'=>'branch_number_ticketing_invoice');
+        $data['branch_number_invoice'] = array('name'=>'branch_number_invoice');
+        $data['branch_number_invoice_optional'] = array('name'=>'branch_number_invoice_optional');
+        $data['branch_number_voucher'] = array('name'=>'branch_number_voucher');
+        $data['branch_prefix_invoice'] = array('name'=>'branch_prefix_invoice');
+        
         $data['btn_save'] = array('name' => 'btn_save', 'value' => 'Save', "class" => "btn btn-primary");
 
         $this->load->view('branches/frm_branch', $data);
@@ -86,7 +93,14 @@ class Branches extends CI_Controller {
         $branch = new Branch();
         $rs = $branch->where('branch_id', $id)->get();
         $data['id'] = $rs->branch_id;
+        
         $data['branch_name'] = array('name' => 'branch_name', 'value' => $rs->branch_name);
+        $data['branch_number_invoice_ticketing'] = array('name'=>'branch_number_ticketing_invoice', 'value'=>$rs->branch_number_ticketing_invoice);
+        $data['branch_number_invoice'] = array('name'=>'branch_number_invoice', 'value'=>$rs->branch_number_invoice);
+        $data['branch_number_invoice_optional'] = array('name'=>'branch_number_invoice_optional', 'value'=>$rs->branch_number_invoice_optional);
+        $data['branch_number_voucher'] = array('name'=>'branch_number_voucher', 'value'=>$rs->branch_number_voucher);
+        $data['branch_prefix_invoice'] = array('name'=>'branch_prefix_invoice', 'value'=>$rs->branch_prefix_invoice);
+        
         $data['btn_save'] = array('name' => 'btn_save', 'value' => 'Update', "class" => "btn btn-primary");
 
         $data['title'] = 'Update Branch';
@@ -101,6 +115,11 @@ class Branches extends CI_Controller {
 
         $branch = new Branch();
         $branch->branch_name = $this->input->post('branch_name');
+        $branch->branch_number_ticketing_invoice = $this->input->post("branch_number_ticketing_invoice");
+        $branch->branch_number_invoice = $this->input->post("branch_number_invoice");
+        $branch->branch_number_invoice_optional = $this->input->post("branch_number_invoice_optional");
+        $branch->branch_number_voucher = $this->input->post("branch_number_voucher");
+        $branch->branch_prefix_invoice = $this->input->post("branch_prefix_invoice");
         if ($branch->save()) {
             $this->session->set_flashdata('message', 'Branch successfully created!');
             redirect('branches/');
@@ -117,8 +136,13 @@ class Branches extends CI_Controller {
         filter_access("Branch", "edit");
 
         $branch = new Branch();
-        $branch->where('branch_id', $this->input->post('id'))
-                ->update('branch_name', $this->input->post('branch_name'));
+        $branch->where('branch_id', $this->input->post('id'))->update(array(
+            "branch_name"=>$this->input->post('branch_name'),
+            "branch_number_ticketing_invoice"=>$this->input->post("branch_number_ticketing_invoice"),
+            "branch_number_invoice"=>$this->input->post("branch_number_invoice"),
+            "branch_number_invoice_optional"=>$this->input->post("branch_number_voucher"),
+            "branch_prefix_invoice"=>$this->input->post("branch_prefix_invoice")
+        ));
 
         $this->session->set_flashdata('message', 'Branch Update successfuly.');
         redirect('branches/');

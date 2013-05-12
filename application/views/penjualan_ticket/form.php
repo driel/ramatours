@@ -1,39 +1,7 @@
 <?php get_header(); ?>
-<script>
-$(document).ready(function(){
-	$("#status").iphoneStyle({
-	  checkedLabel: "Enable",
-	  uncheckedLabel: "Disable",
-	  onChange: function(e, checked){
-		  $("#disable_on").toggle();
-	  }
-	});
-
-	$("#agent").autocomplete({
-		//tixa_glacc_cr: "7000000"
-		//tixa_glacc_dr: "16000000"
-    source: function(request, proses){
-  	  console.log(request);
-  	  var q = request.term;
-  	  var url = '<?php echo site_url('ticket_agent/get_agent'); ?>/'+q;
-  	  $.getJSON(url, function(data){
-  	  	var items = [];
-	  	  $.each(data, function(i, v){
-	  		  var item = {label:v.tixa_name, tid:v.tixa_id, glaccno_dr:v.tixa_glacc_dr, glaccno_cr:v.tixa_glacc_cr};
-	  		  items.push(item);
-	  	  });
-	  	  proses(items);
-  	  });
-    },
-    select: function(e, ui){
-      console.log(ui);
-      $("#agent_id").val(ui.item.tid);
-      $("input[name=glacc_dr]").val(ui.item.glaccno_dr);
-      $("input[name=glacc_cr]").val(ui.item.glaccno_cr);
-    }
-	});
-});
-</script>
+<?php echo load_js(array(
+  "penjualan_ticket.php?url=".site_url()
+));?>
 <div class="body">
 	<div class="content">
 		<?php if(validation_errors()) echo error_box(validation_errors()); ?>
@@ -42,7 +10,7 @@ $(document).ready(function(){
 				<span class="ico-tag"></span>
 			</div>
 			<h1>
-				Penjualan ticket <small>Add penjualan ticket</small>
+				Ticketing Sales Transactions <small>Add Ticketing Sales Transactions</small>
 			</h1>
 		</div>
 		<br class="cl" />
@@ -116,7 +84,8 @@ $(document).ready(function(){
 			</tr>
 		</table>
 		<h5>Detail</h5>
-		<table width="100%">
+		<div id="invoice_detail"></div>
+		<!-- <table width="100%">
 			<tr>
 				<td width="20%">Airline</td>
 				<td><div class="span3"><?php echo $airline; ?></div></td>
@@ -163,6 +132,8 @@ $(document).ready(function(){
 		    <?php echo $komisi_us; ?>
 		  </div>
 		</div>
+		-->
+		<br />
 		<?php echo $submit; ?>
 		<?php echo $back; ?>
 		<?php echo form_close(); ?>

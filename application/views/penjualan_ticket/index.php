@@ -6,8 +6,8 @@ $(window).load(function(){
 	});
 });
 </script>
-<div class="body customscroll" style="overflow: auto;">
-	<div class="content">
+<div class="body" style="overflow: auto;">
+	<div class="content customscroll" style="overflow: auto;">
 		<?php 
 		if(validation_errors()) echo error_box(validation_errors());
 		if($this->session->flashdata('denied')) echo error_box($this->session->flashdata('denied'));
@@ -18,7 +18,7 @@ $(window).load(function(){
 				<span class="ico-tag"></span>
 			</div>
 			<h1>
-				Penjualan Ticket <small>Manage penjualan ticket</small>
+				Ticketing Sales Transactions <small>Manage Ticketing Sales Transactions</small>
 			</h1>
 		</div>
 		<br class="cl" />

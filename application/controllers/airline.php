@@ -85,4 +85,9 @@ class Airline extends CI_Controller{
       redirect("airline/index");
     }
   }
+  
+  function get($name){
+    $airline = $this->airline->get_by();
+    echo json_encode($airline->result());
+  }
 }

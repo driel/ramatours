@@ -95,7 +95,7 @@ class Ticket_Agent extends CI_Controller{
   
   function get_agent($agent){
     $agent = urldecode($agent);
-    $agents =$this->agent->get_by("tixa_name", $agent);
+    $agents =$this->agent->get_by("tixa_code", $agent);
     echo json_encode($agents->result());
   }
   

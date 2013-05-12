@@ -158,5 +158,11 @@ class Accounts extends CI_Controller {
       $account = new Account();
       echo json_encode($account->get_account_number($key)->result());
     }
+    
+    function get(){
+      $account = new Account();
+      $id = $this->uri->segment(3);
+      echo $account->where('glacc_id', $id)->get()->glacc_no;
+    }
 
 }

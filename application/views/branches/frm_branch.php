@@ -14,9 +14,39 @@
       <?php echo form_open($form_action) . form_hidden('id', $id); ?>
       <table width="100%">
         <tr>
-          <td width="20%">Branch Name</td>
+          <td width="20%">Branch</td>
           <td>
             <div class="span3"><?php echo form_input($branch_name); ?></div>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%">Nomor invoice ticketing</td>
+          <td>
+            <div class="span2"><?php echo form_input($branch_number_invoice_ticketing); ?></div>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%">Nomor invoice</td>
+          <td>
+            <div class="span2"><?php echo form_input($branch_number_invoice); ?></div>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%">Nomor invoice optional</td>
+          <td>
+            <div class="span2"><?php echo form_input($branch_number_invoice_optional); ?></div>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%">Nomor voucher</td>
+          <td>
+            <div class="span2"><?php echo form_input($branch_number_voucher); ?></div>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%">Prefix invoice</td>
+          <td>
+            <div class="span2"><?php echo form_input($branch_prefix_invoice); ?></div>
           </td>
         </tr>
       </table>

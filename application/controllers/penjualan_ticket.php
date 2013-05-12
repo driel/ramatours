@@ -113,8 +113,8 @@ class Penjualan_Ticket extends CI_Controller{
     $data["date"] = array("name"=>"date", "class"=>"datepicker");
     $data["agent_id"] = form_input(array("type"=>"hidden", "name"=>"agent_id", "id"=>"agent_id"));
     $data["agent"] = form_input(array("id"=>"agent"));
-    $data["name"] = form_input(array("name"=>"name"));
-    $data["address"] = form_textarea(array("name"=>"address"));
+    $data["name"] = form_input(array("name"=>"name", "id"=>"agent_name"));
+    $data["address"] = form_textarea(array("name"=>"address", "id"=>"agent_address"));
     $data["due_date"] = form_input(array("name"=>"due_date", "class"=>"datepicker"));
     $data["biaya_surcharge_rp"] = form_input(array("name"=>"biaya_surcharge_rp", "class"=>"auto-coma"));
     $data["kurs_pajak"] = form_input(array("name"=>"kurs_pajak", "value"=>$kurs_pajak->kurs_us_rp));

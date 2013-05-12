@@ -12,7 +12,6 @@ body, html{
 }
 
 .sidebar{
-  position:fixed;
   height: 100%
 }
 
@@ -99,6 +98,7 @@ a.btn{
 	left: 182px;
 	background: #000;
 	z-index: 2;
+	display: none;
 }
 
 .grand-sub-menu li a{
