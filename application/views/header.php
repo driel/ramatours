@@ -68,13 +68,16 @@ echo load_js(array(
 					$setting = new Setting();
 					?>
 					<div>
-						<img src="<?php echo assets_url('upload/' . $setting->get_val('logo')) ?>" style="display: block; margin: 0 auto" />
+						<img
+							src="<?php echo assets_url('upload/' . $setting->get_val('logo')) ?>"
+							style="display: block; margin: 0 auto" />
 					</div>
 					<!-- <div style="font-size: 20px; padding: 5px; color: #fff; font-weight: bold;">
 						<?php echo $setting->get_val('company_name'); ?>
 					</div> -->
 					<form action="<?php echo site_url('searches')?> " method="get">
-						<input autofocus="autofocus" type="text" name="q" placeholder="Search Advance" style="width: 215px;">
+						<input autofocus="autofocus" type="text" name="q"
+							placeholder="Search Advance" style="width: 215px;">
 					</form>
 				</div>
 				<ul class="navigation">
@@ -84,7 +87,7 @@ echo load_js(array(
 						<ul>
 							<li><a href="#" class="blblue">Master</a>
 								<div class="open"></div>
-								<ul>
+								<ul class="grand-sub-menu">
 									<li><?php echo anchor('assets', 'Assets'); ?></li>
 									<li><?php echo anchor('branches', 'Branch'); ?></li>
 									<li><?php echo anchor('departments', 'Departments'); ?></li>
@@ -101,7 +104,7 @@ echo load_js(array(
 							</li>
 							<li><a href="#" class="blyellow">Transaction</a>
 								<div class="open"></div>
-								<ul>
+								<ul class="grand-sub-menu">
 									<li><?php echo anchor('absensi', 'Absensi')?></li>
 									<li><?php echo anchor('izin', 'Izin')?></li>
 									<li><?php echo anchor('cuti', 'Cuti')?></li>
@@ -111,7 +114,7 @@ echo load_js(array(
 							</li>
 							<li><a href="#" class="blorange">Reporting</a>
 								<div class="open"></div>
-								<ul>
+								<ul class="grand-sub-menu">
 									<li><?php echo anchor('staffs/report_list', 'Daftar Karyawan'); ?>
 									</li>
 									<li><?php echo anchor('components/report_recap', 'Rekap Gaji Karyawan'); ?>
@@ -135,10 +138,28 @@ echo load_js(array(
 							</li>
 							<li><a href="#" class="blgreen">Config</a>
 								<div class="open"></div>
-								<ul>
+								<ul class="grand-sub-menu">
 									<li><?php echo anchor('settings', 'Settings'); ?></li>
 									<li><?php echo anchor('users/index', 'Users'); ?></li>
 									<li><?php echo anchor('users/roles', 'Roles'); ?></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li><a href="#" class="blgreen">GL</a>
+						<div class="open"></div>
+						<ul>
+							<li><a href="#" class="blblue">Master</a>
+								<div class="open"></div>
+								<ul class="grand-sub-menu">
+									<li><?php echo anchor('accounts/index', 'GL Account'); ?></li>
+									<li><?php echo anchor('fiscal/index', 'Kurs Pajak'); ?></li>
+								</ul>
+							
+							<li><a href="#" class="blyellow">Transaction</a>
+								<div class="open"></div>
+								<ul class="grand-sub-menu">
+									<li><?php echo anchor('journal/index', 'Jurnal')?></li>
 								</ul>
 							</li>
 						</ul>
@@ -148,30 +169,22 @@ echo load_js(array(
 						<ul>
 							<li><a href="#" class="blblue">Master</a>
 								<div class="open"></div>
-								<ul>
-									<li><?php echo anchor('accounts/index', 'GL Account'); ?></li>
-									<li><?php echo anchor('fiscal/index', 'Kurs Pajak'); ?></li>
+								<ul class="grand-sub-menu">
 									<li><?php echo anchor('ticket_agent/index', 'Ticket Agent'); ?></li>
 									<li><?php echo anchor('airline/index', 'Airlines'); ?></li>
 								</ul>
 							
 							<li><a href="#" class="blyellow">Transaction</a>
 								<div class="open"></div>
-								<ul>
-									<li><?php echo anchor('journal/index', 'Jurnal')?></li>
+								<ul class="grand-sub-menu">
 									<li><?php echo anchor('penjualan_ticket/index', 'Penjualan Ticket')?>
 									</li>
 								</ul>
 							</li>
-					
+						</ul>
 					</li>
-				</ul>
-				<ul>
-				</ul>
-				</li>
-				<li>
-				  <a href="<?php echo site_url('users/logout'); ?>" class="blred">Logout</a>
-				</li>
+					<li><a href="<?php echo site_url('users/logout'); ?>" class="blred">Logout</a>
+					</li>
 				</ul>
 			</div>
 			<!-- // nContainer -->

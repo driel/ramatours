@@ -43,7 +43,7 @@ form{margin: 0px;}
         /* eof simple navigation */
         
         /* bordered navigation */
-        .sidebar .navigation.bordered{width: 218px; margin: 10px 0px 20px; padding: 0px; list-style: none; display: block; float: left; border: 1px solid #1A1A1A; border-bottom: 0px; border-left: 0px; overflow: hidden;}
+        .sidebar .navigation.bordered{width: 218px; margin: 10px 0px 20px; padding: 0px; list-style: none; display: block; float: left; border: 1px solid #1A1A1A; border-bottom: 0px; border-left: 0px; /*overflow: hidden;*/}
             .sidebar .navigation.bordered > li{position: relative; width: 218px; float: left; display: block;}
                 .sidebar .navigation.bordered > li > a{font-size: 16px; color: #C9C9C9; display: block; float: left; width: 200px; line-height: 16px; border-left: 3px solid #111;
                                                        border-bottom: 1px solid #1A1A1A; padding: 12px 8px 11px 7px; text-decoration: none; background: #222222; margin: 0px;}
@@ -64,7 +64,7 @@ form{margin: 0px;}
                         .sidebar .navigation.bordered li ul > li.active a{background: transparent; color: #FFF;}        
                         
                 /*SECOND LEVEL*/
-                .sidebar .navigation.bordered > li > ul > li > a{font-size: 16px; color: #C9C9C9; display: block; float: left; width: 200px; line-height: 16px; border-left: 3px solid #111;
+                .sidebar .navigation.bordered > li > ul > li > a{font-size: 16px; color: #C9C9C9; display: block; float: left; width: 188px; line-height: 16px; border-left: 3px solid #111;
                                                        border-bottom: 1px solid #1A1A1A; padding: 12px 8px 11px 7px; text-decoration: none; background: #0c0c0c; margin: 0px; padding-left: 20px;}
                 .sidebar .navigation.bordered li.active ul li ul{width: 220px; float: left; display: none; list-style: none; padding: 0px; margin: 0px;}
                  .sidebar .navigation.bordered > li ul li .open{width: 38px; height: 39px; position: absolute; right: 0px; top: 0px; background: #222222; 

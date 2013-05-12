@@ -61,14 +61,14 @@ $(document).ready(function(){
         
     });
     
-    $(".navigation li ul li a").click(function(){
-        var li = $(this).parent('li');
-        if(li.find('ul').length > 0){
+    $(".navigation li ul li").hover(function(){
+        //var li = $(this).parent('li');
+        if($(this).find('ul').length > 0){
             
-            if(li.hasClass('active'))
-                li.removeClass('active');
+            if($(this).hasClass('active'))
+            	$(this).removeClass('active');
             else
-                li.addClass('active');
+            	$(this).addClass('active');
             
             return false;
         }

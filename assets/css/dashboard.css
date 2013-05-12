@@ -94,6 +94,23 @@ a.btn{
 	background: #f2f2f2;
 }
 
+.grand-sub-menu{
+	position: absolute;
+	left: 182px;
+	background: #000;
+	z-index: 2;
+}
+
+.grand-sub-menu li a{
+	color:#C9C9C9!important;
+	padding-left: 10px!important;
+	padding-top: 14px!important;
+}
+
+.grand-sub-menu li a:hover{
+  color:#fff!important;
+}
+
 .separator{
   border-bottom: 1px solid #6F6F6F;
   width: 90%;
