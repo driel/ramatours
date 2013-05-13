@@ -34,9 +34,16 @@ class Account extends DataMapper {
     }
     return $data;
   }
-  
-  function get_account_number($key){
-    return $this->db->like("glacc_no", $key)->get($this->table);
+
+  function list_drop_accno() {
+    $data = array();
+    $account = new Account();
+    $account->get();
+    foreach ($account as $row) {
+      $data["0"] = "[ Pilih Kode Akun ]";
+      $data[$row->glacc_no] = $row->glacc_no.' - '.$row->glacc_name;
+    }
+    return $data;
   }
 
 }

@@ -21,17 +21,15 @@ class Journal_model extends CI_Model{
   	}
 
   	function add(){
-    	$kurs_date = $this->input->post("gltr_date");
-    	$kurs_us_rp = $this->input->post("gltr_voucher");
+    	$gltr_date = $this->input->post("gltr_date");
+    	$gltr_voucher = $this->input->post("gltr_voucher");
 
     	if ($gltr_date && $gltr_voucher) {
       		if ($this->db->insert("journal", array(
 		        "gltr_date"=>$gltr_date,
 		        "gltr_voucher"=>$gltr_voucher
       		))) {
-      			$gltr_id = $this->db->insert_id();
-
-				
+      			return $this->db->insert_id();
       		}
       	}
 
@@ -39,23 +37,46 @@ class Journal_model extends CI_Model{
   	}
   
   	function update(){
-    	$kurs_id = $this->input->post("kurs_id");
-    	$kurs_us_rp = $this->input->post("kurs_us_rp");
-    	$kurs_yen_rp = $this->input->post("kurs_yen_rp");
-    	if($kurs_id){
-      		if ($this->db->update("kurs_pajak", array(
-		        "kurs_us_rp"=>$kurs_us_rp,
-		        "kurs_yen_rp"=>$kurs_yen_rp), array("kurs_id"=>$kurs_id))) {
-		        	return true;
-		        }
+    	$gltr_id = $this->input->post("gltr_id");
+    	$gltr_date = $this->input->post("gltr_date");
+    	$gltr_voucher = $this->input->post("gltr_voucher");
 
+    	if ($gltr_date && $gltr_voucher) {
+      		if ($this->db->update("journal", array(
+		        "gltr_date"=>$gltr_date,
+		        "gltr_voucher"=>$gltr_voucher
+      		),array("gltr_id"=>$gltr_id))) {
+      			if ($this->db->delete("journal_detail",array("gltr_id"=>$gltr_id))) {
+					for($i=0; $i<count($_POST['gltr_accno']); $i++) {
+						if (isset($_POST['gltr_accno'][$i]) && isset($_POST['gltr_keterangan'][$i]) && $_POST['gltr_dr'][$i] && $_POST['gltr_cr'][$i]) {
+							$gltr_accno = $_POST['gltr_accno'][$i];
+							$gltr_rti = $_POST['gltr_rti'][$i];
+							$gltr_keteragan = $_POST['gltr_keterangan'][$i];
+							$gltr_dr = $_POST['gltr_dr'][$i];
+							$gltr_cr = $_POST['gltr_cr'][$i];
+
+							$this->db->insert("journal_detail", array(
+						        "gltr_id"=>$gltr_id,
+						        "gltr_accno"=>$gltr_accno,
+						        "gltr_rti"=>$gltr_rti,
+						        "gltr_keterangan"=>$gltr_keterangan,
+						        "gltr_dr"=>$gltr_dr,
+						        "gltr_cr"=>$gltr_cr
+				      		));
+			      		}
+					}
+				}
+      		}
       	}
+
       	return false;
   	}
 
 	function delete($id) {
-  		if ($this->db->delete("kurs_pajak", array("kurs_id"=>$id))) {
-	        	return true;
+  		if ($this->db->delete("journal", array("gltr_id"=>$id))) {
+	        if ($this->db->delete("journal_detail",array("gltr_id"=>$id))) {
+				return true;
+			}
     	}
       	return false;
 	}
