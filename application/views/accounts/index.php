@@ -1,55 +1,5 @@
 <?php get_header(); ?>
 
-<?php
-
-function HeaderLink($value, $key, $col, $dir) {
-    $out = "<a href=\"" . site_url('cuti') . "?c=";
-    //set column query string value
-    switch ($key) {
-        case "glacc_id":
-            $out .= "1";
-            break;
-        case "glacc_parent":
-            $out .= "2";
-            break;
-        case "glacc_no":
-            $out .= "3";
-            break;
-        case "glacc_name":
-            $out .= "4";
-            break;
-        default:
-            $out .= "0";
-    }
-
-    $out .= "&d=";
-
-    //reverse sort if the current column is clicked
-    if ($key == $col) {
-        switch ($dir) {
-            case "ASC":
-                $out .= "1";
-                break;
-            default:
-                $out .= "0";
-        }
-    } else {
-        //pass on current sort direction
-        switch ($dir) {
-            case "ASC":
-                $out .= "0";
-                break;
-            default:
-                $out .= "1";
-        }
-    }
-
-    //complete link
-    $out .= "\">$value</a>";
-
-    return $out;
-}
-?>
 <div class="body">
     <div class="content">
         <?php echo $this->session->flashdata('message'); ?>
@@ -71,10 +21,10 @@ function HeaderLink($value, $key, $col, $dir) {
         <table class="table fpTable table-hover">
             <thead>
                 <tr>
-                    <th width="25%"><?php echo HeaderLink("Account No", "glacc_no", $col, $dir); ?></th>
-                    <th width="25%"><?php echo HeaderLink("Parent", "glacc_parent", $col, $dir); ?></th>
+                    <th width="25%">Parent</th>
                     <th width="10%">Parent Status</th>
-                    <th width="35%"><?php echo HeaderLink("Account Name", "glacc_name", $col, $dir); ?></th>
+                    <th width="25%">Account No</th>
+                    <th width="35%">Account Name</th>
                     <th width="5%">Action</th>
                 </tr>
             </thead>
@@ -84,10 +34,10 @@ function HeaderLink($value, $key, $col, $dir) {
               $parent = $account->where('glacc_id', $row->glacc_parent)->get();
             ?>
                 <tr>
-                    <td><?php echo $row->glacc_no; ?></td>
                     <td><?php echo $parent->glacc_no; ?></td>
                     <td><?php echo strtoupper($row->glacc_parent_stat); ?></td>
-                    <td><?php echo $row->glacc_name; ?></td>
+                    <td><?php echo $row->glacc_parent_stat == 'y' && $row->glacc_parent == 0? $row->glacc_no:($row->glacc_parent_stat == 'y' && $row->glacc_parent > 0? '&nbsp;&nbsp;&nbsp;&nbsp;'.$row->glacc_no:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row->glacc_no); ?></td>
+                    <td><?php echo $row->glacc_parent_stat == 'y' && $row->glacc_parent == 0? $row->glacc_name:($row->glacc_parent_stat == 'y' && $row->glacc_parent > 0? '&nbsp;&nbsp;&nbsp;&nbsp;'.$row->glacc_name:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row->glacc_name); ?></td>
                     <td>
                         <div class="btn-group">
                             <a href="#" data-toggle="dropdown" class="btn btn-mini dropdown-toggle">

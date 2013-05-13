@@ -20,28 +20,6 @@ class Accounts extends CI_Controller {
         //filter_access(__CLASS__, "view");
         $account_list = new Account();
         $data['account'] = new Account();
-        switch ($this->input->get('c')) {
-        	case "1":
-	          	$data['col'] = "glacc_id";
-	          	break;
-	      	case "2":
-	          	$data['col'] = "glacc_parent";
-	          	break;
-	      	case "3":
-	          	$data['col'] = "glacc_no";
-	          	break;
-	      	case "4":
-	          	$data['col'] = "glacc_name";
-	          	break;
-	      	default:
-	          	$data['col'] = "glacc_id";
-	    }
-	
-	    if ($this->input->get('d') == "1") {
-	        $data['dir'] = "DESC";
-	    } else {
-	        $data['dir'] = "ASC";
-	    }
 
 	    $total_rows = $account_list->count();
         $data['title'] = "Chart of Account";
@@ -51,7 +29,7 @@ class Accounts extends CI_Controller {
         $uri_segment = 3;
         $offset = $this->uri->segment($uri_segment);
 
-        $account_list->order_by($data['col'], $data['dir']);
+        $account_list->order_by("glacc_no", "ASC");
         $data['account_list'] = $account_list->get($this->limit, $offset)->all;
 
         $config['base_url'] = site_url("accounts/index");

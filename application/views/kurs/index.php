@@ -12,13 +12,13 @@
             <div class="icon">
                 <span class="ico-tag"></span>
             </div>
-            <h1>Tahun Fiskal
-                <small>Manage Tahun Fiskal</small>
+            <h1>Kurs Pajak
+                <small>Manage Kurs Pajak</small>
             </h1>
         </div>
         <br class="cl" />
         <div class="head blue">
-            <?php echo header_btn_group("#", "fiscal/add"); ?>
+            <?php echo header_btn_group("#", "kurs/add"); ?>
         </div>
         <div id="search_bar" class="widget-header">
             <?php search_form(array("" => "By", "kurs_date" => "Kurs Date")); ?>
@@ -26,7 +26,7 @@
         <table class="table fpTable table-hover">
             <thead>
                 <tr>
-                    <th width="25%"><?php sorter_link("fiscal/index", "kurs_date", $order, "Kurs Date"); ?></th>
+                    <th width="25%"><?php sorter_link("kurs/index", "kurs_date", $order, "Kurs Date"); ?></th>
                     <th>Kurs US</th>
                     <th>Kurs Yen</th>
                     <th width="5%">Action</th>
@@ -34,7 +34,7 @@
             </thead>
             <tbody>
             <?php
-            foreach ($fiscal->result() as $row) {
+            foreach ($kurs->result() as $row) {
             ?>
                 <tr>
                     <td><?php echo date_format(new DateTime($row->kurs_date),'j M Y'); ?></td>
@@ -47,8 +47,8 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><?php echo anchor('fiscal/edit/' . $row->kurs_id, '<i class="icon-pencil"></i> Edit'); ?></li>
-                                <li><?php echo anchor('fiscal/delete/' . $row->kurs_id, '<i class="icon-trash"></i> Delete', array('onclick' => "return confirm('Are you sure want to delete?')")); ?></li>
+                                <li><?php echo anchor('kurs/edit/' . $row->kurs_id, '<i class="icon-pencil"></i> Edit'); ?></li>
+                                <li><?php echo anchor('kurs/delete/' . $row->kurs_id, '<i class="icon-trash"></i> Delete', array('onclick' => "return confirm('Are you sure want to delete?')")); ?></li>
                             </ul>
                         </div>
                     </td>

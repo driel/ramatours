@@ -161,7 +161,7 @@ function setBodyHeight(){
 								<div class="open"></div>
 								<ul class="grand-sub-menu">
 									<li><?php echo anchor('accounts/index', 'GL Account'); ?></li>
-									<li><?php echo anchor('fiscal/index', 'Kurs Pajak'); ?></li>
+									<li><?php echo anchor('kurs/index', 'Kurs Pajak'); ?></li>
 								</ul>
 							
 							<li><a href="#" class="blyellow">Transaction</a>
