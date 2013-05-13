@@ -9,9 +9,13 @@ class Penjualan_Ticket extends CI_Controller{
     $this->load->helper("staff");
     $this->load->helper("branch");
     $this->load->helper("agent");
+    $this->load->helper("penjualan_ticket");
+    $this->load->helper("airline");
   }
   
   function index(){
+    // get branch id
+    $branch_id = $this->_get_tix_branch_id();
     // view to page
     $tp = $this->input->get("to_page");
     if(strlen($tp)){
@@ -28,10 +32,10 @@ class Penjualan_Ticket extends CI_Controller{
       if(strlen($by)){
         $data["penjualan"] = $this->penjualan->search($by, $q);
       }else{
-        $data["penjualan"] = $this->penjualan->get_all($order_by, strtoupper($order), $this->perpage, $this->offset);
+        $data["penjualan"] = $this->penjualan->get_all($order_by, strtoupper($order), $this->perpage, $this->offset, $branch_id);
       }
     }else{
-      $data["penjualan"] = $this->penjualan->get_all($order_by, strtoupper($order), $this->perpage, $this->offset);
+      $data["penjualan"] = $this->penjualan->get_all($order_by, strtoupper($order), $this->perpage, $this->offset, $branch_id);
       $config = init_paginate(base_url("penjualan_ticket/index"), $this->penjualan->get_all()->num_rows(), $this->perpage);
       $config["suffix"] = '?'.http_build_query($_GET, '', "&");
       $this->pagination->initialize($config);
@@ -108,14 +112,14 @@ class Penjualan_Ticket extends CI_Controller{
     
     $data["branch"] = form_hidden('branch', $this->session->userdata('branch'));
     $data["staff_id"] = form_hidden("staff_id", $this->session->userdata('sess_staff_id'));
-    $data["tour_id"] = array("name"=>"tour_id");
-    $data["invoice_no"] = array("name"=>"invoice_no");
-    $data["date"] = array("name"=>"date", "class"=>"datepicker");
+    $data["tour_id"] = form_input(array("name"=>"tour_id", "id"=>"tour_id"));
+    $data["invoice_no"] = form_input(array("name"=>"invoice_no", "id"=>"invoice_no"));
+    $data["date"] = form_input(array("name"=>"date", "class"=>"datepicker"));
     $data["agent_id"] = form_input(array("type"=>"hidden", "name"=>"agent_id", "id"=>"agent_id"));
     $data["agent"] = form_input(array("id"=>"agent"));
     $data["name"] = form_input(array("name"=>"name", "id"=>"agent_name"));
     $data["address"] = form_textarea(array("name"=>"address", "id"=>"agent_address"));
-    $data["due_date"] = form_input(array("name"=>"due_date", "class"=>"datepicker"));
+    $data["due_date"] = form_input(array("name"=>"due_date", "class"=>"datepicker", "id"=>"due_date"));
     $data["biaya_surcharge_rp"] = form_input(array("name"=>"biaya_surcharge_rp", "class"=>"auto-coma"));
     $data["kurs_pajak"] = form_input(array("name"=>"kurs_pajak", "value"=>$kurs_pajak->kurs_us_rp));
     $data["glacc_dr"] = form_input(array("name"=>"glacc_dr"));
@@ -150,9 +154,9 @@ class Penjualan_Ticket extends CI_Controller{
     
     $data["branch"] = form_hidden('branch', $penjualan->tix_branch_id);
     $data["staff_id"] = form_hidden("staff_id", $penjualan->tix_staff);
-    $data["tour_id"] = array("name"=>"tour_id", "value"=>$penjualan->tix_tour_id);
-    $data["invoice_no"] = array("name"=>"invoice_no", "value"=>$penjualan->tix_invoice_no);
-    $data["date"] = array("name"=>"date", "class"=>"datepicker", "value"=>$penjualan->tix_date_time);
+    $data["tour_id"] = form_input(array("name"=>"tour_id", "value"=>$penjualan->tix_tour_id));
+    $data["invoice_no"] = form_input(array("name"=>"invoice_no", "value"=>$penjualan->tix_invoice_no));
+    $data["date"] = form_input(array("name"=>"date", "class"=>"datepicker", "value"=>$penjualan->tix_date_time));
     $data["agent_id"] = form_input(array("type"=>"hidden", "name"=>"agent_id", "id"=>"agent_id", "value"=>$penjualan->tix_agent_id));
     $data["agent"] = form_input(array("id"=>"agent", "value"=>$agent_name));
     $data["name"] = form_input(array("name"=>"name", "value"=>$penjualan->tix_name));
@@ -180,5 +184,19 @@ class Penjualan_Ticket extends CI_Controller{
     $data["submit"] = form_submit(array("name"=>"save", "value"=>"Save", "class"=>"btn btn-primary"));
     $data["back"] = anchor("penjualan_ticket/index", "Back", array("class"=>"btn btn-danger"));
     return $data;
+  }
+  
+  function _get_tix_branch_id(){
+    $role_id = $this->session->userdata("sess_role_id");
+    $role = $this->db->get_where("user_roled", array("role_id"=>$role_id));
+    if($role->num_rows()){
+      $role = $role->row();
+      if($role->roled_super == "1"){
+        return 0;
+      }else{
+        return $this->session->userdata("branch");
+      }
+    }
+    return false;
   }
 }

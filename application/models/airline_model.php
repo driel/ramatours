@@ -10,6 +10,10 @@ class Airline_model extends CI_Model{
     return $bank;
   }
   
+  function get($id){
+    return $this->db->get_where("airline", array("id"=>$id));
+  }
+  
   function search($k, $v){
     return $this->db->like($k, $v)->order_by($k, "asc")->get("airline");
   }

@@ -2,6 +2,32 @@
 <?php echo load_js(array(
   "penjualan_ticket.php?url=".site_url()
 ));?>
+<script>
+$(document).ready(function(){
+	$(".generate_invoice").on("click", function(e){
+		  e.preventDefault();
+		  var url = "<?php echo site_url("branches/update_invoice_number")."/".$this->session->userdata("branch"); ?>";
+		  $.ajax({
+			  url: url,
+			  type: "GET",
+			  success: function(data){
+				  $("#invoice_no").val(data);
+			  }
+		  })
+	});
+	$(".generate_rti").on("click", function(e){
+		  e.preventDefault();
+		  var url = "<?php echo site_url("settings/update_tour_id"); ?>";
+		  $.ajax({
+			  url: url,
+			  type: "GET",
+			  success: function(data){
+				  $("#tour_id").val(data);
+			  }
+		  })
+	});
+});
+</script>
 <div class="body">
 	<div class="content">
 		<?php if(validation_errors()) echo error_box(validation_errors()); ?>
@@ -20,14 +46,20 @@
 		<table width="100%">
 			<tr>
 				<td width="20%">Tour ID</td>
-				<td><div class="span2">
-						<?php echo form_input($tour_id); ?>
+				<td><div class="input-append span2">
+						<?php echo $tour_id; ?> <a href="#" class="btn generate_rti">Generate Tour ID</a>
+					</div></td>
+			</tr>
+			<tr>
+				<td width="20%">Invoice number</td>
+				<td><div class="input-append span2">
+						<?php echo $invoice_no; ?> <a href="#" class="btn generate_invoice">Generate Invoice</a>
 					</div></td>
 			</tr>
 			<tr>
 				<td>Transaction date</td>
 				<td><div class="span2">
-						<?php echo form_input($date); ?>
+						<?php echo $date; ?>
 					</div></td>
 			</tr>
 			<tr>
@@ -85,6 +117,7 @@
 		</table>
 		<h5>Detail</h5>
 		<div id="invoice_detail"></div>
+		<div id="invoice_items"></div>
 		<!-- <table width="100%">
 			<tr>
 				<td width="20%">Airline</td>

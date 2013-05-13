@@ -316,7 +316,7 @@ ul.context-menu-list li {
 .handsontable .dragdealer {
   position: relative;
   width: 9px;
-  height: 9px;
+  height: 3px;
   background: #F8F8F8;
   border: 1px solid #DDD;
 }
@@ -324,7 +324,7 @@ ul.context-menu-list li {
 .handsontable .dragdealer .handle {
   position: absolute;
   width: 9px;
-  height: 9px;
+  height: 3px;
   background: #009AD7;
 }
 

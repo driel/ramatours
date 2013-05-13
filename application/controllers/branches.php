@@ -179,6 +179,14 @@ class Branches extends CI_Controller {
     function to_excel() {
         $this->load->view('branches/to_excel');
     }
+    
+    function update_invoice_number($id){
+      $branch = new Branch();
+      $last_number = $branch->where("branch_id", $id)->get()->branch_number_ticketing_invoice;
+      $updated_number = ++$last_number;
+      $branch->where("branch_id", $id)->update("branch_number_ticketing_invoice", $updated_number);
+      echo $updated_number;
+    }
 
 }
 

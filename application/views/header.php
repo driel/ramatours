@@ -56,10 +56,6 @@ echo load_js(array(
 <script>
 $(window).load(function(){
 	setBodyHeight();
-	/*$(window).resize(function(){
-		setBodyHeight();
-		console.log("resized");
-	});*/
 });
 
 function setBodyHeight(){

@@ -140,20 +140,15 @@ class Settings extends CI_Controller {
     $this->session->set_flashdata('message', 'Config successfully deleted!');
     redirect('settings/');
   }
-
-  function to_excel() {
-    $this->load->view('settings/to_excel');
-  }
-
-  function filter_access($module, $field, $page) {
-    $user = new User();
-    $status_access = $user->get_access($this->sess_role_id, $module, $field);
-
-    if ($status_access == false) {
-      $msg = '<div class="alert alert-error">You do not have access to this page, please contact administrator</div>';
-      $this->session->set_flashdata('message', $msg);
-      redirect($page);
-    }
+  
+  function update_tour_id(){
+    $setting = new Setting();
+    $last_tour_id = $setting->get_val("rti_start_from");
+    
+    $updated_tour_id = ++$last_tour_id;
+    $setting->update("rti_start_from", $updated_tour_id);
+    
+    echo $updated_tour_id;
   }
 
 }
