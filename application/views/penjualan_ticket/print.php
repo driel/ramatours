@@ -86,21 +86,12 @@ $branch = get_branch_detail($penjualan->tix_branch_id);
 	<br class="cl" /><br />
 	<table cellspacing="0" cellpadding="1" width="100%" id="invoice_items">
 		<tr>
-			<th width="30" rowspan="2">No</th>
-			<th width="150" rowspan="2">Airline</th>
-			<th width="150" rowspan="2">Route</th>
-			<th rowspan="2" width="300">Description</th>
-			<th colspan="2" class="merge">Price</th>
-			<th colspan="2" class="merge">Discount</th>
-			<th colspan="2" class="merge">Komisi</th>
-		</tr>
-		<tr>
-		  <th width="100">RP</th>
-		  <th width="80">US$</th>
-		  <th width="100">RP</th>
-		  <th width="80">US$</th>
-		  <th width="100">RP</th>
-		  <th width="80">US$</th>
+			<th width="30">No</th>
+			<th width="150">Airline</th>
+			<th width="250">Route, Description</th>
+			<th width="120">Price</th>
+			<th width="80">Discount</th>
+			<th width="120">Amount</th>
 		</tr>
 		<?php 
 		  $items = get_items($penjualan->tix_id);
@@ -113,26 +104,35 @@ $branch = get_branch_detail($penjualan->tix_branch_id);
 		  $total_komisi_us = 0;
 		  foreach($items->result() as $row):
 		  $airline = get_airline($row->tix_air);
+		  
+		  $currency = "Rp ";
+		  $prefix = "rp"; 
+		  if(intval($row->tix_price_us) > 0){
+		    $currency = "USD ";
+		    $prefix = "us";
+		  }
+		  
+		  $amount = $row->{"tix_price_".$prefix} - $row->{"tix_discount_".$prefix};
 		?>
 		<tr>
 			<td class="ta_center"><?php echo $no; ?></td>
 			<td><?php echo $airline->name; ?></td>
-			<td><?php echo $row->tix_route; ?></td>
-			<td><?php echo $row->tix_description; ?></td>
-			<td class="ta_right"><?php echo number_format($row->tix_price_rp, 2, ".", ","); ?></td>
-			<td class="ta_right"><?php echo number_format($row->tix_price_us, 2, ".", ","); ?></td>
-			<td class="ta_right"><?php echo number_format($row->tix_discount_rp, 2, ".", ","); ?></td>
-			<td class="ta_right"><?php echo number_format($row->tix_discount_us, 2, ".", ","); ?></td>
-			<td class="ta_right"><?php echo number_format($row->tix_komisi_rp, 2, ".", ","); ?></td>
-			<td class="ta_right"><?php echo number_format($row->tix_komisi_us, 2, ".", ","); ?></td>
+			<td><?php echo $row->tix_route."<br />".$row->tix_description; ?></td>
+			<td>
+			  <?php echo $currency.number_format($row->{"tix_price_".$prefix}, 2, ".", ","); ?>
+			</td>
+			<td>
+			  <?php echo $currency.number_format($row->{"tix_discount_".$prefix}, 2, ".", ",");?>
+			</td>
+			<td>
+			  <?php echo $currency.number_format($amount, 2, ".", ",");?>
+			</td>
 		</tr>
 		<?php
 		$total_rp += $row->tix_price_rp; 
 		$total_us += $row->tix_price_us;
 		$total_discount_rp += $row->tix_discount_rp;
 		$total_discount_us += $row->tix_discount_us;
-		$total_komisi_rp += $row->tix_komisi_rp;
-		$total_komisi_us += $row->tix_komisi_us;
 		$no++; 
 		endforeach; 
 		
@@ -140,13 +140,9 @@ $branch = get_branch_detail($penjualan->tix_branch_id);
 		$subtotal_rp = $total_rp - $total_discount_rp;
 		$subtotal_us = $total_us - $total_discount_us;
 		
-		// ppn
-		$ppn_rp = $subtotal_rp /100 * 10;
-		$ppn_us = $subtotal_us /100 * 10;
-		
 		// grandtotal 
-		$grand_total_rp = $subtotal_rp + $ppn_rp;
-		$grand_total_us = $subtotal_us + $ppn_us;
+		//$grand_total_rp = $subtotal_rp + $ppn_rp;
+		//$grand_total_us = $subtotal_us + $ppn_us;
 		?>
 	</table>
 	<hr />
@@ -157,108 +153,52 @@ $branch = get_branch_detail($penjualan->tix_branch_id);
 		<table width="100%">
 			<tr>
 				<td width="100" class="ta_right"><b>Subtotal</b></td>
-				<td width="5"><b>:</b></td>
-				<td>
-				  <table width="100%">
-				  	<tr>
-				  		<td>Rp</td>
-				  		<td class="ta_right"><?php echo number_format($total_rp, 2, ".", ","); ?></td>
-				  	</tr>
-				  	<tr>
-				  		<td>US$</td>
-				  		<td class="ta_right"><?php echo number_format($total_us, 2, ".", ","); ?></td>
-				  	</tr>
-				  </table>
+				<td>Rp.</td>
+				<td class="ta_right">
+				  <?php echo number_format($total_rp, 2, ".", ","); ?>
 				</td>
 			</tr>
-			<tr>
-				<td class="ta_right"><b>Discount</b></td>
-				<td><b>:</b></td>
-				<td>
-				  <table width="100%">
-				  	<tr>
-				  		<td>Rp</td>
-				  		<td class="ta_right"><?php echo number_format($total_discount_rp, 2, ".", ","); ?></td>
-				  	</tr>
-				  	<tr>
-				  		<td>US$</td>
-				  		<td class="ta_right"><?php echo number_format($total_discount_us, 2, ".", ","); ?></td>
-				  	</tr>
-				  </table>
-				</td>
-			</tr>
-			<!-- <tr>
-				<td class="ta_right"><b>Komisi</b></td>
-				<td><b>:</b></td>
-				<td>
-				  <table width="100%">
-				  	<tr>
-				  		<td>Rp</td>
-				  		<td class="ta_right"><?php echo number_format($total_komisi_rp, 2, ".", ","); ?></td>
-				  	</tr>
-				  	<tr>
-				  		<td>US$</td>
-				  		<td class="ta_right"><?php echo number_format($total_komisi_us, 2, ".", ","); ?></td>
-				  	</tr>
-				  </table>
-				</td>
-			</tr> -->
-		</table>
-		<hr class="thin" />
-		<table width="100%">
 			<tr>
 				<td width="100" class="ta_right"><b>Subtotal</b></td>
-				<td width="5"><b>:</b></td>
-				<td>
-				  <table width="100%">
-				  	<tr>
-				  		<td>Rp</td>
-				  		<td class="ta_right"><?php echo number_format($subtotal_rp, 2, ".", ","); ?></td>
-				  	</tr>
-				  	<tr>
-				  		<td>US$</td>
-				  		<td class="ta_right"><?php echo number_format($subtotal_us, 2, ".", ","); ?></td>
-				  	</tr>
-				  </table>
+				<td>USD.</td>
+				<td class="ta_right">
+				  <?php echo number_format($total_us, 2, ".", ","); ?>
+				</td>
+			</tr>
+			<?php if($total_discount_rp != 0 || $total_discount_us != 0): ?>
+			<tr>
+				<td width="100" class="ta_right"><b>Discount</b></td>
+				<td>Rp.</td>
+				<td class="ta_right">
+				  <?php echo number_format($total_discount_rp, 2, ".", ","); ?>
 				</td>
 			</tr>
 			<tr>
-				<td class="ta_right"><b>PPn</b></td>
-				<td><b>:</b></td>
-				<td>
-				  <table width="100%">
-				  	<tr>
-				  		<td>Rp</td>
-				  		<td class="ta_right"><?php echo number_format($ppn_rp, 2, ".", ","); ?></td>
-				  	</tr>
-				  	<tr>
-				  		<td>US$</td>
-				  		<td class="ta_right"><?php echo number_format($ppn_us, 2, ".", ","); ?></td>
-				  	</tr>
-				  </table>
+				<td width="100" class="ta_right"><b>Discount</b></td>
+				<td>USD.</td>
+				<td class="ta_right">
+				  <?php echo number_format($total_discount_us, 2, ".", ","); ?>
 				</td>
 			</tr>
+			<?php endif; ?>
 		</table>
 		<hr class="thin" />
 		<table width="100%">
 			<tr>
-				<td width="100" class="ta_right"><b>Grand Total</b></td>
-				<td width="5"><b>:</b></td>
-				<td>
-				  <table width="100%">
-				  	<tr>
-				  		<td>Rp</td>
-				  		<td class="ta_right"><?php echo number_format($grand_total_rp, 2, ".", ","); ?></td>
-				  	</tr>
-				  	<tr>
-				  		<td>US$</td>
-				  		<td class="ta_right"><?php echo number_format($grand_total_us, 2, ".", ","); ?></td>
-				  	</tr>
-				  </table>
+				<td width="100" class="ta_right"><b>Net</b></td>
+				<td>Rp.</td>
+				<td class="ta_right">
+				  <?php echo number_format($subtotal_rp, 2, ".", ","); ?>
+				</td>
+			</tr>
+			<tr>
+				<td width="100" class="ta_right"><b>Net</b></td>
+				<td>USD.</td>
+				<td class="ta_right">
+				  <?php echo number_format($subtotal_us, 2, ".", ","); ?>
 				</td>
 			</tr>
 		</table>
-		<hr class="thin" />
 		<br /><br />
 		<?php echo "<b>".$branch->branch_name."</b> , ".date("d-M-Y"); ?>
 		<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />

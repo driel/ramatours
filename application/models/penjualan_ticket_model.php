@@ -52,7 +52,27 @@ class Penjualan_Ticket_Model extends CI_Model{
     $items = $this->input->post("invoice_items");
     if(is_array($items)){
       foreach($items as $item){
-        list($air_name, $route, $description, $price_rp, $price_us, $discount_rp, $discount_us, $komisi_rp, $komisi_us, $air_id) = explode(";", $item);
+        list($air_name, $route, $description, $currency_price, $price, $currency_discount, $discount, $currency_komisi, $komisi, $air_id) = explode(";", $item);
+        $price_rp = 0; $price_us = 0;
+        if(strtolower($currency_price) == "rp"){
+          $price_rp = $price;
+        }else{
+          $price_us = $price;
+        }
+        
+        $discount_rp = 0; $discount_us = 0;
+        if(strtolower($currency_discount) == "rp"){
+          $discount_rp = $discount;
+        }else{
+          $discount_us = $discount;
+        }
+        
+        $komisi_rp = 0; $komisi_us = 0;
+        if(strtolower($currency_komisi) == "rp"){
+          $komisi_rp = $komisi;
+        }else{
+          $komisi_us = $komisi;
+        }
         $this->db->insert("penjualan_ticket_detail", array(
             "tix_id"=>$tix_id,
             "tix_air"=>$air_id,

@@ -29,37 +29,39 @@ $(window).load(function(){
 			<?php search_form(array("" => "By", "name" => "Name")); ?>
 		</div>
 
-		<table class="fpTable table table-hover" style="width: 1800px">
+		<table class="fpTable table table-hover" style="width: 1200px">
 			<thead>
 				<tr>
-					<th width="150"><?php sorter_link("penjualan_ticket/index", "tix_branch_id", $order, "Branch"); ?>
+					<th width="100"><?php sorter_link("penjualan_ticket/index", "tix_branch_id", $order, "Branch"); ?>
 					</th>
-					<th width="200"><?php sorter_link("penjualan_ticket/index", "tix_staff", $order, "Staff"); ?>
-					</th>
+					<!-- <th width="200"><?php sorter_link("penjualan_ticket/index", "tix_staff", $order, "Staff"); ?> 
+					</th> -->
 					<th width="100"><?php sorter_link("penjualan_ticket/index", "tix_tour_id", $order, "Tour ID"); ?>
 					</th>
-					<th width="150"><?php sorter_link("penjualan_ticket/index", "tix_invoice", $order, "Invoice No"); ?>
+					<th width="80"><?php sorter_link("penjualan_ticket/index", "tix_invoice", $order, "Invoice No"); ?>
 					</th>
-					<th width="200"><?php sorter_link("penjualan_ticket/index", "tix_date_time", $order, "Date"); ?>
+					<th width="100"><?php sorter_link("penjualan_ticket/index", "tix_date_time", $order, "Date"); ?>
 					</th>
-					<th width="200"><?php sorter_link("penjualan_ticket/index", "tix_agent_id", $order, "Agent"); ?>
+					<th width="150"><?php sorter_link("penjualan_ticket/index", "tix_agent_id", $order, "Agent"); ?>
 					</th>
-					<th width="200"><?php sorter_link("penjualan_ticket/index", "tix_name", $order, "Name"); ?>
+					<th width="150"><?php sorter_link("penjualan_ticket/index", "tix_name", $order, "Name"); ?>
 					</th>
-					<th width="350"><?php sorter_link("penjualan_ticket/index", "tix_address", $order, "Address"); ?>
+					<!-- <th width="350"><?php sorter_link("penjualan_ticket/index", "tix_address", $order, "Address"); ?>
+					</th> -->
+					<th width="100"><?php sorter_link("penjualan_ticket/index", "tix_due_date", $order, "Due date"); ?>
 					</th>
-					<th width="150"><?php sorter_link("penjualan_ticket/index", "tix_due_date", $order, "Due date"); ?>
+					<th width="100">Total</th>
+					<th width="100">Discount</th>
+					<th width="100"><?php sorter_link("penjualan_ticket/index", "tix_biaya_surcharge", $order, "Surcharge fee"); ?>
 					</th>
-					<th width="150"><?php sorter_link("penjualan_ticket/index", "tix_biaya_surcharge", $order, "Surcharge fee"); ?>
+					<!-- <th width="150"><?php sorter_link("penjualan_ticket/index", "tix_kurs_pajak", $order, "Kurs pajak"); ?>
+					</th> -->
+					<th width="60"><?php sorter_link("penjualan_ticket/index", "tix_status", $order, "Status"); ?>
 					</th>
-					<th width="150"><?php sorter_link("penjualan_ticket/index", "tix_kurs_pajak", $order, "Kurs pajak"); ?>
-					</th>
-					<th width="100"><?php sorter_link("penjualan_ticket/index", "tix_status", $order, "Status"); ?>
-					</th>
-					<th width="100"><?php sorter_link("penjualan_ticket/index", "tix_glacc_dr", $order, "GL Acc DR"); ?>
+					<!-- <th width="100"><?php sorter_link("penjualan_ticket/index", "tix_glacc_dr", $order, "GL Acc DR"); ?>
 					</th>
 					<th width="100"><?php sorter_link("penjualan_ticket/index", "tix_glacc_cr", $order, "GL Acc CR"); ?>
-					</th>
+					</th> -->
 					<th width="50">Actions</th>
 				</tr>
 			</thead>
@@ -72,19 +74,21 @@ $(window).load(function(){
 				?>
 				<tr>
 					<td><?php echo $branch->branch_name; ?></td>
-					<td><?php echo $staff->staff_name; ?></td>
+					<!-- <td><?php //echo $staff->staff_name; ?></td> -->
 					<td><?php echo $row->tix_tour_id; ?></td>
 					<td><?php echo $row->tix_invoice_no; ?></td>
 					<td><?php echo $row->tix_date_time; ?></td>
 					<td><?php echo $agent ? $agent->tixa_name:'-'; ?></td>
 					<td><?php echo $row->tix_name ?></td>
-					<td><?php echo $row->tix_address ?></td>
+					<!-- <td><?php //echo $row->tix_address ?></td> -->
 					<td><?php echo $row->tix_due_date ?></td>
+					<td></td>
+					<td></td>
 					<td><?php echo $row->tix_biaya_surcharge_rp ?></td>
-					<td><?php echo $row->tix_kurs_pajak ?></td>
-					<td><?php echo $row->tix_status ?></td>
-					<td><?php echo $row->tix_glaccno_dr ?></td>
-					<td><?php echo $row->tix_glaccno_cr ?></td>
+					<!-- <td><?php //echo $row->tix_kurs_pajak ?></td> -->
+					<td style="text-align: center"><?php echo $row->tix_status == "new" ? '<span class="btn btn-info">New</span>':'<span class="btn">Post</span>'; ?></td>
+					<!-- <td><?php //echo $row->tix_glaccno_dr ?></td>
+					<td><?php //echo $row->tix_glaccno_cr ?></td> -->
 					<td>
 						<div class="btn-group">
 							<a href="#" data-toggle="dropdown"

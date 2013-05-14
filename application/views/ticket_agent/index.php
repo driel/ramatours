@@ -6,8 +6,8 @@ $(window).load(function(){
 	});
 });
 </script>
-<div class="body customscroll" style="overflow: auto;">
-	<div class="content">
+<div class="body">
+	<div class="content customscroll" style="overflow: auto;">
 		<?php 
 		if($this->session->flashdata('denied')) echo error_box($this->session->flashdata('denied'));
 		if($this->session->flashdata('message')) echo success_box($this->session->flashdata('message'));

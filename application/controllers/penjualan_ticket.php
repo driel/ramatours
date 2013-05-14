@@ -4,7 +4,7 @@ class Penjualan_Ticket extends CI_Controller{
     parent::__construct();
     $this->load->model("Penjualan_Ticket_Model", "penjualan");
     $this->load->model("Ticket_Agent_Model", "agent");
-    $this->load->model("Fiscal_model", "fiscal");
+    $this->load->model("Kurs_model", "kurs");
     
     $this->load->helper("staff");
     $this->load->helper("branch");
@@ -105,7 +105,7 @@ class Penjualan_Ticket extends CI_Controller{
   
   // private functions
   private function _addData(){
-    $kurs = $this->fiscal->get_last();
+    $kurs = $this->kurs->get_last();
     $kurs_pajak = $kurs->num_rows() > 0 ? $kurs->row():0;
     
     $data["tix_id"] = form_hidden("tix_id", "");
@@ -114,14 +114,14 @@ class Penjualan_Ticket extends CI_Controller{
     $data["staff_id"] = form_hidden("staff_id", $this->session->userdata('sess_staff_id'));
     $data["tour_id"] = form_input(array("name"=>"tour_id", "id"=>"tour_id"));
     $data["invoice_no"] = form_input(array("name"=>"invoice_no", "id"=>"invoice_no"));
-    $data["date"] = form_input(array("name"=>"date", "class"=>"datepicker"));
+    $data["date"] = form_input(array("name"=>"date", "class"=>"datepicker", "value"=>date("Y-m-d")));
     $data["agent_id"] = form_input(array("type"=>"hidden", "name"=>"agent_id", "id"=>"agent_id"));
     $data["agent"] = form_input(array("id"=>"agent"));
     $data["name"] = form_input(array("name"=>"name", "id"=>"agent_name"));
     $data["address"] = form_textarea(array("name"=>"address", "id"=>"agent_address"));
     $data["due_date"] = form_input(array("name"=>"due_date", "class"=>"datepicker", "id"=>"due_date"));
     $data["biaya_surcharge_rp"] = form_input(array("name"=>"biaya_surcharge_rp", "class"=>"auto-coma"));
-    $data["kurs_pajak"] = form_input(array("name"=>"kurs_pajak", "value"=>$kurs_pajak->kurs_us_rp));
+    $data["kurs_pajak"] = form_input(array("name"=>"kurs_pajak", "value"=>$kurs_pajak->kurs_us_rp, "class"=>"auto-coma"));
     $data["glacc_dr"] = form_input(array("name"=>"glacc_dr"));
     $data["glacc_cr"] = form_input(array("name"=>"glacc_cr"));
     

@@ -9,8 +9,8 @@ $(document).ready(function(){
   $("#invoice_detail").handsontable({
     startRows: 3,
     startCols: 11,
-    colHeaders: ["Airline", "Route", "Description", "Price (Rp)", "Price (US)", "Discount (Rp)","Discount (US)", "Komisi (Rp)", "Komisi (US)", "", ""], // airline ID, penjualan ticket detail ID
-    colWidths: [150, 150, 400, 100, 100, 100, 100, 100, 100],
+    colHeaders: ["Airline", "Route", "Description", "Currency", "Price", "Currency","Discount", "Currency", "Komisi", "", ""], // airline ID, penjualan ticket detail ID
+    colWidths: [150, 150, 300, 60, 100, 60, 100, 60, 100],
     stretchH: 'all',
     minSpareRows: 1,
     onChange: function(update, source){
@@ -48,24 +48,27 @@ $(document).ready(function(){
       {},
       {},
       {
-        type: 'numeric',
-        format: '0,0.00'
+        type: 'autocomplete',
+        source: ['Rp', 'USD'],
+        strict: true
       },
       {
         type: 'numeric',
         format: '0,0.00'
       },
       {
-        type: 'numeric',
-        format: '0,0.00'
+        type: 'autocomplete',
+        source: ['Rp', 'USD'],
+        strict: true
       },
       {
         type: 'numeric',
         format: '0,0.00'
       },
       {
-        type: 'numeric',
-        format: '0,0.00'
+        type: 'autocomplete',
+        source: ['Rp', 'USD'],
+        strict: true
       },
       {
         type: 'numeric',
@@ -81,7 +84,7 @@ $(document).ready(function(){
     var data = $("#invoice_detail").handsontable("getData");
     var invoice_items = "";
     for(i in data){
-      if(data[i][0]!=null && data[i][1]!=null && data[i][2]!=null){
+      if(data[i][0]!=null && data[i][1]!=null && data[i][3]!=null && data[i][5]!=null && data[i][7]!=null){
         invoice_items += '<input type="hidden" name="invoice_items[]" value="'+data[i][0]+';'+data[i][1]+';'+data[i][2]+';'+data[i][3]+';'+data[i][4]+';'+data[i][5]+';'+data[i][6]+';'+data[i][7]+';'+data[i][8]+';'+data[i][9]+'" />';
       }
     }
@@ -89,14 +92,6 @@ $(document).ready(function(){
     this.submit();
   });
   
-  $("#status").iphoneStyle({
-	  checkedLabel: "Enable",
-	  uncheckedLabel: "Disable",
-	  onChange: function(e, checked){
-		  $("#disable_on").toggle();
-	  }
-	});
-
 	$("#agent").autocomplete({
     source: function(request, proses){
   	  console.log(request);

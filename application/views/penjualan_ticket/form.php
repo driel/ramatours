@@ -7,24 +7,28 @@ $(document).ready(function(){
 	$(".generate_invoice").on("click", function(e){
 		  e.preventDefault();
 		  var url = "<?php echo site_url("branches/update_invoice_number")."/".$this->session->userdata("branch"); ?>";
-		  $.ajax({
-			  url: url,
-			  type: "GET",
-			  success: function(data){
-				  $("#invoice_no").val(data);
-			  }
-		  })
+		  if($("#invoice_no").val().length == 0){
+			  $.ajax({
+				  url: url,
+				  type: "GET",
+				  success: function(data){
+					  $("#invoice_no").val(data);
+				  }
+			  });
+		  }
 	});
 	$(".generate_rti").on("click", function(e){
 		  e.preventDefault();
 		  var url = "<?php echo site_url("settings/update_tour_id"); ?>";
-		  $.ajax({
-			  url: url,
-			  type: "GET",
-			  success: function(data){
-				  $("#tour_id").val(data);
-			  }
-		  })
+		  if($("#tour_id").val().length == 0){
+  		  $.ajax({
+  			  url: url,
+  			  type: "GET",
+  			  success: function(data){
+  				  $("#tour_id").val(data);
+  			  }
+  		  });
+		  }
 	});
 });
 </script>
@@ -98,8 +102,8 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<td>Kurs pajak</td>
-				<td><div class="span2">
-						<?php echo $kurs_pajak; ?>
+				<td><div class="input-prepend span2">
+						<span class="btn bootstrap-tooltip" data-placement="top" data-title="Kurs USD">Rp</span> <?php echo $kurs_pajak; ?>
 					</div></td>
 			</tr>
 			<tr>
@@ -118,54 +122,6 @@ $(document).ready(function(){
 		<h5>Detail</h5>
 		<div id="invoice_detail"></div>
 		<div id="invoice_items"></div>
-		<!-- <table width="100%">
-			<tr>
-				<td width="20%">Airline</td>
-				<td><div class="span3"><?php echo $airline; ?></div></td>
-			</tr>
-			<tr>
-				<td>Route</td>
-				<td><div class="span3"><?php echo $route; ?></div></td>
-			</tr>
-			<tr>
-				<td>Invoice description</td>
-				<td><div class="span5"><?php echo $description; ?></div></td>
-			</tr>
-		</table>
-		<div class="one_third">
-		  <span>Price</span><br />
-		  <div class="input-prepend span2">
-		    <span class="btn">Rp</span>
-		    <?php echo $price_rp; ?>
-		  </div><br class="cl" />
-		  <div class="input-prepend span2">
-		    <span class="btn">US</span>
-		    <?php echo $price_us; ?>
-		  </div>
-		</div>
-		<div class="one_third">
-		  <span>Discount</span><br />
-		  <div class="input-prepend span2">
-		    <span class="btn">Rp</span>
-		    <?php echo $discount_rp; ?>
-		  </div><br class="cl" />
-		  <div class="input-prepend span2">
-		    <span class="btn">US</span>
-		    <?php echo $discount_us; ?>
-		  </div>
-		</div>
-		<div class="one_third lastcolumn">
-		  <span>Komisi</span><br />
-		  <div class="input-prepend span2">
-		    <span class="btn">Rp</span>
-		    <?php echo $komisi_rp; ?>
-		  </div><br class="cl" />
-		  <div class="input-prepend span2">
-		    <span class="btn">US</span>
-		    <?php echo $komisi_us; ?>
-		  </div>
-		</div>
-		-->
 		<br />
 		<?php echo $submit; ?>
 		<?php echo $back; ?>
