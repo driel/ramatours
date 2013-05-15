@@ -366,6 +366,20 @@ table.part-table tr:hover td{
   background: #B2E1FC!important;
 }
 
+table.ordinary-table{
+	background: #fff;
+	border: 1px solid #ccc;
+	min-width: 175px;
+}
+
+table.ordinary-table tr:nth-child(1) td{
+  background: #ccc!important;
+}
+
+table.ordinary-table td{
+  background: #fff!important;
+}
+
 div#search{
   float: right;
   padding: 5px 0;

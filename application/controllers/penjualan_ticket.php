@@ -103,6 +103,11 @@ class Penjualan_Ticket extends CI_Controller{
     $this->load->view("penjualan_ticket/print", $data);
   }
   
+  function update_item(){
+    $this->penjualan->update_item();
+    print_r($this->input->post());
+  }
+  
   // private functions
   private function _addData(){
     $kurs = $this->kurs->get_last();
@@ -150,12 +155,13 @@ class Penjualan_Ticket extends CI_Controller{
     
     $agent_name = $agent ? $agent->tixa_name:"";
     
+    $data["id"] = $penjualan->tix_id;
     $data["tix_id"] = form_hidden("tix_id", $penjualan->tix_id);
     
     $data["branch"] = form_hidden('branch', $penjualan->tix_branch_id);
     $data["staff_id"] = form_hidden("staff_id", $penjualan->tix_staff);
-    $data["tour_id"] = form_input(array("name"=>"tour_id", "value"=>$penjualan->tix_tour_id));
-    $data["invoice_no"] = form_input(array("name"=>"invoice_no", "value"=>$penjualan->tix_invoice_no));
+    $data["tour_id"] = form_input(array("name"=>"tour_id", "value"=>$penjualan->tix_tour_id, "readonly"=>"readonly"));
+    $data["invoice_no"] = form_input(array("name"=>"invoice_no", "value"=>$penjualan->tix_invoice_no, "readonly"=>"readonly"));
     $data["date"] = form_input(array("name"=>"date", "class"=>"datepicker", "value"=>$penjualan->tix_date_time));
     $data["agent_id"] = form_input(array("type"=>"hidden", "name"=>"agent_id", "id"=>"agent_id", "value"=>$penjualan->tix_agent_id));
     $data["agent"] = form_input(array("id"=>"agent", "value"=>$agent_name));

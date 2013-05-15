@@ -23,7 +23,7 @@ class Penjualan_Ticket_Model extends CI_Model{
   }
   
   function get_items($tix_id){
-    return $this->db->get_where("penjualan_ticket_detail", array("tix_id"=>$tix_id));
+    return $this->db->join("airline air", "jual.tix_air=air.id")->get_where("penjualan_ticket_detail jual", array("jual.tix_id"=>$tix_id));
   }
 
   function search($k, $v){
@@ -41,7 +41,7 @@ class Penjualan_Ticket_Model extends CI_Model{
         "tix_name"=>$this->input->post("name"),
         "tix_address"=>$this->input->post("address"),
         "tix_due_date"=>$this->input->post("due_date"),
-        "tix_biaya_surcharge_rp"=>$this->input->post("biaya_shurcharge_rp"),
+        "tix_biaya_surcharge_rp"=>str_replace(",", "", $this->input->post("biaya_shurcharge_rp")),
         "tix_kurs_pajak"=>$this->input->post("kurs_pajak"),
         "tix_glaccno_dr"=>$this->input->post("glacc_dr"),
         "tix_glaccno_cr"=>$this->input->post("glacc_cr")
@@ -101,29 +101,99 @@ class Penjualan_Ticket_Model extends CI_Model{
         "tix_name"=>$this->input->post("name"),
         "tix_address"=>$this->input->post("address"),
         "tix_due_date"=>$this->input->post("due_date"),
-        "tix_biaya_surcharge_rp"=>$this->input->post("biaya_shurcharge_rp"),
+        "tix_biaya_surcharge_rp"=>str_replace(",", "", $this->input->post("biaya_shurcharge_rp")),
         "tix_kurs_pajak"=>$this->input->post("kurs_pajak"),
         "tix_glaccno_dr"=>$this->input->post("glacc_dr"),
         "tix_glaccno_cr"=>$this->input->post("glacc_cr")
     ), array("tix_id"=>$tix_id));
   
-    // detail
-    $this->db->update("penjualan_ticket_detail", array(
-        "tix_id"=>$tix_id,
-        "tix_air"=>$this->input->post("tix_air"),
-        "tix_route"=>$this->input->post("tix_route"),
-        "tix_description"=>$this->input->post("tix_description"),
-        "tix_price_rp"=>str_replace(",", "", $this->input->post("tix_price_rp")),
-        "tix_price_us"=>str_replace(",", "", $this->input->post("tix_price_us")),
-        "tix_discount_rp"=>str_replace(",", "", $this->input->post("tix_discount_rp")),
-        "tix_discount_us"=>str_replace(",", "", $this->input->post("tix_discount_us")),
-        "tix_komisi_rp"=>str_replace(",", "", $this->input->post("tix_komisi_rp")),
-        "tix_komisi_us"=>str_replace(",", "", $this->input->post("tix_komisi_us"))
-    ), array("tix_id"=>$tix_id));
+  // detail
+    $items = $this->input->post("invoice_items");
+    if(is_array($items)){
+      foreach($items as $item){
+        list($air_name, $route, $description, $currency_price, $price, $currency_discount, $discount, $currency_komisi, $komisi, $air_id, $tixd_id) = explode(";", $item);
+        $price_rp = 0; $price_us = 0;
+        if(strtolower($currency_price) == "rp"){
+          $price_rp = $price;
+        }else{
+          $price_us = $price;
+        }
+        
+        $discount_rp = 0; $discount_us = 0;
+        if(strtolower($currency_discount) == "rp"){
+          $discount_rp = $discount;
+        }else{
+          $discount_us = $discount;
+        }
+        
+        $komisi_rp = 0; $komisi_us = 0;
+        if(strtolower($currency_komisi) == "rp"){
+          $komisi_rp = $komisi;
+        }else{
+          $komisi_us = $komisi;
+        }
+        if($tixd_id=="undefined"){ // berarti ga ada IDnya
+          $this->db->insert("penjualan_ticket_detail", array(
+              "tix_id"=>$tix_id,
+              "tix_air"=>$air_id,
+              "tix_route"=>$route,
+              "tix_description"=>$description,
+              "tix_price_rp"=>$price_rp,
+              "tix_price_us"=>$price_us,
+              "tix_discount_rp"=>$discount_rp,
+              "tix_discount_us"=>$discount_us,
+              "tix_komisi_rp"=>$komisi_rp,
+              "tix_komisi_us"=>$komisi_us
+          ));
+        }
+      }
+    }
   }
   
   function delete($id){
     $this->db->delete("penjualan_ticket", array("tix_id"=>$id));
     $this->db->delete("penjualan_ticket_detail", array("tix_id"=>$id));
+  }
+  
+  function sum_total($what, $tix_id){
+    return $this->db->select("SUM($what) AS $what")->get_where("penjualan_ticket_detail", array("tix_id"=>$tix_id))->row();
+  }
+  
+  function update_item(){
+    $currency_price = $this->input->post("currency_price");
+    $price_rp = 0; $price_us = 0;
+    if(strtolower($currency_price) == "rp"){
+      $price_rp = $this->input->post("price");
+    }else{
+      $price_us = $this->input->post("price");
+    }
+    
+    $currency_discount = $this->input->post("currency_discount");
+    $discount_rp = 0; $discount_us = 0;
+    if(strtolower($currency_discount) == "rp"){
+      $discount_rp = $this->input->post("discount");
+    }else{
+      $discount_us = $this->input->post("discount");
+    }
+    
+    $currency_komisi = $this->input->post("currency_komisi");
+    $komisi_rp = 0; $komisi_us = 0;
+    if(strtolower($currency_komisi) == "rp"){
+      $komisi_rp = $this->input->post("komisi");
+    }else{
+      $komisi_us = $this->input->post("komisi");
+    }
+    
+    $this->db->update("penjualan_ticket_detail", array(
+        "tix_air"=>$this->input->post("air_id"),
+        "tix_route"=>$this->input->post("route"),
+        "tix_description"=>$this->input->post("description"),
+        "tix_price_rp"=>$price_rp,
+        "tix_price_us"=>$price_us,
+        "tix_discount_rp"=>$discount_rp,
+        "tix_discount_us"=>$discount_us,
+        "tix_komisi_rp"=>$komisi_rp,
+        "tix_komisi_us"=>$komisi_us
+    ), array("tixd_id"=>$this->input->post("tixd_id")));
   }
 }

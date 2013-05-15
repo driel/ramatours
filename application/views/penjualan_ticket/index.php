@@ -29,7 +29,7 @@ $(window).load(function(){
 			<?php search_form(array("" => "By", "name" => "Name")); ?>
 		</div>
 
-		<table class="fpTable table table-hover" style="width: 1200px">
+		<table class="fpTable table table-hover" style="width: 1500px">
 			<thead>
 				<tr>
 					<th width="100"><?php sorter_link("penjualan_ticket/index", "tix_branch_id", $order, "Branch"); ?>
@@ -82,8 +82,30 @@ $(window).load(function(){
 					<td><?php echo $row->tix_name ?></td>
 					<!-- <td><?php //echo $row->tix_address ?></td> -->
 					<td><?php echo $row->tix_due_date ?></td>
-					<td></td>
-					<td></td>
+					<td>
+					  <table class="ordinary-table">
+					  	<tr>
+					  		<td width="110">Rp</td>
+					  		<td width="65">USD</td>
+					  	</tr>
+					  	<tr>
+					  		<td><?php echo sum_total("tix_price_rp", $row->tix_id)?></td>
+					  		<td><?php echo sum_total("tix_price_us", $row->tix_id)?></td>
+					  	</tr>
+					  </table>
+					</td>
+					<td>
+					  <table class="ordinary-table">
+					  	<tr>
+					  		<td width="110">Rp</td>
+					  		<td width="65">USD</td>
+					  	</tr>
+					  	<tr>
+					  		<td><?php echo sum_total("tix_discount_rp", $row->tix_id)?></td>
+					  		<td><?php echo sum_total("tix_discount_us", $row->tix_id)?></td>
+					  	</tr>
+					  </table>
+					</td>
 					<td><?php echo $row->tix_biaya_surcharge_rp ?></td>
 					<!-- <td><?php //echo $row->tix_kurs_pajak ?></td> -->
 					<td style="text-align: center"><?php echo $row->tix_status == "new" ? '<span class="btn btn-info">New</span>':'<span class="btn">Post</span>'; ?></td>

@@ -59,10 +59,10 @@ $(window).load(function(){
 });
 
 function setBodyHeight(){
-	var bHeight = $(".body").innerHeight();
+	var cHeight = $(".content").innerHeight();
 	var wHeight = $(window).innerHeight();
-	if(bHeight < wHeight){
-		$(".body").css("height", wHeight+"px");
+	if(cHeight < wHeight){
+		$(".sidebar").css("height", wHeight+"px");
 	}
 }
 </script>

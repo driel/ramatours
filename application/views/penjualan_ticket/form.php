@@ -30,6 +30,39 @@ $(document).ready(function(){
   		  });
 		  }
 	});
+	<?php
+	$items = get_items($id);
+	//print_r($items->result());
+	$data = "var data = [";
+	foreach($items->result() as $item){
+    $price_currency = "Rp";
+    $prefix = "rp";
+    if($item->tix_price_us > 0){
+      $price_currency = "USD";
+      $prefix = "us";
+    }
+    
+    $discount_currency = "Rp";
+    $discount_prefix = "rp";
+    if($item->tix_discount_us > 0){
+      $discount_currency = "USD";
+      $discount_prefix = "us";
+    }
+    
+    $komisi_currency = "Rp";
+    $komisi_prefix = "rp";
+    if($item->tix_komisi_us > 0){
+      $komisi_currency = "USD";
+      $komisi_prefix = "us";
+    }
+    
+    $data .= '["'.$item->name.'", "'.$item->tix_route.'","'.$item->tix_description.'", "'.$price_currency.'", "'.$item->{"tix_price_".$prefix}.'", "'.$discount_currency.'", "'.$item->{"tix_discount_".$discount_prefix}.'", "'.$komisi_currency.'", "'.$item->{"tix_discount_".$komisi_prefix}.'", "'.$item->tix_air.'", "'.$item->tixd_id.'"],';
+  }
+  $data = substr($data, 0, strlen($data)-1);
+  $data .= "];\n";
+  echo $data;
+	?>
+	$("#invoice_detail").handsontable("loadData", data);
 });
 </script>
 <div class="body">
@@ -122,6 +155,39 @@ $(document).ready(function(){
 		<h5>Detail</h5>
 		<div id="invoice_detail"></div>
 		<div id="invoice_items"></div>
+		<h5>Total : </h5>
+		<table width="200">
+			<tr>
+				<td width="90">Total</td>
+				<td width="40">Rp</td>
+				<td class="ta_right"><span id="total_rp"></span></td>
+			</tr>
+			<tr style="border-bottom: 1px solid #E0E0E0;">
+				<td>Total</td>
+				<td>USD</td>
+				<td class="ta_right"><span id="total_us"></span></td>
+			</tr>
+			<tr>
+				<td>Discount</td>
+				<td>Rp</td>
+				<td class="ta_right"><span id="discount_rp"></span></td>
+			</tr>
+			<tr style="border-bottom: 1px solid #E0E0E0;">
+				<td>Discount</td>
+				<td>USD</td>
+				<td class="ta_right"><span id="discount_us"></span></td>
+			</tr>
+			<tr>
+				<td>Komisi</td>
+				<td>Rp</td>
+				<td class="ta_right"><span id="komisi_rp"></span></td>
+			</tr>
+			<tr>
+				<td>Komisi</td>
+				<td>USD</td>
+				<td class="ta_right"><span id="komisi_us"></span></td>
+			</tr>
+		</table>
 		<br />
 		<?php echo $submit; ?>
 		<?php echo $back; ?>

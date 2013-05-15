@@ -15,3 +15,13 @@ function invoice_number_format($invoice_no, $prefix, $year){
   $invoice = str_repeat("0", $zero_count).$invoice_no."/".$prefix."-".substr($year, 0, 4);
   return $invoice;
 }
+
+function sum_total($what, $tix_id, $format = true){
+  $ci = &get_instance();
+  $ci->load->model("Penjualan_Ticket_Model", "penjualan");
+  $result = $ci->penjualan->sum_total($what, $tix_id);
+  if($format){
+    $result = number_format($result->{$what}, 2, ".", ",");
+  }
+  return $result;
+}

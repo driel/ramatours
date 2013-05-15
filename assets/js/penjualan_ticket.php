@@ -13,9 +13,75 @@ $(document).ready(function(){
     colWidths: [150, 150, 300, 60, 100, 60, 100, 60, 100],
     stretchH: 'all',
     minSpareRows: 1,
+    contextMenu: true,
     onChange: function(update, source){
       if(source == "populateFromArray"){
-        $("#invoice_detail").handsontable("setDataAtCell", update[0][0], 9, map[selected_item].id);
+        if(selected_item){
+          $("#invoice_detail").handsontable("setDataAtCell", update[0][0], 9, map[selected_item].id);
+        }
+        var tixd_id = $("#invoice_detail").handsontable("getDataAtCell", update[0][0], 10);
+        if(tixd_id != null){ // tixd_id is not null, meanig this row is from database
+          var air_id = $("#invoice_detail").handsontable("getDataAtCell", update[0][0], 9);
+          var route = $("#invoice_detail").handsontable("getDataAtCell", update[0][0], 1);
+          var description = $("#invoice_detail").handsontable("getDataAtCell", update[0][0], 2);
+          var currency_price = $("#invoice_detail").handsontable("getDataAtCell", update[0][0], 3);
+          var price = $("#invoice_detail").handsontable("getDataAtCell", update[0][0], 4);
+          var currency_discount = $("#invoice_detail").handsontable("getDataAtCell", update[0][0], 5);
+          var discount = $("#invoice_detail").handsontable("getDataAtCell", update[0][0], 6);
+          var currency_komisi = $("#invoice_detail").handsontable("getDataAtCell", update[0][0], 7);
+          var komisi = $("#invoice_detail").handsontable("getDataAtCell", update[0][0], 8);
+          var data = {
+            air_id:air_id, 
+            tixd_id:tixd_id, 
+            route:route, 
+            description:description,
+            currency_price:currency_price,
+            price:price,
+            currency_discount:currency_discount,
+            discount:discount,
+            currency_komisi:currency_komisi,
+            komisi:komisi
+          }
+          var url = '<?php echo $url."/penjualan_ticket/update_item/"?>';
+          $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            success:function(d){console.log(d);}
+          });
+        }
+      }
+      
+      if(source == "edit" || source == "loadData"){
+        var data = $("#invoice_detail").handsontable("getData");
+        var total_rp = 0, total_us = 0, discount_rp = 0, discount_us = 0, komisi_rp = 0, komisi_us = 0;
+        for(i = 0; i<data.length-1; i++){
+          if(data[i][3] != null && data[i][3].toLowerCase()=="rp"){
+            total_rp += parseInt(data[i][4]);
+          }else{
+            total_us += parseInt(data[i][4]);
+          }
+          
+          if(data[i][5] != null && data[i][5].toLowerCase()=="rp"){
+            discount_rp += parseInt(data[i][6]);
+          }else{
+            discount_us += parseInt(data[i][6]);
+          }
+          
+          if(data[i][7] != null && data[i][7].toLowerCase()=="rp"){
+            komisi_rp += parseInt(data[i][8]);
+          }else{
+            komisi_us += parseInt(data[i][8]);
+          }
+        }
+        $("#total_rp").text(accounting.formatMoney(total_rp, ""));
+        $("#total_us").text(accounting.formatMoney(total_us, ""));
+        
+        $("#discount_rp").text(accounting.formatMoney(discount_rp, ""));
+        $("#discount_us").text(accounting.formatMoney(discount_us, ""));
+        
+        $("#komisi_rp").text(accounting.formatMoney(komisi_rp, ""));
+        $("#komisi_us").text(accounting.formatMoney(komisi_us, ""));
       }
     },
     columns: [
@@ -85,7 +151,7 @@ $(document).ready(function(){
     var invoice_items = "";
     for(i in data){
       if(data[i][0]!=null && data[i][1]!=null && data[i][3]!=null && data[i][5]!=null && data[i][7]!=null){
-        invoice_items += '<input type="hidden" name="invoice_items[]" value="'+data[i][0]+';'+data[i][1]+';'+data[i][2]+';'+data[i][3]+';'+data[i][4]+';'+data[i][5]+';'+data[i][6]+';'+data[i][7]+';'+data[i][8]+';'+data[i][9]+'" />';
+        invoice_items += '<input type="hidden" name="invoice_items[]" value="'+data[i][0]+';'+data[i][1]+';'+data[i][2]+';'+data[i][3]+';'+data[i][4]+';'+data[i][5]+';'+data[i][6]+';'+data[i][7]+';'+data[i][8]+';'+data[i][9]+';'+data[i][10]+'" />';
       }
     }
     $("#invoice_items").html(invoice_items);
