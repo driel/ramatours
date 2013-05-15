@@ -13,7 +13,7 @@
   if($detail){
     foreach($detail->result() as $trx){
       $account = get_account($trx->gltr_accno);
-      $journal_detail .= '["'.$account->glacc_no.' - '.$account->glacc_name.'", "'.$trx->gltr_keterangan.'", "'.$trx->rti.'", "'.number_format($trx->gltr_dr, 2, ".", ",").'", "'.number_format($trx->gltr_cr, 2, ".", ",").'", "'.$trx->id.'", "'.$trx->gltr_accno.'"],';
+      $journal_detail .= '["'.$account->glacc_no.' - '.$account->glacc_name.'", "'.$trx->gltr_keterangan.'", "'.$trx->gltr_rti.'", "'.number_format($trx->gltr_dr, 2, ".", ",").'", "'.number_format($trx->gltr_cr, 2, ".", ",").'", "'.$trx->id.'", "'.$trx->gltr_accno.'"],';
     }
     $journal_detail = substr($journal_detail, 0, (strlen($journal_detail)-1));
   }
@@ -50,7 +50,7 @@
             </tr>
           	<tr>
                 <td width="20%">Date</td>
-                <td><div class="span3"><?php echo form_input($gltr_date); ?></div></td>
+                <td><div class="span3"><?php echo $gltr_date; echo form_input($gltr_date_display); ?></div></td>
             </tr>
             <tr><td colspan="2">&nbsp;</td></tr>
         </table>

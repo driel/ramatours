@@ -9,7 +9,7 @@ class Journal extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->helper("journal");
+        $this->load->helpers(array("journal","bulan"));
         $this->load->model("Journal_model","journal");
         $this->sess_username = $this->session->userdata('username');
         $this->sess_role_id = $this->session->userdata('sess_role_id');
@@ -19,6 +19,8 @@ class Journal extends CI_Controller {
 
 	public function index($offset = 0) {
         //filter_access(__CLASS__, "view");
+
+		$this->session->set_flashdata('message', '');
 
 	    $tp = $this->input->get("to_page");
 	    if(strlen($tp)){
@@ -38,7 +40,7 @@ class Journal extends CI_Controller {
 	        	$data["journal"] = $this->journal->get_all($order_by, strtoupper($order), $this->perpage, $this->offset);
 	      	}
 	    }else{
-	      	$data["journal"] = $this->journal->get_all("gltr_date", "ASC", $this->perpage, $this->offset);
+	      	$data["journal"] = $this->journal->get_all("gltr_date", "DESC", $this->perpage, $this->offset);
 	      	$config = init_paginate(base_url("fiscal/index"), $this->journal->get_all()->num_rows(), $this->perpage);
 	      	$config["suffix"] = '?'.http_build_query($_GET, '', "&");
 	      	$this->pagination->initialize($config);
@@ -56,7 +58,8 @@ class Journal extends CI_Controller {
 
         $data['act'] = "add";
         $data['gltr_id'] = "";
-        $data["gltr_date"] = array("name"=>"gltr_date", "class"=>"datepicker", "value"=>date("Y-m-d"));
+        $data["gltr_date"] = form_hidden("gltr_date", date("Ym"));
+        $data["gltr_date_display"] = array("name"=>"gltr_date_display", "value"=>bulan_full(date("m"))." ".date("Y"), "disabled=disabled");
         $data["gltr_voucher"] = array('name' => "gltr_voucher");
 
         $account = new Account();
@@ -90,7 +93,8 @@ class Journal extends CI_Controller {
 
         $data['act'] = "edit";
         $data['gltr_id'] = $gltr->gltr_id;
-        $data["gltr_date"] = array("name"=>"gltr_date", "class"=>"datepicker", "value"=>$gltr->gltr_date);
+        $data["gltr_date"] = form_hidden("gltr_date", $gltr->gltr_date);
+        $data["gltr_date_display"] = array("name"=>"gltr_date_display", "value"=>bulan_full(substr($gltr->gltr_date,4))." ".substr($gltr->gltr_date,0,4), "disabled=disabled");
         $data["gltr_voucher"] = array("name" => "gltr_voucher", "value"=>$gltr->gltr_voucher);
 
         $data['btn_save'] = array('name' => 'btn_save', 'value' => 'Save', 'class' => 'btn btn-primary');
@@ -125,11 +129,11 @@ class Journal extends CI_Controller {
 	      	if ($this->input->post("act") == "add") {
 	      		$gltr_id = $this->journal->add();
 	      		$this->_saveDetail($gltr_id);
-	      		$this->output->enable_profiler(true);
 		  	} else {
 	      		$this->journal->update();
+	      		$this->_saveDetail($this->input->post("gltr_id"));
 		  	}
-	      	//redirect("journal/index");
+	      	redirect("journal/index");
 	    }
     }
     
@@ -138,9 +142,9 @@ class Journal extends CI_Controller {
       	if(is_array($detail)){
         	foreach($detail as $jd){
           		list($id, $account, $desc, $rti, $debit, $credit) = explode(";", $jd);
-          		$acc = explode(" ",$account);
-          		if (($id == "undefined" || $id == "") && (($account != "undefined" || $account == "") && (($debit != "undefined" || $debit != "") || ($credit != "undefined" || $credit != "")))) {
-            		$this->db->insert("journal_detail", array("gltr_id"=>$gltr_id,"gltr_accno"=>$acc[0],"gltr_rti"=>$rti,"gltr_keterangan"=>$desc,"gltr_dr"=>$debit,"gltr_cr"=>$credit));
+          		$acc = explode("-",$account);
+          		if (($id == "undefined" || $id == "") && (($account != "null" && ($account != "undefined" || $account != "")) && (($debit != "undefined" || $debit != "") || ($credit != "undefined" || $credit != "")))) {
+            		$this->db->insert("journal_detail", array("gltr_id"=>$gltr_id,"gltr_accno"=>ltrim(rtrim($acc[0])),"gltr_rti"=>$rti == "undefined"?"":$rti,"gltr_keterangan"=>$desc == "undefined"?"":$desc,"gltr_dr"=>$debit,"gltr_cr"=>$credit));
           		}
         	}
       	}
@@ -186,16 +190,60 @@ class Journal extends CI_Controller {
     function update_journal_detail(){
        	$id = $this->input->post("id");
        	$account = $this->input->post("account");
+       	$acc = explode("-",$account);
        	$desc = $this->input->post("description");
        	$rti = $this->input->post("rti");
        	$debit = $this->input->post("debit");
        	$credit = $this->input->post("credit");
 
-		$this->db->update("journal_detail",array("gltr_accno"=>$account,"gltr_rti"=>$rti,"gltr_keterangan"=>$desc,"gltr_dr"=>$debit,"gltr_cr"=>$credit),array("id"=>$id));
+		$this->db->update("journal_detail",array("gltr_accno"=>ltrim(rtrim($acc[0])),"gltr_rti"=>$rti,"gltr_keterangan"=>$desc,"gltr_dr"=>$debit,"gltr_cr"=>$credit),array("id"=>$id));
     }
     
     function delete_journal_detail($id){
       $this->db->delete("journal_detail", array("id"=>$id));
     }
+
+	function post() {
+        $data['title'] = 'Posting Journal';
+        $data['form_action'] = site_url('journal/post');
+        $data['link_back'] = anchor('/', 'Back', array('class' => 'btn btn-danger'));
+
+		// Year Period
+        $years = array();
+		for($i=date('Y'); $i>(date('Y')-5); $i--) {
+	  		$years[$i] = $i;
+	  	}
+
+        $data['period_year'] = form_dropdown('period_year',
+                        $years,
+                        $this->input->post("period_year"));
+
+		// Monthly Period
+        $list_period = array();
+		for ($i=1; $i<=12; $i++) {
+            if ($i < 10) { $i = '0'.$i; }
+            $list_period[$i] = bulan_full($i);
+        }
+        
+        $data['period_month'] = form_dropdown('period_month',
+                        $list_period,
+                        $this->input->post("period_month"));
+        
+        $data['btn_save'] = array('name' => 'btn_save', 'value' => 'Post', 'class' => 'btn btn-primary');
+
+		if ($_POST) {
+			$this->load->model("Fiscal_model","fiscal");			
+        	$thf = $this->fiscal->get($this->input->post("period_year").$this->input->post("period_month"))->row();
+        	if ($thf->fiskal_status == "Close") {
+        		$this->session->set_flashdata('message', 'Journal has been closed for that period!');
+        	} else {
+        		if (posting_journal($this->input->post("period_year").$this->input->post("period_month"))) {
+					redirect("/");
+				}
+        	}
+		}
+
+        $this->load->view('journal/post', $data);
+	}
 
 }

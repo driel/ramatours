@@ -26,7 +26,7 @@
         <table class="table fpTable table-hover">
             <thead>
                 <tr>
-                    <th width="25%"><?php sorter_link("journal/index", "gltr_date", $order, "Date"); ?></th>
+                    <th width="25%">Date</th>
                     <th>Voucher</th>
                     <th>Status</th>
                     <th width="5%">Action</th>
@@ -37,7 +37,7 @@
             foreach ($journal->result() as $row) {
             ?>
                 <tr>
-                    <td><?php echo date_format(new DateTime($row->gltr_date),'j M Y'); ?></td>
+                    <td><?php echo bulan_full(substr($row->gltr_date,4)).' '.substr($row->gltr_date,0,4); ?></td>
                     <td><?php echo $row->gltr_voucher; ?></td>
                     <td><?php echo $row->gltr_status; ?></td>
                     <td>
@@ -46,10 +46,16 @@
                                 <i class="icon-cog"></i>
                                 <span class="caret"></span>
                             </a>
+                            <?php
+                            if ($row->gltr_status == "Open") {
+                            ?>
                             <ul class="dropdown-menu pull-right">
                                 <li><?php echo anchor('journal/edit/' . $row->gltr_id, '<i class="icon-pencil"></i> Edit'); ?></li>
                                 <li><?php echo anchor('journal/delete/' . $row->gltr_id, '<i class="icon-trash"></i> Delete', array('onclick' => "return confirm('Are you sure want to delete?')")); ?></li>
                             </ul>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </td>
                 </tr>

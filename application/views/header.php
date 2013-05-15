@@ -59,10 +59,10 @@ $(window).load(function(){
 });
 
 function setBodyHeight(){
-	var cHeight = $(".content").innerHeight();
+	var bHeight = $(".body").innerHeight();
 	var wHeight = $(window).innerHeight();
-	if(cHeight < wHeight){
-		$(".sidebar").css("height", wHeight+"px");
+	if(bHeight < wHeight){
+		$(".body").css("height", wHeight+"px");
 	}
 }
 </script>
@@ -162,12 +162,14 @@ function setBodyHeight(){
 								<ul class="grand-sub-menu">
 									<li><?php echo anchor('accounts/index', 'GL Account'); ?></li>
 									<li><?php echo anchor('kurs/index', 'Kurs Pajak'); ?></li>
+									<li><?php echo anchor('fiscal/index', 'Tahun Fiskal'); ?></li>
 								</ul>
 							
 							<li><a href="#" class="blyellow">Transaction</a>
 								<div class="open"></div>
 								<ul class="grand-sub-menu">
 									<li><?php echo anchor('journal/index', 'Jurnal')?></li>
+									<li><?php echo anchor('journal/post', 'Posting')?></li>
 								</ul>
 							</li>
 						</ul>

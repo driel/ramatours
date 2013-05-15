@@ -1,25 +1,35 @@
 <?php get_header(); ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#fiskal_status").iphoneStyle({
+          checkedLabel: "Open",
+          uncheckedLabel: "Close",
+          onChange: function(e, checked){
+            if(checked){
+              $(e).attr("checked", "checked");
+            }else{
+            	$(e).removeAttr("checked");
+            }
+          }
+        });
+    });
+</script>
 <div class="body">
     <div class="content">
         <h2 class="rama-title">Form Tahun Fiskal</h2>
         <?php echo validation_errors(); ?>
         <?php echo $this->session->flashdata('message'); ?>
-        <?php echo form_open($form_action) . form_hidden('id', $kurs_id); ?>
+        <?php echo form_open($form_action) . form_hidden('id', $id); ?>
         <input type="hidden" id="act" name="act" value="<?php echo $act; ?>" />
-        <input type="hidden" id="kurs_id" name="kurs_id" value="<?php echo $kurs_id; ?>" />
         <table width="100%">
           	<tr>
-                <td width="20%">Kurs Date</td>
-                <td><div class="span3"><?php echo form_input($kurs_date); ?></div></td>
+                <td width="20%">Fiskal Date</td>
+                <td><div class="span3"><?php echo $period_month; ?>&nbsp;<?php echo $period_year; ?></div></td>
             </tr>
-            <tr>
-                <td>Kurs Dollar</td>
-                <td><?php echo form_input($kurs_us_rp); ?></td>
-            </tr>
-            <tr>
-                <td>Kurs Yen</td>
-                <td><?php echo form_input($kurs_yen_rp); ?></td>
-            </tr>
+			<tr>
+				<td>Status</td>
+				<td><?php echo $fiskal_status; ?></td>
+			</tr>
         </table>
         <input type="submit" name="save" value="Save" class="btn btn-primary" />
         <a href="<?php echo site_url('fiscal/index'); ?>" class="btn btn-danger">Back</a>
