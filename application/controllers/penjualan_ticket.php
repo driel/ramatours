@@ -118,6 +118,8 @@ class Penjualan_Ticket extends CI_Controller{
     $kurs = $this->kurs->get_last();
     $kurs_pajak = $kurs->num_rows() > 0 ? $kurs->row():0;
     
+    $data["id"] = false;
+    
     $data["tix_id"] = form_hidden("tix_id", "");
     
     $data["branch"] = form_hidden('branch', $this->session->userdata('branch'));

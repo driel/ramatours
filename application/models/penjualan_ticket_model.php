@@ -19,7 +19,7 @@ class Penjualan_Ticket_Model extends CI_Model{
   }
   
   function get($id){
-    return $this->db->join("penjualan_ticket_detail", "penjualan_ticket.tix_id=penjualan_ticket_detail.tix_id")->get_where("penjualan_ticket", array("penjualan_ticket.tix_id"=>$id));
+    return $this->db->join("penjualan_ticket_detail", "penjualan_ticket.tix_id=penjualan_ticket_detail.tix_id", "left")->get_where("penjualan_ticket", array("penjualan_ticket.tix_id"=>$id));
   }
   
   function get_items($tix_id){
@@ -185,6 +185,7 @@ class Penjualan_Ticket_Model extends CI_Model{
     }
     
     $this->db->update("penjualan_ticket_detail", array(
+        "tixd_id"=>$this->input->post("tixd_id"),
         "tix_air"=>$this->input->post("air_id"),
         "tix_route"=>$this->input->post("route"),
         "tix_description"=>$this->input->post("description"),

@@ -20,8 +20,6 @@
       $component = get_components($gaji->gaji_component_id);
       if($component){
         $comp_a_data .= '["'.$component->comp_name.'", "'.$component->comp_type.'", "'.number_format($gaji->gaji_daily_value, 2, ".", ",").'", "'.number_format($gaji->gaji_amount_value, 2, ".", ",").'", "'.$gaji->gaji_id.'", "'.$gaji->gaji_component_id.'"],';
-      }else{
-        $comp_a_data .= '[],';
       }
     }
     $comp_a_data = substr($comp_a_data, 0, (strlen($comp_a_data)-1));
@@ -35,8 +33,6 @@
       $component = get_components($gaji->gaji_component_id);
       if($component){
         $comp_b_data .= '["'.$component->comp_name.'", "'.$component->comp_type.'", "'.$gaji->gaji_daily_value.'", "'.number_format($gaji->gaji_amount_value, 2, ".", ",").'", "'.$gaji->gaji_id.'", "'.$gaji->gaji_component_id.'"],';
-      }else{
-        $comp_b_data .= '[]';
       }
     }
     $comp_b_data = substr($comp_b_data, 0, (strlen($comp_b_data)-1));

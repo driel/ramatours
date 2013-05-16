@@ -31,35 +31,39 @@ $(document).ready(function(){
 		  }
 	});
 	<?php
-	$items = get_items($id);
-	//print_r($items->result());
-	$data = "var data = [";
-	foreach($items->result() as $item){
-    $price_currency = "Rp";
-    $prefix = "rp";
-    if($item->tix_price_us > 0){
-      $price_currency = "USD";
-      $prefix = "us";
-    }
+	if($id){
+	  $items = get_items($id);
+    //print_r($items->result());
+    $data = "var data = [";
+    foreach($items->result() as $item){
+      $price_currency = "Rp";
+      $prefix = "rp";
+      if($item->tix_price_us > 0){
+        $price_currency = "USD";
+        $prefix = "us";
+      }
     
-    $discount_currency = "Rp";
-    $discount_prefix = "rp";
-    if($item->tix_discount_us > 0){
-      $discount_currency = "USD";
-      $discount_prefix = "us";
-    }
+      $discount_currency = "Rp";
+      $discount_prefix = "rp";
+      if($item->tix_discount_us > 0){
+        $discount_currency = "USD";
+        $discount_prefix = "us";
+      }
     
-    $komisi_currency = "Rp";
-    $komisi_prefix = "rp";
-    if($item->tix_komisi_us > 0){
-      $komisi_currency = "USD";
-      $komisi_prefix = "us";
-    }
+      $komisi_currency = "Rp";
+      $komisi_prefix = "rp";
+      if($item->tix_komisi_us > 0){
+        $komisi_currency = "USD";
+        $komisi_prefix = "us";
+      }
     
-    $data .= '["'.$item->name.'", "'.$item->tix_route.'","'.$item->tix_description.'", "'.$price_currency.'", "'.$item->{"tix_price_".$prefix}.'", "'.$discount_currency.'", "'.$item->{"tix_discount_".$discount_prefix}.'", "'.$komisi_currency.'", "'.$item->{"tix_discount_".$komisi_prefix}.'", "'.$item->tix_air.'", "'.$item->tixd_id.'"],';
-  }
-  $data = substr($data, 0, strlen($data)-1);
-  $data .= "];\n";
+      $data .= '["'.$item->name.'", "'.$item->tix_route.'","'.$item->tix_description.'", "'.$price_currency.'", "'.$item->{"tix_price_".$prefix}.'", "'.$discount_currency.'", "'.$item->{"tix_discount_".$discount_prefix}.'", "'.$komisi_currency.'", "'.$item->{"tix_discount_".$komisi_prefix}.'", "'.$item->tix_air.'", "'.$item->tixd_id.'"],';
+    }
+    $data = substr($data, 0, strlen($data)-1);
+    $data .= "];\n";
+	}else{
+	  $data = "var data = [];\n";
+	}
   echo $data;
 	?>
 	$("#invoice_detail").handsontable("loadData", data);
