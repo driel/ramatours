@@ -82,6 +82,9 @@ class Branches extends CI_Controller {
         $data['branch_number_voucher'] = array('name'=>'branch_number_voucher');
         $data['branch_prefix_invoice'] = array('name'=>'branch_prefix_invoice');
         
+        $data['branch_invoice_name'] = array('name'=>'branch_invoice_name');
+        $data['branch_invoice_title'] = array('name'=>'branch_invoice_title');
+        
         $data['btn_save'] = array('name' => 'btn_save', 'value' => 'Save', "class" => "btn btn-primary");
 
         $this->load->view('branches/frm_branch', $data);
@@ -100,6 +103,9 @@ class Branches extends CI_Controller {
         $data['branch_number_invoice_optional'] = array('name'=>'branch_number_invoice_optional', 'value'=>$rs->branch_number_invoice_optional);
         $data['branch_number_voucher'] = array('name'=>'branch_number_voucher', 'value'=>$rs->branch_number_voucher);
         $data['branch_prefix_invoice'] = array('name'=>'branch_prefix_invoice', 'value'=>$rs->branch_prefix_invoice);
+        
+        $data['branch_invoice_name'] = array('name'=>'branch_invoice_name', 'value'=>$rs->branch_invoice_name);
+        $data['branch_invoice_title'] = array('name'=>'branch_invoice_title', 'value'=>$rs->branch_invoice_title);
         
         $data['btn_save'] = array('name' => 'btn_save', 'value' => 'Update', "class" => "btn btn-primary");
 
@@ -120,6 +126,8 @@ class Branches extends CI_Controller {
         $branch->branch_number_invoice_optional = $this->input->post("branch_number_invoice_optional");
         $branch->branch_number_voucher = $this->input->post("branch_number_voucher");
         $branch->branch_prefix_invoice = $this->input->post("branch_prefix_invoice");
+        $branch->branch_invoice_name = $this->input->post("branch_invoice_name");
+        $branch->branch_invoice_title = $this->input->post("branch_invoice_title");
         if ($branch->save()) {
             $this->session->set_flashdata('message', 'Branch successfully created!');
             redirect('branches/');
@@ -141,7 +149,9 @@ class Branches extends CI_Controller {
             "branch_number_ticketing_invoice"=>$this->input->post("branch_number_ticketing_invoice"),
             "branch_number_invoice"=>$this->input->post("branch_number_invoice"),
             "branch_number_invoice_optional"=>$this->input->post("branch_number_voucher"),
-            "branch_prefix_invoice"=>$this->input->post("branch_prefix_invoice")
+            "branch_prefix_invoice"=>$this->input->post("branch_prefix_invoice"),
+            "branch_invoice_name"=>$this->input->post("branch_invoice_name"),
+            "branch_invoice_title"=>$this->input->post("branch_invoice_title")
         ));
 
         $this->session->set_flashdata('message', 'Branch Update successfuly.');

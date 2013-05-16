@@ -16,7 +16,7 @@ class Role extends DataMapper {
       if($result->num_rows() > 0){
         foreach($result->result() as $user){
           $role_id = $user->role_id;
-          $roles = $this->db->get_where("user_roled", array("roled_approval"=>"1", "roled_module"=>$module));
+          $roles = $this->db->get_where("user_roled", array("roled_approve"=>"1", "module_id"=>$module));
           if($roles->num_rows() > 0){
             $user_list[$user->id] = $user->username;
           }

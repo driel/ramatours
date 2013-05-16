@@ -18,7 +18,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     public function index($offset = 0) {
-        filter_access(__CLASS__, 'view');
+        filter_access("Taxes Employess", 'view');
         $tax_list = new Tax_Employee();
         switch ($this->input->get('c')) {
             case "1":
@@ -68,7 +68,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     function add() {
-        filter_access(__CLASS__, 'add');;
+        filter_access("Taxes Employess", 'add');;
 
         $data['title'] = 'Add New Tax Employee';
         $data['form_action'] = site_url('taxes_employees/save');
@@ -76,7 +76,7 @@ class Taxes_Employees extends CI_Controller {
 
         $data['id'] = '';
         $data['sp_status'] = array('name' => 'sp_status', 'id' => 'sp_status');
-        $data['sp_ptkp'] = array('name' => 'sp_ptkp', 'id' => 'sp_ptkp', 'class' => 'auto-coma', 'style' => 'margin:0!important');
+        $data['sp_ptkp'] = array('name' => 'sp_ptkp', 'id' => 'sp_ptkp', 'class' => 'auto-coma');
         $data['sp_note'] = array('name' => 'sp_note', 'id' => 'sp_note');
         $data['btn_save'] = array('name' => 'btn_save', 'value' => 'Save', "class" => "btn btn-primary");
 
@@ -84,12 +84,12 @@ class Taxes_Employees extends CI_Controller {
     }
 
     function edit($id) {
-        filter_access(__CLASS__, 'edit');
+        filter_access("Taxes Employess", 'edit');
         $te = new Tax_Employee();
         $rs = $te->where('sp_id', $id)->get();
         $data['id'] = $rs->sp_id;
         $data['sp_status'] = array('name' => 'sp_status', 'value' => $rs->sp_status);
-        $data['sp_ptkp'] = array('name' => 'sp_ptkp', 'id' => 'sp_ptkp', 'value' => rupiah($rs->sp_ptkp), 'class' => 'auto-coma', 'style' => 'margin:0!important');
+        $data['sp_ptkp'] = array('name' => 'sp_ptkp', 'id' => 'sp_ptkp', 'value' => rupiah($rs->sp_ptkp), 'class' => 'auto-coma');
         $data['sp_note'] = array('name' => 'sp_note', 'id' => 'sp_note', 'value' => $rs->sp_note);
         $data['btn_save'] = array('name' => 'btn_save', 'value' => 'Update', "class" => "btn btn-primary");
 
@@ -108,7 +108,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     function save() {
-        filter_access(__CLASS__, 'add');
+        filter_access("Taxes Employess", 'add');
 
         $te = new Tax_Employee();
         $te->sp_status = $this->input->post('sp_status');
@@ -128,7 +128,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     function update() {
-        filter_access(__CLASS__, 'edit');
+        filter_access("Taxes Employess", 'edit');
 
         $te = new Tax_Employee();
         $te->where('sp_id', $this->input->post('id'))
@@ -144,7 +144,7 @@ class Taxes_Employees extends CI_Controller {
     }
 
     function delete($id) {
-        filter_access(__CLASS__, 'delete');
+        filter_access("Taxes Employess", 'delete');
 
         $te = new Tax_Employee();
         $te->_delete($id);

@@ -2,7 +2,9 @@
 function getApproval($module){
   $ci = &get_instance();
   $ci->load->model("Role", "role");
-  $users = $ci->role->get_approval_permission($module);
+  //
+  $module = $ci->db->get("module", array('name'=>$module))->row();
+  $users = $ci->role->get_approval_permission($module->id);
   return $users;
 }
 

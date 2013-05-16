@@ -9,6 +9,7 @@ class Absensi extends CI_Controller{
   }
   
   function index(){
+    filter_access("Absensi Transaction", "view");
     $this->add();
   }
   
@@ -58,6 +59,7 @@ class Absensi extends CI_Controller{
   }
   
   function edit(){
+    filter_access("Absensi Transaction", "edit");
     $data["id"] = $this->uri->segment(3);
     $absensi = $this->absensi->get($data["id"])->row();
     $staff = get_staff_detail($absensi->staff_id);
@@ -71,6 +73,7 @@ class Absensi extends CI_Controller{
   }
   
   function create(){
+    filter_access("Absensi Transaction", "add");
     if(!empty($_FILES["csv"]["name"])){ //if uploaded file is not empty
       $config['upload_path'] = 'assets/upload';
       $config['allowed_types'] = 'csv';
@@ -111,6 +114,7 @@ class Absensi extends CI_Controller{
   }
   
   function update(){
+    filter_access("Absensi Transaction", "edit");
     $this->absensi->update();
     redirect("absensi/index");
   }

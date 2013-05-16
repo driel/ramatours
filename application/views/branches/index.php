@@ -71,8 +71,9 @@ function HeaderLink($value, $key, $col, $dir) {
     <table class="table fpTable table-hover">
         <thead>
             <tr>
-                <th width="5%"><?php echo HeaderLink("Branch ID", "branch_id", $col, $dir); ?></th>
-                <th width="50%"><?php echo HeaderLink("Branch Name", "branch_name", $col, $dir); ?></th>
+                <th width="30%"><?php echo HeaderLink("Branch Name", "branch_name", $col, $dir); ?></th>
+                <th width="30%"><?php echo HeaderLink("Invoice name", "branch_invoice_name", $col, $dir); ?></th>
+                <th width="30%"><?php echo HeaderLink("Invoice title", "branch_invoice_title", $col, $dir); ?></th>
                 <th width="5%" class="action_cell">Action</th>
             </tr>
         </thead>
@@ -80,8 +81,9 @@ function HeaderLink($value, $key, $col, $dir) {
         foreach ($branch_list as $row) {
         ?>
             <tr>
-                <td><?php echo $row->branch_id; ?></td>
                 <td><?php echo $row->branch_name; ?></td>
+                <td><?php echo $row->branch_invoice_name; ?></td>
+                <td><?php echo $row->branch_invoice_title; ?></td>
                 <td>
                   <div class="btn-group">
                       <a href="#" data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
@@ -96,14 +98,13 @@ function HeaderLink($value, $key, $col, $dir) {
                 </td>
             </tr>
         <?php } ?>
+        <tfoot class="foot_pagi">
+        	<tr>
+        		<th colspan="4"><?php echo $pagination; ?></th>
+        	</tr>
+        </tfoot>
     </table>
     <div class="clearfix"></div>
-    <br>
-    <div class="pagination pagination-right">
-        <ul>
-            <?php echo $pagination; ?>
-        </ul>
-    </div>
   </div>
 </div>
 <?php get_footer(); ?>

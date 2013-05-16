@@ -83,6 +83,15 @@ $(document).ready(function(){
         $("#komisi_rp").text(accounting.formatMoney(komisi_rp, ""));
         $("#komisi_us").text(accounting.formatMoney(komisi_us, ""));
       }
+      
+      if(source == "alter"){
+        var id = deleted_row[0][10]
+        var url = "<?php echo $url;?>/penjualan_ticket/delete_item/"+id;
+        $.ajax({
+          url: url,
+          type: "GET"
+        });
+      }
     },
     columns: [
       {

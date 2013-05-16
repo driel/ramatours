@@ -17,6 +17,7 @@ class Settings extends CI_Controller {
   }
 
   public function index() {
+    filter_access("Settings", "view");
     $setting = new Setting();
      
     $data['form_action'] = site_url('settings/save');
@@ -55,6 +56,9 @@ class Settings extends CI_Controller {
     // reservation
     $data["rti_start_from"] = array("name"=>"rti_start_from", "value"=>$setting->get_val("rti_start_from"));
     $data["rti_length"] = array("name"=>"rti_length", "value"=>$setting->get_val("rti_length"));
+    
+    // absensi
+    $data["default_absensi_day"] = array("name"=>"default_absensi_day", "value"=>$setting->get_val("default_absensi_day"));
 
     $data['btn_save'] = array('name' => 'btn_save', 'value' => 'Update', 'class' => 'btn -btn-primary');
 
@@ -68,7 +72,8 @@ class Settings extends CI_Controller {
           "company_name","address","phone","fax","email", "city","no_npwp",
           "hrd_wp","hrd_tj_percent", "hrd_tj_max","hrd_net1","hrd_net2","hrd_net3","hrd_pph_percent1","hrd_pph_percent2","hrd_pph_percent3","hrd_pph_percent4",
           "invoice_note","invoice_number_length","invoice_ticketing_ho_start","invoice_ticketing_jkt_start","invoice_ticketing_jog_start","code_behind_invoice",
-          "rti_start_from","rti_length"
+          "rti_start_from","rti_length",
+          "default_absensi_day"
       );
       foreach($keys as $k){
         $v = $this->input->post($k);

@@ -1,7 +1,14 @@
 <?php
 class Cuti_model extends CI_Model{
-  function get_all(){
-    return $this->db->get("cuti");
+  
+  function get_all($order_by = 'date_request', $order = "ASC", $per_page = 0, $offset = 0){
+    $order_by = strlen($order_by) ? $order_by:"date_request";
+    if($per_page == 0 && $offset == 0){
+      $jual_ticket = $this->db->order_by($order_by, $order)->get("cuti");
+    }else{
+      $jual_ticket = $this->db->order_by($order_by, $order)->get("cuti", $per_page, $offset);
+    }
+    return $jual_ticket;
   }
   
   function get($id){

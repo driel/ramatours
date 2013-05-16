@@ -6,6 +6,7 @@
 ** deleted_data is a global variable located on hansontable script, added by myself 
 */
 var errors = 0;
+var total_daily_a = 0, total_monthly_a = 0, total_daily_b = 0, total_monthly_b = 0;
 $(document).ready(function(){
   
   $("#family_table").handsontable({
@@ -124,9 +125,9 @@ $(document).ready(function(){
     startCols: 4,
     startRows: 3,
     minSpareRows: 1,
-    colHeaders: ["Date", "Gelar", "Nama", ""],
-    colWidths: [50, 300, 200],
-    columns: [{type: 'numeric'}, {}, {}],
+    colHeaders: ["Date", "Description", ""],
+    colWidths: [50, 300],
+    columns: [{type: 'numeric'}, {}],
     contextMenu: true,
     onChange: function(update, source){
       if(source != "alter" && update){ // there's no changes on columns, no need to flag 1
@@ -134,16 +135,15 @@ $(document).ready(function(){
         var data = $("#edu_table").handsontable("getData")[row];
         var url = "<?php echo $url.'/staffs/update_edu'; ?>";
         $.post(url, {
-          id: data[3],
+          id: data[2],
           date: data[0],
-          gelar: data[1],
-          name: data[2]
+          name: data[1]
         });
       }
       
       // delete row ajax
       if(source == "alter"){
-        var id = deleted_row[0][3];
+        var id = deleted_row[0][2];
         var url = "<?php echo $url.'/educations/ajax_delete/'; ?>"+id;
         $.get(url);
       }
@@ -178,6 +178,7 @@ $(document).ready(function(){
     ],
     onChange: function(update, source){
       calculate_comp_a($("#salary_component_a"));
+      take_home_pay();
       if(source=="edit" && update[0][1]==0){
         var url = "<?php echo $url.'/components/get_where_component'; ?>/"+update[0][3];
         $.getJSON(url, function(data){
@@ -250,6 +251,7 @@ $(document).ready(function(){
     ],
     onChange: function(update, source){
       calculate_comp_b($("#salary_component_b"));
+      take_home_pay();
       if(source=="edit" && update[0][1]==0){
         var url = "<?php echo $url.'/components/get_where_component'; ?>/"+update[0][3];
         $.getJSON(url, function(data){
@@ -374,8 +376,8 @@ function getEdu(){
   var row_length = data.length;
   var edu = "";
   for(i=0; i<row_length; i++){
-    if(data[i][0] != null && data[i][1] != null && data[i][2] != null){
-      edu += '<input type="hidden" name="edu[]" value="'+data[i][0]+';'+data[i][1]+';'+data[i][2]+';'+data[i][3]+'">';
+    if(data[i][0] != null && data[i][1] != null){
+      edu += '<input type="hidden" name="edu[]" value="'+data[i][0]+';'+data[i][1]+';'+data[i][2]+'">';
     }else{
       errors++;
     }
@@ -437,6 +439,8 @@ function calculate_comp_a($instance){
   }
   $("#total_a_daily").html(accounting.formatMoney(total_daily, "Rp. "));
   $("#total_a_monthly").html(accounting.formatMoney(total_monthly, "Rp. "));
+  total_daily_a = total_daily;
+  total_monthly_a = total_monthly;
 }
 
 function calculate_comp_b($instance){
@@ -451,4 +455,7 @@ function calculate_comp_b($instance){
   }
   $("#total_b_daily").html(accounting.formatMoney(total_daily, "Rp. "));
   $("#total_b_monthly").html(accounting.formatMoney(total_monthly, "Rp. "));
+  
+  total_daily_b = total_daily;
+  total_monthly_b = total_monthly;
 }

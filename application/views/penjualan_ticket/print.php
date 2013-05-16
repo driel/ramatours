@@ -1,6 +1,8 @@
 <?php 
-$setting = new Setting();
-$branch = get_branch_detail($penjualan->tix_branch_id);
+if($penjualan){
+  $setting = new Setting();
+  $branch = get_branch_detail($penjualan->tix_branch_id);
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -33,7 +35,6 @@ $branch = get_branch_detail($penjualan->tix_branch_id);
 	<div style="font:bold 17px verdana"><?php echo $setting->get_val("company_name"); ?></div>
 	<?php echo $setting->get_val("address"); ?><br />
 	Telp. <?php echo $setting->get_val("phone");?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fax <?php echo $setting->get_val("fax"); ?>
-	<?php endif; ?>
 	<div id="invoice_text">INVOICE</div><br />
 	<div id="invoice_head_left">
 	  <table>
@@ -88,7 +89,7 @@ $branch = get_branch_detail($penjualan->tix_branch_id);
 		<tr>
 			<th width="30">No</th>
 			<th width="150">Airline</th>
-			<th width="250">Route, Description</th>
+			<th width="250">Description</th>
 			<th width="120">Price</th>
 			<th width="80">Discount</th>
 			<th width="120">Amount</th>
@@ -200,11 +201,14 @@ $branch = get_branch_detail($penjualan->tix_branch_id);
 			</tr>
 		</table>
 		<br /><br />
-		<?php echo "<b>".$branch->branch_name."</b> , ".date("d-M-Y"); ?>
+		<?php echo "<b>".$branch->branch_name."</b> , ".$penjualan->tix_date_time; ?>
 		<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-		<div class="ta_center">(Director name)</div>
+		<div class="ta_center"><?php echo $branch->branch_invoice_name; ?></div>
 		<hr class="thin" />
-		<div class="ta_center">Director</div>
+		<div class="ta_center"><?php echo $branch->branch_invoice_title; ?></div>
 	</div>
+	<?php else: ?>
+	<pre>Invalid Invoice ID</pre>
+	<?php endif; ?>
 </body>
 </html>

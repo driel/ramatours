@@ -8,6 +8,7 @@ class Izin extends CI_Controller{
   }
   
   function index(){
+    filter_access("Izin Transaction", "view");
     switch ($this->input->get('c')) {
       case "1":
           $data['col'] = "izin_staff_id";
@@ -47,6 +48,7 @@ class Izin extends CI_Controller{
   }
   
   function add(){
+    filter_access("Izin Transaction", "add");
     $data["izin_staff"] = array("id"=>"staff", "name"=>"izin_staff");
     $data["izin_date"] = array("name"=>"izin_date", "class"=>"datepicker");
     $data["izin_jumlah_hari"] = array("name"=>"izin_jumlah_hari");
@@ -58,6 +60,7 @@ class Izin extends CI_Controller{
   }
   
   function edit(){
+    filter_access("Izin Transaction", "edit");
     $data["id"] = $this->uri->segment(3);
     $izin = $this->izin->get($data["id"])->row();
     $staff = get_staff_detail($izin->izin_staff_id);
@@ -71,6 +74,7 @@ class Izin extends CI_Controller{
   }
   
   function create(){
+    filter_access("Izin Transaction", "add");
     $this->form_validation->set_rules(array(
       array("field"=>"izin_staff", "label"=>"Staff Name", "rules"=>"required"),
       array("field"=>"izin_date", "label"=>"Tanggal izin", "rules"=>"required"),
@@ -85,6 +89,7 @@ class Izin extends CI_Controller{
   }
   
   function update(){
+    filter_access("Izin Transaction", "edit");
     $this->form_validation->set_rules(array(
       array("field"=>"izin_staff", "label"=>"Staff Name", "rules"=>"required"),
       array("field"=>"izin_date", "label"=>"Tanggal izin", "rules"=>"required"),
@@ -99,6 +104,7 @@ class Izin extends CI_Controller{
   }
   
   function delete(){
+    filter_access("Izin Transaction", "delete");
     $id = $this->uri->segment(3);
     $this->db->delete("izin", array("izin_id"=>$id));
     redirect("izin/index");

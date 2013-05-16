@@ -18,7 +18,11 @@
   if($component_a){
     foreach($component_a->result() as $gaji){
       $component = get_components($gaji->gaji_component_id);
-      $comp_a_data .= '["'.$component->comp_name.'", "'.$component->comp_type.'", "'.number_format($gaji->gaji_daily_value, 2, ".", ",").'", "'.number_format($gaji->gaji_amount_value, 2, ".", ",").'", "'.$gaji->gaji_id.'", "'.$gaji->gaji_component_id.'"],';
+      if($component){
+        $comp_a_data .= '["'.$component->comp_name.'", "'.$component->comp_type.'", "'.number_format($gaji->gaji_daily_value, 2, ".", ",").'", "'.number_format($gaji->gaji_amount_value, 2, ".", ",").'", "'.$gaji->gaji_id.'", "'.$gaji->gaji_component_id.'"],';
+      }else{
+        $comp_a_data .= '[],';
+      }
     }
     $comp_a_data = substr($comp_a_data, 0, (strlen($comp_a_data)-1));
   }
@@ -29,7 +33,11 @@
   if($component_b){
     foreach($component_b->result() as $gaji){
       $component = get_components($gaji->gaji_component_id);
-      $comp_b_data .= '["'.$component->comp_name.'", "'.$component->comp_type.'", "'.$gaji->gaji_daily_value.'", "'.number_format($gaji->gaji_amount_value, 2, ".", ",").'", "'.$gaji->gaji_id.'", "'.$gaji->gaji_component_id.'"],';
+      if($component){
+        $comp_b_data .= '["'.$component->comp_name.'", "'.$component->comp_type.'", "'.$gaji->gaji_daily_value.'", "'.number_format($gaji->gaji_amount_value, 2, ".", ",").'", "'.$gaji->gaji_id.'", "'.$gaji->gaji_component_id.'"],';
+      }else{
+        $comp_b_data .= '[]';
+      }
     }
     $comp_b_data = substr($comp_b_data, 0, (strlen($comp_b_data)-1));
   }
@@ -110,6 +118,19 @@
     calculate_comp_a($("#salary_component_a"));
     calculate_comp_b($("#salary_component_b"));
   });
+
+  function take_home_pay(){
+	  <?php 
+	    $setting = new Setting();
+	    $absen = $setting->get_val("default_absensi_day");
+	    if($edit){
+        $absensi = get_absensi($id);
+        $absen = $absensi ? $absensi->hari_masuk:"26";
+      }
+	  ?>
+	  var total = (total_daily_a * <?php echo $absen; ?>) + (total_daily_b * <?php echo $absen; ?>) + total_monthly_a + total_monthly_b;
+	  $("#take_home_pay").text(accounting.formatMoney(total, ""));
+	}
 </script>
 <div class="body">
   <div class="content">
@@ -329,7 +350,7 @@
             <h5>Total Component A</h5>
           	<div>
           	  <span><b>Daily : </b></span>
-          	  <span id="total_a_daily"></span>
+          	  <span id="total_a_daily"></span> x <a data-title="jumlah hari masuk" data-placement="top" class="bootstrap-tooltip"><?php echo $absen; ?> Hari</a>
           	</div>
           	<div>
           	  <span><b>Monthly : </b></span>
@@ -344,7 +365,7 @@
             <h5>Total Component B</h5>
           	<div>
           	  <span><b>Daily : </b></span>
-          	  <span id="total_b_daily"></span>
+          	  <span id="total_b_daily"></span>  x <a data-title="jumlah hari masuk" data-placement="top" class="bootstrap-tooltip"><?php echo $absen; ?> Hari</a>
           	</div>
           	<div>
           	  <span><b>Monthly : </b></span>
@@ -352,6 +373,9 @@
           	</div>
           </div>
         </div>
+        <br class="cl" />
+        <div style="border-bottom: 1px solid #000; margin: 5px 0;"></div>
+        <b>Take Home pay (Total A + Total B) :</b> Rp. <span id="take_home_pay"></span>
       </div>
       <div class="tab-pane" id="salary_history">
         <h5>Salary histories</h5>

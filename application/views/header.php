@@ -54,17 +54,22 @@ echo load_js(array(
 <script src="<?php echo base_url(); ?>assets/js/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/docs.css" />
 <script>
-$(window).load(function(){
-	setBodyHeight();
-});
-
-function setBodyHeight(){
-	var bHeight = $(".body").innerHeight();
+$(function($){
+	$('#select_perpage').change(function(e){
+    var v = $(this).val();
+    var url = "<?php echo current_url();?>/?to_page="+v;
+    window.location.href = url;
+  });
+	  
+	var cHeight = $(".content").innerHeight();
 	var wHeight = $(window).innerHeight();
-	if(bHeight < wHeight){
-		$(".body").css("height", wHeight+"px");
+	if(cHeight < wHeight){
+		$(".sidebar").css("height", wHeight+"px");
+	}else{
+		$(".sidebar").css("height", cHeight+"px");
 	}
-}
+		
+});
 </script>
 </head>
 <body>

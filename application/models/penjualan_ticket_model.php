@@ -196,4 +196,8 @@ class Penjualan_Ticket_Model extends CI_Model{
         "tix_komisi_us"=>$komisi_us
     ), array("tixd_id"=>$this->input->post("tixd_id")));
   }
+  
+  function delete_item($id){
+    $this->db->delete("penjualan_ticket_detail", array("tixd_id"=>$id));
+  }
 }

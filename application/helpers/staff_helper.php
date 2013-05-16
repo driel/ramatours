@@ -52,3 +52,9 @@ function get_components($id){
   $result = $ci->db->get_where("components", array("comp_id"=>$id))->row();
   return $result;
 }
+
+function get_absensi($id){
+  $ci = &get_instance();
+  $result = $ci->db->get_where("absensi", array("staff_id"=>$id))->row();
+  return $result;
+}

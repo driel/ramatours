@@ -1,5 +1,7 @@
 <?php
 class Penjualan_Ticket extends CI_Controller{
+  private $perpage = 50;
+  
   function __construct(){
     parent::__construct();
     $this->load->model("Penjualan_Ticket_Model", "penjualan");
@@ -21,7 +23,7 @@ class Penjualan_Ticket extends CI_Controller{
     if(strlen($tp)){
       $this->session->set_userdata(array("to_page"=>$tp));
     }
-    $this->perpage = ($this->session->userdata("to_page") > 0 ? $this->session->userdata("to_page"):10);
+    $this->perpage = $this->session->userdata("to_page") > 0 ? $this->session->userdata("to_page"):50;
     // order by
     $order_by = $this->input->get("order_by");
     $order = $this->input->get("order");
@@ -105,7 +107,10 @@ class Penjualan_Ticket extends CI_Controller{
   
   function update_item(){
     $this->penjualan->update_item();
-    print_r($this->input->post());
+  }
+  
+  function delete_item($id){
+    $this->penjualan->delete_item($id);
   }
   
   // private functions

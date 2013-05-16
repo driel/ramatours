@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 class Staffs extends CI_Controller {
 
-    private $limit = 10;
+    private $perpage = 50;
 
     public function __construct() {
         parent::__construct();
@@ -24,11 +24,19 @@ class Staffs extends CI_Controller {
         $this->load->model('Work');
         $this->load->model('Education');
         $this->load->helper("staff");
+        $this->load->helper("branch");
+        $this->load->helper("dept");
+        $this->load->helper("title");
         $this->session->userdata('logged_in') == true ? '' : redirect('users/sign_in');
     }
 
     public function index($offset = 0) {
         filter_access('Staff', 'view');
+        $tp = $this->input->get("to_page");
+        if(strlen($tp)){
+          $this->session->set_userdata(array("to_page"=>$tp));
+        }
+        $this->perpage = $this->session->userdata("to_page") > 0 ? $this->session->userdata("to_page"):50;
         $staff_list = new Staff();
         switch ($this->input->get('c')) {
             case "1":
@@ -72,23 +80,24 @@ class Staffs extends CI_Controller {
         }
 
         $total_rows = $staff_list->count();
-        $data['title'] = "Staffs";
-        $data['btn_add'] = anchor('staffs/add', 'Add New', array('class' => 'btn btn-primary'));
-        $data['btn_home'] = anchor(base_url(), 'Back', array('class' => 'btn'));
-
-        $uri_segment = 3;
-        $offset = $this->uri->segment($uri_segment);
-
-        $staff_list->order_by($data['col'], $data['dir']);
-        $data['staff_list'] = $staff_list
-                        ->get($this->limit, $offset)->all;
-
-        $config['base_url'] = site_url("staffs/index");
-        $config['total_rows'] = $total_rows;
-        $config['per_page'] = $this->limit;
-        $config['uri_segment'] = $uri_segment;
-        $this->pagination->initialize($config);
-        $data['pagination'] = $this->pagination->create_links();
+        
+        $offset = $this->uri->segment(3);
+        $q = $this->input->get("q");
+        $by = $this->input->get("search_by");
+        
+        if(strlen($q)){
+          if(strlen($by)){
+            $data["staff_list"] = $staff_list->like($by, $q)->get()->all;
+          }else{
+            $staff_list->order_by($data['col'], $data['dir']);
+            $data['staff_list'] = $staff_list->get($this->perpage, $offset)->all;
+          }
+        }else{
+          $staff_list->order_by($data['col'], $data['dir']);
+          $data['staff_list'] = $staff_list->get($this->perpage, $offset)->all;
+          $config = init_paginate(site_url("staffs/index"), $staff_list->count(), $this->perpage);
+          $this->pagination->initialize($config);
+        }
 
         $this->load->view('staffs/index', $data);
     }
@@ -178,6 +187,8 @@ class Staffs extends CI_Controller {
         $data["date_out"] = array("name"=>"date_out", "class"=>"datepicker");
         $data["out_note"] = array("name"=>"out_note");
         $data["pph_by_company"] = 'n';
+        
+        $data["edit"] = false;
 
         $this->load->view('staffs/frm_staff', $data);
     }
@@ -279,6 +290,8 @@ class Staffs extends CI_Controller {
         $data["date_out"] = array("name"=>"date_out", "class"=>"datepicker", "value"=>$staff->date_out);
         $data["out_note"] = array("name"=>"out_note", "value"=>$staff->out_note);
         $data["pph_by_company"] = $staff->pph_by_company;
+        
+        $data["edit"] = true;
 
         $this->load->view('staffs/frm_staff', $data);
     }
@@ -587,11 +600,10 @@ class Staffs extends CI_Controller {
       $edus = $this->input->post("edu");
       if(is_array($edus)){
         foreach($edus as $e){
-          list($date, $gelar, $name, $id)  = explode(";", $e);
+          list($date, $name, $id)  = explode(";", $e);
           if($id =="undefined" || $id == ""){
             $edu->staff_id = $staff_id;
             $edu->edu_year = $date;
-            $edu->edu_gelar = $gelar;
             $edu->edu_name = $name;
             $edu->save();
           }
@@ -674,12 +686,10 @@ class Staffs extends CI_Controller {
     function update_edu(){
        $id = $this->input->post("id");
        $date = $this->input->post("date");
-       $gelar = $this->input->post("gelar");
        $name = $this->input->post("name");
        $edu = new Education();
        $edu->where("edu_id", $id)->update(array(
          "edu_year"=>$date,
-         "edu_gelar"=>$gelar,
          "edu_name"=>$name
        ));
     }
@@ -817,7 +827,7 @@ class Staffs extends CI_Controller {
 
         $staff_list->order_by($data['col'], $data['dir']);
         $data['staff_list'] = $staff_list
-                        ->get($this->limit, $offset)->all;
+                        ->get($this->perpage, $offset)->all;
 
 		// Branch
         $branch = new Branch();
@@ -866,7 +876,7 @@ class Staffs extends CI_Controller {
         } else {
           	$config['base_url'] = site_url("staffs/index");
           	$config['total_rows'] = $total_rows;
-          	$config['per_page'] = $this->limit;
+          	$config['per_page'] = $this->perpage;
           	$config['uri_segment'] = $uri_segment;
           	$this->pagination->initialize($config);
           	$data['pagination'] = $this->pagination->create_links();

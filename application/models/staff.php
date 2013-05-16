@@ -44,6 +44,10 @@ class Staff extends DataMapper {
         $this->db->where('staff_id', $id);
         $this->db->delete($this->table);
     }
+    
+    function search($by, $value){
+      return $this->db->like($by, $value)->get('staffs')->all;
+    }
 
     function _login() {
         $staff = new Staff();

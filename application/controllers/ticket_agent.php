@@ -9,6 +9,7 @@ class Ticket_Agent extends CI_Controller{
   }
   
   function index(){
+    filter_access("Ticket Agent", "view");
     $tp = $this->input->get("to_page");
     if(strlen($tp)){
       $this->session->set_userdata(array("to_page"=>$tp));
@@ -38,16 +39,19 @@ class Ticket_Agent extends CI_Controller{
   }
   
   function add(){
+    filter_access("Ticket Agent", "add");
     $data = $this->_addData();
     $this->load->view("ticket_agent/form", $data);
   }
   
   function edit($id){
+    filter_access("Ticket Agent", "edit");
     $data = $this->_editData($id);
     $this->load->view("ticket_agent/form", $data);
   }
   
   function save(){
+    filter_access("Ticket Agent", "add");
     $this->form_validation->set_rules(array(
         array("field"=>"code", "label"=>"Code", "rules"=>"required"),
         array("field"=>"name", "label"=>"Name", "rules"=>"required"),
@@ -68,6 +72,7 @@ class Ticket_Agent extends CI_Controller{
   }
   
   function update(){
+    filter_access("Ticket Agent", "edit");
     $this->form_validation->set_rules(array(
         array("field"=>"code", "label"=>"Code", "rules"=>"required"),
         array("field"=>"name", "label"=>"Name", "rules"=>"required"),
@@ -89,6 +94,7 @@ class Ticket_Agent extends CI_Controller{
   }
   
   function delete($id){
+    filter_access("Ticket Agent", "delete");
     $this->agent->delete($id);
     redirect("ticket_agent/index");
   }

@@ -1,4 +1,11 @@
 <?php get_header(); ?>
+<script>
+$(window).load(function(){
+	$(".customscroll").mCustomScrollbar({
+	  horizontalScroll:true
+	});
+});
+</script>
 <?php
 
 function HeaderLink($value, $key, $col, $dir) {
@@ -69,7 +76,7 @@ function HeaderLink($value, $key, $col, $dir) {
 ?>
 
 <div class="body">
-  <div class="content">
+  <div class="content customscroll" style="overflow:auto">
     <?php echo $this->session->flashdata('message'); ?>
     <div class="page-header">
       <div class="icon">
@@ -84,9 +91,9 @@ function HeaderLink($value, $key, $col, $dir) {
       <?php echo header_btn_group("staffs/to_excel", "staffs/add");?>
     </div>
     <div id="search_bar" class="widget-header">
-      <?php search_form(array(""=>"By","salary_period"=>"Period")); ?>
+      <?php search_form(array(""=>"By","staff_name"=>"Name", "staff_nik"=>"NIK")); ?>
     </div>
-    <table class="table fpTable table-hover">
+    <table class="table fpTable table-hover" style="width:1500px">
       <thead>
         <tr>
           <th><?php echo HeaderLink("NIK", "staff_nik", $col, $dir); ?></th>
@@ -103,6 +110,9 @@ function HeaderLink($value, $key, $col, $dir) {
       </thead>
       <?php
       foreach ($staff_list as $row) {
+      $branch = get_branch_detail($row->staff_cabang);
+      $dept = get_dept_detail($row->staff_departement);
+      $title = get_title_detail($row->staff_jabatan);
       ?>
           <tr>
             <td><?php echo $row->staff_nik; ?></td>
@@ -111,9 +121,9 @@ function HeaderLink($value, $key, $col, $dir) {
             <td><?php echo $row->staff_email; ?></td>
             <td><?php echo $row->staff_phone_home; ?></td>
             <td><?php echo $row->staff_phone_hp; ?></td>
-            <td><?php echo $row->staff_cabang; ?></td>
-            <td><?php echo $row->staff_departement; ?></td>
-            <td><?php echo $row->staff_jabatan; ?></td>
+            <td><?php echo $branch ? $branch->branch_name:'-'; ?></td>
+            <td><?php echo $dept ? $dept->dept_name:'-'; ?></td>
+            <td><?php echo $title ? $title->title_name:'-'; ?></td>
             <td>
               <div class="btn-group">
                 <a href="#" data-toggle="dropdown" class="btn btn-mini dropdown-toggle">
@@ -136,13 +146,13 @@ function HeaderLink($value, $key, $col, $dir) {
             </td>
           </tr>
       <?php } ?>
+      <tfoot class="foot_pagi">
+      	<tr>
+      		<th colspan="10"><?php echo $this->pagination->create_links(); ?></th>
+      	</tr>
+      </tfoot>
     </table>
     <div class="clearfix"></div>
-    <div class="pagination pagination-right">
-      <ul>
-        <?php echo $pagination; ?>
-      </ul>
-    </div>
   </div>
 </div>
 

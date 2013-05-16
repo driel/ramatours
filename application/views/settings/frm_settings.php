@@ -38,6 +38,8 @@
 				</li>
 				<li><a href="#reservation" data-toggle="tab">Reservation</a>
 				</li>
+				<li><a href="#absensi" data-toggle="tab">Absensi</a>
+				</li>
 			</ul>
 			<div class="tab-content">
 				<div id="general" class="tab-pane active">
@@ -273,6 +275,18 @@
 				  		<td>
 				  		  <div class="span1">
 				  		    <?php echo form_input($rti_length); ?>
+				  		  </div>
+				  		</td>
+				  	</tr>
+				  </table>
+				</div>
+				<div id="absensi" class="tab-pane">
+				  <table width="100%">
+				  	<tr>
+				  		<td width="20%">Default absensi day</td>
+				  		<td>
+				  		  <div class="span1 input-append">
+				  		    <?php echo form_input($default_absensi_day); ?><span class="btn">Hr</span>
 				  		  </div>
 				  		</td>
 				  	</tr>
