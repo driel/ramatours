@@ -198,18 +198,44 @@ if (!function_exists('print_slip_gaji')) {
     	$staff_id = $staff->staff_id;
     	$ci = &get_instance();
     	$ci->load->model("Absensi_model", "absensi");
+    	
+    	$branch = $ci->db->get_where("branches",array("branch_id"=>$staff->staff_cabang))->row();
+    	$dept = $ci->db->get_where("departments",array("dept_id"=>$staff->staff_departement))->row();
+    	$title = $ci->db->get_where("titles",array("title_id"=>$staff->staff_jabatan))->row();
+
+    	$ci->db->select('*');
+    	$ci->db->join("salary_components_a","components.comp_id=salary_components_a.gaji_component_id");
+    	$ci->db->order_by("comp_id","ASC");
+    	$ci->db->where("comp_type !=","Yearly");
+    	$ci->db->where("staff_id",$staff_id);
+  		$compsa = $ci->db->get("components");
+
+		$compA = array();
+		foreach($compsa->result() as $row) {
+			$compA[] = $row;
+		}
+
+    	$ci->db->select('*');
+    	$ci->db->join("salary_components_b","components.comp_id=salary_components_b.gaji_component_id");
+    	$ci->db->order_by("comp_id","ASC");
+    	$ci->db->where("comp_type !=","Yearly");
+    	$ci->db->where("staff_id",$staff_id);
+  		$compsb = $ci->db->get("components");
+
+		$compB = array();
+		foreach($compsb->result() as $row) {
+			$compB[] = $row;
+		}
+
     	$content = "
-		<table width=\"500px\" border=\"0\" align=\"center\">
+		<table width=\"100%\" border=\"0\" align=\"center\">
 			<tr>
-				<td colspan=\"3\" align=\"center\">PT Rama Tours</td>
+				<td colspan=\"6\" align=\"center\"><h3>Slip Gaji: ".bulan_full($_GET["period_month"])." ".$_GET["period_year"]."</h3></td>
 			</tr>
 			<tr>
-				<td colspan=\"3\" align=\"center\">Slip Gaji</td>
-			</tr>
-			<tr>
-				<td colspan=\"3\" align=\"center\">&nbsp;</td>
-			</tr>
-			<tr>
+				<td width=\"20%\">Branch</td>
+				<td width=\"5px\" align=\"center\">:</td>
+				<td>".$branch->branch_name."</td>
 				<td width=\"20%\">Nama</td>
 				<td width=\"5px\" align=\"center\">:</td>
 				<td>".$staff->staff_name."</td>
@@ -217,72 +243,94 @@ if (!function_exists('print_slip_gaji')) {
 			<tr>
 				<td width=\"20%\">Departemen</td>
 				<td width=\"5px\" align=\"center\">:</td>
-				<td>".$staff->staff_departement."</td>
-			</tr>
-			<tr>
+				<td>".$dept->dept_name."</td>
 				<td width=\"20%\">Jabatan</td>
 				<td width=\"5px\" align=\"center\">:</td>
-				<td>".$staff->staff_jabatan."</td>
+				<td>".$title->title_name."</td>
 			</tr>
 			<tr>
-				<td width=\"20%\">Cabang</td>
-				<td width=\"5px\" align=\"center\">:</td>
-				<td>".$staff->staff_cabang."</td>
+				<td colspan=\"6\" align=\"center\">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan=\"3\" align=\"center\">&nbsp;</td>
-			</tr>
-			<tr>
-				<td colspan=\"3\" align=\"center\">
-					<table width=\"500px;\" style=\"border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse; border-style: solid;\">
+				<td colspan=\"6\" align=\"center\">
+					<table width=\"100%\" style=\"border-width: 0 0 0 0; border-spacing: 0; border-collapse: collapse; border-style: solid;\">
      					<tr>
-				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">Jenis</td>
-				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" width=\"10px\">Jml Hari</td>
-				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">Jumlah</td>
+				            <th align=\"left\" colspan=\"3\" style=\"margin: 0; padding: 4px; border-width: 1px 0 1px 0; border-style: solid;\">Component A</th>
+				            <th align=\"left\" colspan=\"3\" style=\"margin: 0; padding: 4px; border-width: 1px 0 1px 0; border-style: solid;\">Component B</th>
           				</tr>";
 
-				    	$ci->db->select('*');
-				    	$ci->db->join("salary_components_a","components.comp_id=salary_components_a.gaji_component_id");
-				    	$ci->db->order_by("comp_id","ASC");
-				    	$ci->db->where("comp_type !=","Yearly");
-				    	$ci->db->where("staff_id",$staff_id);
-				  		$compsa = $ci->db->get("components");
+						$totalA = 0;
+						$totalB = 0;
 
-						foreach($compsa->result() as $comp) {
+						$lim = count($compA) > count($compB)? count($compA):count($compB);
+						for($i=0; $i<$lim; $i++) {
 							$staff_absensi = $ci->absensi->get_staff_absensi($staff_id,$period)->row();
-							$comp_a = $ci->db->where("staff_id",$staff_id)->where("gaji_component_id",$comp->comp_id)->get("salary_components_a")->row();
+							$comp_a = $ci->db->where("staff_id",$staff_id)->where("gaji_component_id",(isset($compA[$i])? $compA[$i]->comp_id:0))->get("salary_components_a")->row();
+							$comp_b = $ci->db->where("staff_id",$staff_id)->where("gaji_component_id",(isset($compB[$i])? $compB[$i]->comp_id:0))->get("salary_components_b")->row();
+							
+							$compA_name = (isset($compA[$i])? $compA[$i]->comp_name:'');
+							$compB_name = (isset($compB[$i])? $compB[$i]->comp_name:'');
+							
+							$totValueA = (isset($compA[$i])? ($compA[$i]->comp_type == 'Daily'? (isset($comp_a)? $comp_a->gaji_daily_value:0)*$staff_absensi->hari_masuk:(isset($comp_a)? $comp_a->gaji_amount_value:0)):0);
+							$totValueB = (isset($compB[$i])? ($compB[$i]->comp_type == 'Daily'? (isset($comp_b)? $comp_b->gaji_daily_value:0)*$staff_absensi->hari_masuk:(isset($comp_b)? $comp_b->gaji_amount_value:0)):0);
+							
+							$totalA += $totValueA;
+							$totalB += $totValueB;
 							
 							$content .= "
      					<tr>
-				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".$comp->comp_name."</td>
-				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" width=\"10px\">".($comp->comp_type == 'Daily'? $staff_absensi->hari_masuk:'-')."</td>
-				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".($comp->comp_type == 'Daily'? number_format($comp_a->gaji_daily_value*$staff_absensi->hari_masuk,0,",","."):number_format($comp_a->gaji_amount_value,0,",","."))."</td>
+				            <td style=\"margin: 0; padding: 4px;\">".$compA_name."</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">Rp.</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">".number_format($totValueA,0,",",".")."</td>
+				            <td style=\"margin: 0; padding: 4px;\">".$compB_name."</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">Rp.</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">".number_format($totValueB,0,",",".")."</td>
           				</tr>";
           				}
+          				$grand = $totalA+$totalB;
           				$content .= "
      					<tr>
-				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" colspan=\"3\">Lainnya</td>
-          				</tr>";
-
-				    	$ci->db->select('*');
-				    	$ci->db->join("salary_components_b","components.comp_id=salary_components_b.gaji_component_id");
-				    	$ci->db->order_by("comp_id","ASC");
-				    	$ci->db->where("comp_type !=","Yearly");
-				    	$ci->db->where("staff_id",$staff_id);
-				  		$compsb = $ci->db->get("components");
-
-						foreach($compsb->result() as $comp) {
-							$staff_absensi = $ci->absensi->get_staff_absensi($staff_id,$period)->row();
-							$comp_a = $ci->db->where("staff_id",$staff_id)->where("gaji_component_id",$comp->comp_id)->get("salary_components_b")->row();
-						
-							$content .= "
+				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 0 0 0; border-style: solid;\">Total(A) : </td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 0 0 0; border-style: solid;\">Rp.</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 0 0 0; border-style: solid;\">".number_format($totalA,0,",",".")."</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 0 0 0; border-style: solid;\">Total(B) : </td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 0 0 0; border-style: solid;\">Rp.</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 0 0 0; border-style: solid;\">".number_format($totalB,0,",",".")."</td>
+          				</tr>
+          				<tr><td colspan=\"6\">&nbsp;</td></tr>
      					<tr>
-				            <td style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".$comp->comp_name."</td>
-				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\" width=\"10px\">".($comp->comp_type == 'Daily'? $staff_absensi->hari_masuk:'-')."</td>
-				            <td align=\"right\" style=\"margin: 0; padding: 4px; border-width: 1px 1px 0 0; border-style: solid;\">".($comp->comp_type == 'Daily'? number_format($comp_a->gaji_daily_value*$staff_absensi->hari_masuk,0,",","."):number_format($comp_a->gaji_amount_value,0,",","."))."</td>
-          				</tr>";
-          				}
-          				$content .= "
+				            <td colspan=\"3\">&nbsp;</td>
+				            <td style=\"margin: 0; padding: 4px;\">Grand Total(A+B) : </td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">Rp.</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">".number_format($totalA+$totalB,0,",",".")."</td>
+          				</tr>
+     					<tr>
+     						<td colspan=\"3\">&nbsp;</td>
+				            <td style=\"margin: 0; padding: 4px;\">PPh 21 : </td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">Rp.</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">".($staff->pph_by_company == 'y'? number_format(0,0,',','.'):number_format((get_total_monthly_tax($staff->staff_id)),0,',','.'))."</td>
+          				</tr>
+     					<tr>
+     						<td colspan=\"3\">&nbsp;</td>
+				            <td style=\"margin: 0; padding: 4px;\">Nett : </td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">Rp.</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">".($staff->pph_by_company == 'y'? number_format($grand,0,',','.'):number_format(($grand-get_total_monthly_tax($staff->staff_id)),0,',','.'))."</td>
+          				</tr>
+          				<tr><td colspan=\"6\">&nbsp;</td></tr>
+     					<tr>
+				            <td colspan=\"2\" align=\"center\" style=\"margin: 0; padding: 4px;\">Deliver By</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">&nbsp;</td>
+				            <td colspan=\"2\" align=\"center\" style=\"margin: 0; padding: 4px;\">Received By</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">&nbsp;</td>
+          				</tr>
+          				<tr><td colspan=\"6\">&nbsp;</td></tr>
+          				<tr><td colspan=\"6\">&nbsp;</td></tr>
+     					<tr>
+				            <td colspan=\"2\" align=\"center\" style=\"margin: 0; padding: 4px;\">Sungkono</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">&nbsp;</td>
+				            <td colspan=\"2\" align=\"center\" style=\"margin: 0; padding: 4px;\">".$staff->staff_name."</td>
+				            <td align=\"right\" style=\"margin: 0; padding: 4px;\">&nbsp;</td>
+          				</tr>
 				    </table>
 				</td>
 			</tr>

@@ -179,7 +179,7 @@ class Components extends CI_Controller {
 		$this->load->helpers(array('report','bulan'));
 		$this->load->model("Absensi_model", "absensi");
 		if ($this->input->get('to') == 'pdf') {
-			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff"))->row();
+			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff_id"))->row();
 			$content = print_slip_gaji($staff,$this->input->get("period_year").'-'.$this->input->get("period_month"));
 
 			$this->load->library('html2pdf');
@@ -190,26 +190,19 @@ class Components extends CI_Controller {
 	    
 	    	$this->html2pdf->create();
     	} else if ($this->input->get('to') == 'xls') {
-			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff"))->row();
+			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff_id"))->row();
 			$content = print_slip_gaji($staff,$this->input->get("period_year").'-'.$this->input->get("period_month"));
 
     		$param['file_name'] = 'staff_component_slip.xls';
     		$param['content_sheet'] = $content;
     		$this->load->view('to_excel',$param);
     	} else if($this->input->get('to') == 'print'){
-			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff"))->row();
+			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff_id"))->row();
 			$content = print_slip_gaji($staff,$this->input->get("period_year").'-'.$this->input->get("period_month"));
 
         	$data['content'] = $content;
         	$this->load->view('components/slip_to_pdf', $data);
         } else {
-        	//Staff
-	        $staff = new Staff();
-	        $list_staff = $staff->list_drop();
-	        $staff_selected = $this->input->get('staff');
-	        $data['staff_list'] = form_dropdown('staff',
-	                        $list_staff,
-	                        $staff_selected);
 			// Year Period
 	        $years = array();
 			for($i=date('Y'); $i>(date('Y')-5); $i--) {
@@ -237,6 +230,9 @@ class Components extends CI_Controller {
 	
 			$data['period_month_selected'] = $period_month_selected;
 	
+        	//Staff
+    		$data["staff"] = form_input(array("id"=>"staff"));
+    		$data["staff_id"] = form_input(array("name"=>"staff_id", "type"=>"hidden", "id"=>"staff_id"));
 
         	$this->load->view('components/report_slip', $data);
 		}
