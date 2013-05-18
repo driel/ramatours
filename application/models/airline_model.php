@@ -35,4 +35,8 @@ class Airline_model extends CI_Model{
         "contact_email2"=>$this->input->post("cp_email2")
     ));
   }
+  
+  function update(){
+    
+  }
 }

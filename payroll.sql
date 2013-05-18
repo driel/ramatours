@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 16, 2013 at 02:43 PM
+-- Generation Time: May 18, 2013 at 06:17 PM
 -- Server version: 5.5.28
 -- PHP Version: 5.3.10-1ubuntu3.6
 
@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `branches` (
 --
 
 INSERT INTO `branches` (`branch_id`, `branch_name`, `branch_number_ticketing_invoice`, `branch_number_invoice`, `branch_number_invoice_optional`, `branch_number_voucher`, `branch_prefix_invoice`, `branch_invoice_name`, `branch_invoice_title`) VALUES
-(1, 'Bandung', 91, 150, 0, 0, 'BDG', 'Yunus', 'Direktur'),
+(1, 'Bandung', 93, 150, 0, 0, 'BDG', 'Yunus', 'Direktur'),
 (4, 'Bali', 92, 160, 0, 0, 'HO', 'I Made Wirawan', 'Direktur'),
 (10, 'Jakarta', 0, 0, 0, 0, 'JKT', 'Suroso Kusumo', 'Direktur');
 
@@ -666,7 +666,7 @@ CREATE TABLE IF NOT EXISTS `penjualan_ticket` (
   `tix_glaccno_dr` decimal(18,2) NOT NULL,
   `tix_glaccno_cr` decimal(18,2) NOT NULL,
   PRIMARY KEY (`tix_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- Dumping data for table `penjualan_ticket`
@@ -674,11 +674,13 @@ CREATE TABLE IF NOT EXISTS `penjualan_ticket` (
 
 INSERT INTO `penjualan_ticket` (`tix_id`, `tix_branch_id`, `tix_staff`, `tix_tour_id`, `tix_invoice_no`, `tix_date_time`, `tix_agent_id`, `tix_name`, `tix_address`, `tix_due_date`, `tix_biaya_surcharge_rp`, `tix_kurs_pajak`, `tix_status`, `tix_glaccno_dr`, `tix_glaccno_cr`) VALUES
 (13, 1, 23, 134, '84', '2013-05-01', 1, 'Bali tourism', 'Ubud', '2013-06-12', 0.00, 9590, 'new', 11000.00, 10000.00),
-(14, 4, 1, 138, '92', '2013-05-30', 5, 'Riak tours', 'Jl. Soekarno Hatta No.104, Bandung', '2013-06-12', 0.00, 9590, 'new', 10000.00, 11000.00),
+(14, 4, 1, 138, '92', '2013-05-17', 5, 'Riak tours', 'Jl. Soekarno Hatta No.104, Bandung', '2013-06-12', 0.00, 9590, 'new', 10000.00, 11000.00),
 (15, 1, 23, 143, '88', '2013-05-14', 5, 'Riak tours', 'Jl. Soekarno Hatta No.104, Bandung', '2013-06-13', 0.00, 9590, 'new', 10000.00, 11000.00),
 (16, 1, 23, 144, '89', '2013-05-14', 3, 'Hari Tours & Travel', 'Pademangan', '2013-06-13', 0.00, 9590, 'new', 10000.00, 11000.00),
 (17, 1, 23, 145, '90', '2013-05-15', 3, 'Hari Tours & Travel', 'Pademangan', '2013-06-14', 0.00, 9590, 'new', 10000.00, 11000.00),
-(18, 1, 23, 146, '91', '2013-05-15', 5, 'Riak tours', 'Jl. Soekarno Hatta No.104, Bandung', '2013-06-14', 0.00, 9590, 'new', 10000.00, 11000.00);
+(18, 1, 23, 146, '91', '2013-05-15', 5, 'Riak tours', 'Jl. Soekarno Hatta No.104, Bandung', '2013-06-14', 0.00, 9590, 'new', 10000.00, 11000.00),
+(19, 1, 23, 147, '92', '2013-05-17', 1, 'Bali tourism', 'Ubud', '2013-06-15', 0.00, 9590, 'new', 11000.00, 10000.00),
+(20, 1, 23, 148, '93', '2013-05-17', 5, 'Riak tours', 'Jl. Soekarno Hatta No.104, Bandung', '2013-06-15', 0.00, 9590, 'new', 10000.00, 11000.00);
 
 -- --------------------------------------------------------
 
@@ -699,7 +701,7 @@ CREATE TABLE IF NOT EXISTS `penjualan_ticket_detail` (
   `tix_komisi_rp` decimal(16,2) NOT NULL,
   `tix_komisi_us` decimal(16,2) NOT NULL,
   PRIMARY KEY (`tixd_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `penjualan_ticket_detail`
@@ -715,7 +717,9 @@ INSERT INTO `penjualan_ticket_detail` (`tixd_id`, `tix_id`, `tix_air`, `tix_rout
 (10, 17, 1, 'Jakarta', '-', 0.00, 25.00, 0.00, 0.00, 0.00, 2.00),
 (11, 18, 2, 'Bandung', 'Test', 150000.00, 0.00, 15000.00, 0.00, 15000.00, 0.00),
 (12, 18, 1, 'Pangandaran', 'Mudik', 0.00, 30000.00, 0.00, 5.00, 0.00, 5.00),
-(15, 18, 1, 'Cijerah', 'Mudik', 150000.00, 0.00, 50000.00, 0.00, 10000.00, 0.00);
+(15, 18, 1, 'Cijerah', 'Mudik', 150000.00, 0.00, 50000.00, 0.00, 10000.00, 0.00),
+(16, 19, 1, 'Bandung', '-', 1000000.00, 0.00, 0.00, 0.00, 15000.00, 0.00),
+(17, 19, 1, 'bangka', '-', 1500000.00, 0.00, 0.00, 0.00, 12000.00, 0.00);
 
 -- --------------------------------------------------------
 
@@ -750,7 +754,7 @@ CREATE TABLE IF NOT EXISTS `salary_components_a` (
   `gaji_daily_value` decimal(10,0) NOT NULL,
   `gaji_amount_value` decimal(10,0) NOT NULL,
   PRIMARY KEY (`gaji_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
 
 --
 -- Dumping data for table `salary_components_a`
@@ -764,7 +768,7 @@ INSERT INTO `salary_components_a` (`gaji_id`, `staff_id`, `gaji_component_id`, `
 (5, 22, 4, 0, 10000000),
 (6, 23, 4, 0, 12000000),
 (7, 23, 5, 0, 1500000),
-(24, 23, 6, 15000, 0);
+(25, 23, 7, 0, 1000000);
 
 -- --------------------------------------------------------
 
@@ -802,7 +806,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `name` varchar(255) NOT NULL,
   `value` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=32 ;
 
 --
 -- Dumping data for table `settings`
@@ -833,7 +837,7 @@ INSERT INTO `settings` (`id`, `name`, `value`) VALUES
 (24, 'invoice_ticketing_jkt_start', ''),
 (25, 'invoice_ticketing_jog_start', ''),
 (26, 'code_behind_invoice', ''),
-(27, 'rti_start_from', '146'),
+(27, 'rti_start_from', '148'),
 (28, 'rti_length', '8'),
 (29, 'login_page_bg', 'cheap_bali_holidays1.jpg'),
 (30, 'phone', '(0361)752321'),

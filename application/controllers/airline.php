@@ -90,4 +90,11 @@ class Airline extends CI_Controller{
     $airline = $this->airline->search("name", $name);
     echo json_encode($airline->result());
   }
+  
+  function get_airline(){
+    $airline = $this->uri->segment(3);
+    
+    $result = $this->airline->search("name", $airline)->result();
+    echo json_encode($result);
+  }
 }

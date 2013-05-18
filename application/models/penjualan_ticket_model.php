@@ -17,11 +17,11 @@ class Penjualan_Ticket_Model extends CI_Model{
     }
     return $jual_ticket;
   }
-  
+
   function get($id){
     return $this->db->join("penjualan_ticket_detail", "penjualan_ticket.tix_id=penjualan_ticket_detail.tix_id", "left")->get_where("penjualan_ticket", array("penjualan_ticket.tix_id"=>$id));
   }
-  
+
   function get_items($tix_id){
     return $this->db->join("airline air", "jual.tix_air=air.id")->get_where("penjualan_ticket_detail jual", array("jual.tix_id"=>$tix_id));
   }
@@ -41,13 +41,13 @@ class Penjualan_Ticket_Model extends CI_Model{
         "tix_name"=>$this->input->post("name"),
         "tix_address"=>$this->input->post("address"),
         "tix_due_date"=>$this->input->post("due_date"),
-        "tix_biaya_surcharge_rp"=>str_replace(",", "", $this->input->post("biaya_shurcharge_rp")),
+        "tix_biaya_surcharge_rp"=>str_replace(",", "", $this->input->post("biaya_surcharge_rp")),
         "tix_kurs_pajak"=>$this->input->post("kurs_pajak"),
         "tix_glaccno_dr"=>$this->input->post("glacc_dr"),
         "tix_glaccno_cr"=>$this->input->post("glacc_cr")
     ));
     $tix_id = $this->db->insert_id();
-    
+
     // detail
     $items = $this->input->post("invoice_items");
     if(is_array($items)){
@@ -59,14 +59,14 @@ class Penjualan_Ticket_Model extends CI_Model{
         }else{
           $price_us = $price;
         }
-        
+
         $discount_rp = 0; $discount_us = 0;
         if(strtolower($currency_discount) == "rp"){
           $discount_rp = $discount;
         }else{
           $discount_us = $discount;
         }
-        
+
         $komisi_rp = 0; $komisi_us = 0;
         if(strtolower($currency_komisi) == "rp"){
           $komisi_rp = $komisi;
@@ -88,7 +88,7 @@ class Penjualan_Ticket_Model extends CI_Model{
       }
     }
   }
-  
+
   function update(){
     $tix_id = $this->input->post("tix_id");
     $this->db->update("penjualan_ticket", array(
@@ -101,13 +101,13 @@ class Penjualan_Ticket_Model extends CI_Model{
         "tix_name"=>$this->input->post("name"),
         "tix_address"=>$this->input->post("address"),
         "tix_due_date"=>$this->input->post("due_date"),
-        "tix_biaya_surcharge_rp"=>str_replace(",", "", $this->input->post("biaya_shurcharge_rp")),
+        "tix_biaya_surcharge_rp"=>str_replace(",", "", $this->input->post("biaya_surcharge_rp")),
         "tix_kurs_pajak"=>$this->input->post("kurs_pajak"),
         "tix_glaccno_dr"=>$this->input->post("glacc_dr"),
         "tix_glaccno_cr"=>$this->input->post("glacc_cr")
     ), array("tix_id"=>$tix_id));
-  
-  // detail
+
+    // detail
     $items = $this->input->post("invoice_items");
     if(is_array($items)){
       foreach($items as $item){
@@ -118,14 +118,14 @@ class Penjualan_Ticket_Model extends CI_Model{
         }else{
           $price_us = $price;
         }
-        
+
         $discount_rp = 0; $discount_us = 0;
         if(strtolower($currency_discount) == "rp"){
           $discount_rp = $discount;
         }else{
           $discount_us = $discount;
         }
-        
+
         $komisi_rp = 0; $komisi_us = 0;
         if(strtolower($currency_komisi) == "rp"){
           $komisi_rp = $komisi;
@@ -149,16 +149,16 @@ class Penjualan_Ticket_Model extends CI_Model{
       }
     }
   }
-  
+
   function delete($id){
     $this->db->delete("penjualan_ticket", array("tix_id"=>$id));
     $this->db->delete("penjualan_ticket_detail", array("tix_id"=>$id));
   }
-  
+
   function sum_total($what, $tix_id){
     return $this->db->select("SUM($what) AS $what")->get_where("penjualan_ticket_detail", array("tix_id"=>$tix_id))->row();
   }
-  
+
   function update_item(){
     $currency_price = $this->input->post("currency_price");
     $price_rp = 0; $price_us = 0;
@@ -167,7 +167,7 @@ class Penjualan_Ticket_Model extends CI_Model{
     }else{
       $price_us = $this->input->post("price");
     }
-    
+
     $currency_discount = $this->input->post("currency_discount");
     $discount_rp = 0; $discount_us = 0;
     if(strtolower($currency_discount) == "rp"){
@@ -175,7 +175,7 @@ class Penjualan_Ticket_Model extends CI_Model{
     }else{
       $discount_us = $this->input->post("discount");
     }
-    
+
     $currency_komisi = $this->input->post("currency_komisi");
     $komisi_rp = 0; $komisi_us = 0;
     if(strtolower($currency_komisi) == "rp"){
@@ -183,7 +183,7 @@ class Penjualan_Ticket_Model extends CI_Model{
     }else{
       $komisi_us = $this->input->post("komisi");
     }
-    
+
     $this->db->update("penjualan_ticket_detail", array(
         "tixd_id"=>$this->input->post("tixd_id"),
         "tix_air"=>$this->input->post("air_id"),
@@ -197,8 +197,120 @@ class Penjualan_Ticket_Model extends CI_Model{
         "tix_komisi_us"=>$komisi_us
     ), array("tixd_id"=>$this->input->post("tixd_id")));
   }
-  
+
   function delete_item($id){
     $this->db->delete("penjualan_ticket_detail", array("tixd_id"=>$id));
+  }
+
+  function report_harian($branch = 0, $staff = 0){
+    $query = "SELECT agent.*,
+        pj.*,
+        staff.*,
+        branch.*
+        FROM penjualan_ticket pj
+        JOIN staffs staff ON pj.tix_staff=staff.staff_id
+        JOIN ticket_agent agent ON pj.tix_agent_id=agent.tixa_id
+        JOIN branches branch on pj.tix_branch_id=branch.branch_id
+        WHERE 1=1 AND pj.tix_date_time=DATE(NOW())";
+
+    if($branch > 0){
+      $query .= " AND branch.branch_id='{$branch}'";
+    }
+
+    if($staff > 0){
+      $query .= " AND staff.staff_id='{$staff}'";
+    }
+
+    return $this->db->query($query);
+  }
+
+  function report_airline($branch = 0, $airline = 0, $periode = ""){
+    $query = "SELECT agent.*,
+        pj.*,
+        pjd.*,
+        staff.*,
+        branch.*
+        FROM penjualan_ticket pj
+        JOIN penjualan_ticket_detail pjd ON pj.tix_id=pjd.tix_id
+        JOIN staffs staff ON pj.tix_staff=staff.staff_id
+        JOIN ticket_agent agent ON pj.tix_agent_id=agent.tixa_id
+        JOIN branches branch on pj.tix_branch_id=branch.branch_id
+        WHERE 1=1";
+
+    if($periode){
+      list($month, $year) = explode(" ", $periode);
+      switch($month){
+        case "January": $month = '01'; break;
+        case "February": $month = '02'; break;
+        case "March": $month = '03'; break;
+        case "April": $month = '04'; break;
+        case "May": $month = '05'; break;
+        case "June": $month = '06'; break;
+        case "July": $month = '07'; break;
+        case "August": $month = '08'; break;
+        case "September": $month = '09'; break;
+        case "October": $month = '10'; break;
+        case "November": $month = '11'; break;
+        case "December": $month = '12'; break;
+      }
+      $date_start = $year.'-'.$month.'-01';
+      $date_end = $year.'-'.$month.'-31';
+      $query .= " AND pj.tix_date_time BETWEEN '{$date_start}' AND '{$date_end}'";
+    }else{
+      $query .= " AND pj.tix_date_time=DATE(NOW())";
+    }
+
+    if($branch > 0){
+      $query .= " AND branch.branch_id='{$branch}'";
+    }
+
+    if($airline > 0){
+      $query .= " AND pjd.tix_air='{$airline}'";
+    }
+
+    return $this->db->query($query);
+  }
+
+  function report_staff($staff = 0, $periode = ""){
+    $query = "SELECT agent.*,
+        pj.*,
+        pjd.*,
+        staff.*,
+        branch.*
+        FROM penjualan_ticket pj
+        JOIN penjualan_ticket_detail pjd ON pj.tix_id=pjd.tix_id
+        JOIN staffs staff ON pj.tix_staff=staff.staff_id
+        JOIN ticket_agent agent ON pj.tix_agent_id=agent.tixa_id
+        JOIN branches branch on pj.tix_branch_id=branch.branch_id
+        WHERE 1=1";
+
+    if($periode){
+      list($month, $year) = explode(" ", $periode);
+      switch($month){
+        case "January": $month = '01'; break;
+        case "February": $month = '02'; break;
+        case "March": $month = '03'; break;
+        case "April": $month = '04'; break;
+        case "May": $month = '05'; break;
+        case "June": $month = '06'; break;
+        case "July": $month = '07'; break;
+        case "August": $month = '08'; break;
+        case "September": $month = '09'; break;
+        case "October": $month = '10'; break;
+        case "November": $month = '11'; break;
+        case "December": $month = '12'; break;
+      }
+      $date_start = $year.'-'.$month.'-01';
+      $date_end = $year.'-'.$month.'-31';
+      $query .= " AND pj.tix_date_time BETWEEN '{$date_start}' AND '{$date_end}'";
+    }else{
+      $query .= " AND pj.tix_date_time=DATE(NOW())";
+    }
+
+    if($staff > 0){
+      $query .= " AND staff.staff_id='{$staff}'";
+    }
+
+    return $this->db->query($query);
   }
 }

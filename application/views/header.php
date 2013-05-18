@@ -188,11 +188,21 @@ $(function($){
 									<li><?php echo anchor('ticket_agent/index', 'Ticket Agent'); ?></li>
 									<li><?php echo anchor('airline/index', 'Airlines'); ?></li>
 								</ul>
-							
 							<li><a href="#" class="blyellow">Transaction</a>
 								<div class="open"></div>
 								<ul class="grand-sub-menu">
 									<li><?php echo anchor('penjualan_ticket/index', 'Penjualan Ticket')?>
+									</li>
+								</ul>
+							</li>
+							<li><a href="#" class="blyellow">Reporting</a>
+								<div class="open"></div>
+								<ul class="grand-sub-menu">
+									<li><?php echo anchor('penjualan_ticket/reports/harian', 'Penjualan Ticket Harian')?>
+									</li>
+									<li><?php echo anchor('penjualan_ticket/reports/airline', 'Penjualan Ticket Per Airline')?>
+									</li>
+									<li><?php echo anchor('penjualan_ticket/reports/staff', 'Penjualan Ticket Per Staff')?>
 									</li>
 								</ul>
 							</li>

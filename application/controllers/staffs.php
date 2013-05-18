@@ -548,6 +548,13 @@ class Staffs extends CI_Controller {
         $this->load->view('staffs/to_excel');
     }
     
+    function get_staff(){
+      $name = $this->uri->segment(3);
+      $staff = new Staff();
+      $staff = $staff->_like('staff_name', $name)->result();
+      echo json_encode($staff);
+    }
+    
     private function _saveFamily($family, $staff_id){
       $families = $this->input->post("families");
       if(is_array($families)){

@@ -113,6 +113,134 @@ class Penjualan_Ticket extends CI_Controller{
     $this->penjualan->delete_item($id);
   }
   
+  function reports(){
+    $method = $this->uri->segment(3);
+    $this->{"report_".$method}();
+  }
+  
+  function report_harian(){
+    if($this->input->get("to")){
+      $data["title"] = "Penjualan Ticket Harian";
+      $data["results"] = $this->penjualan->report_harian($this->input->get("branch"), $this->input->get("staff_id"));
+      switch($this->input->get("to")){
+        case "xls":
+          header("Content-type: application/vnd.ms-excel");
+          header("Content-Disposition: attachment; filename=Report penjualan harian (".date("Y-m-d").").xls");
+          header("Pragma: no-cache");
+          header("Expires: 0");
+          $this->load->view("penjualan_ticket/report", $data);
+          break;
+        
+        case "pdf":
+          $this->load->library('html2pdf');
+          
+          $this->html2pdf->filename = 'Report penjualan harian ('.date("Y-m-d").').pdf';
+          $this->html2pdf->paper('a4', 'potrait');
+          $this->html2pdf->html($this->load->view("penjualan_ticket/report", $data, true));
+           
+          $this->html2pdf->create();
+          break;
+          
+        default:
+          $this->load->view("penjualan_ticket/report", $data);
+          break;
+      }
+    }else{
+      $branch = new Branch();
+      $list_branch = $branch->list_drop();
+      $branch_selected = $this->input->get('staff_cabang');
+      $data['staff_cabang'] = form_dropdown('branch', $list_branch, $branch_selected);
+      
+      $data["staff"] = array("id"=>"staff");
+      
+      $data["periode"] = array("name"=>"periode", "id"=>"periode");
+      
+      $this->load->view("penjualan_ticket/report_harian", $data);
+    }
+  }
+  
+  function report_airline(){
+    if($this->input->get("to")){
+      $data["title"] = "Penjualan Ticket per Airline, Periode {$this->input->get("periode")}";
+      $data["results"] = $this->penjualan->report_airline($this->input->get("branch"), $this->input->get("air_id"), $this->input->get("periode"));
+      switch($this->input->get("to")){
+        case "xls":
+          header("Content-type: application/vnd.ms-excel");
+          header("Content-Disposition: attachment; filename=Report penjualan harian (".date("Y-m-d").").xls");
+          header("Pragma: no-cache");
+          header("Expires: 0");
+          $this->load->view("penjualan_ticket/report", $data);
+          break;
+  
+        case "pdf":
+          $this->load->library('html2pdf');
+  
+          $this->html2pdf->filename = 'Report penjualan harian ('.date("Y-m-d").').pdf';
+          $this->html2pdf->paper('a4', 'potrait');
+          $this->html2pdf->html($this->load->view("penjualan_ticket/report", $data, true));
+           
+          $this->html2pdf->create();
+          break;
+  
+        default:
+          $this->load->view("penjualan_ticket/report", $data);
+          break;
+      }
+    }else{
+      $branch = new Branch();
+      $list_branch = $branch->list_drop();
+      $branch_selected = $this->input->get('staff_cabang');
+      $data['staff_cabang'] = form_dropdown('branch', $list_branch, $branch_selected);
+  
+      $data["periode"] = array("name"=>"periode", "id"=>"periode", "value"=>date("M y"));
+  
+      $data["airline"] = array("id"=>"airline");
+  
+      $this->load->view("penjualan_ticket/report_airline", $data);
+    }
+  }
+  
+  function report_staff(){
+    if($this->input->get("to")){
+      $data["title"] = "Penjualan Ticket per Staff, Periode {$this->input->get("periode")}";
+      $data["results"] = $this->penjualan->report_staff($this->input->get("staff_id"), $this->input->get("periode"));
+      switch($this->input->get("to")){
+        case "xls":
+          header("Content-type: application/vnd.ms-excel");
+          header("Content-Disposition: attachment; filename=Report penjualan harian (".date("Y-m-d").").xls");
+          header("Pragma: no-cache");
+          header("Expires: 0");
+          $this->load->view("penjualan_ticket/report", $data);
+          break;
+  
+        case "pdf":
+          $this->load->library('html2pdf');
+  
+          $this->html2pdf->filename = 'Report penjualan harian ('.date("Y-m-d").').pdf';
+          $this->html2pdf->paper('a4', 'potrait');
+          $this->html2pdf->html($this->load->view("penjualan_ticket/report", $data, true));
+           
+          $this->html2pdf->create();
+          break;
+  
+        default:
+          $this->load->view("penjualan_ticket/report", $data);
+          break;
+      }
+    }else{
+      $branch = new Branch();
+      $list_branch = $branch->list_drop();
+      $branch_selected = $this->input->get('staff_cabang');
+      $data['staff_cabang'] = form_dropdown('branch', $list_branch, $branch_selected);
+  
+      $data["periode"] = array("name"=>"periode", "id"=>"periode", "value"=>date("M y"));
+  
+      $data["staff"] = array("id"=>"staff");
+  
+      $this->load->view("penjualan_ticket/report_staff", $data);
+    }
+  }
+  
   // private functions
   private function _addData(){
     $kurs = $this->kurs->get_last();

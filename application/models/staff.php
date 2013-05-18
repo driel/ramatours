@@ -39,6 +39,10 @@ class Staff extends DataMapper {
         $this->gallery_path_staff = realpath(APPPATH . '../uploads/staff/medium/');
         $this->gallery_path_url_staff = base_url() . 'uploads/staff/medium/';
     }
+    
+    function _like($col, $val){
+      return $this->db->like($col, $val)->get("staffs");
+    }
 
     function _delete($id) {
         $this->db->where('staff_id', $id);
