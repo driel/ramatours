@@ -198,11 +198,13 @@ $(function($){
 							<li><a href="#" class="blyellow">Reporting</a>
 								<div class="open"></div>
 								<ul class="grand-sub-menu">
-									<li><?php echo anchor('penjualan_ticket/reports/harian', 'Penjualan Ticket Harian')?>
+									<li><?php echo anchor('penjualan_ticket/reports/harian', 'Penjualan ticket harian')?>
 									</li>
-									<li><?php echo anchor('penjualan_ticket/reports/airline', 'Penjualan Ticket Per Airline')?>
+									<li><?php echo anchor('penjualan_ticket/reports/airline', 'Penjualan ticket per airline')?>
 									</li>
-									<li><?php echo anchor('penjualan_ticket/reports/staff', 'Penjualan Ticket Per Staff')?>
+									<li><?php echo anchor('penjualan_ticket/reports/staff', 'penjualan ticket per staff')?>
+									</li>
+									<li><?php echo anchor('penjualan_ticket/rekap', 'Rekap penjualan per Airline')?>
 									</li>
 								</ul>
 							</li>

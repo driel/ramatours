@@ -313,4 +313,8 @@ class Penjualan_Ticket_Model extends CI_Model{
 
     return $this->db->query($query);
   }
+  
+  function rekap($query){
+    return $this->db->query($query);
+  }
 }

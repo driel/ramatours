@@ -14,28 +14,28 @@ $(document).ready(function(){
       }
   });
 	
-	$("#staff").autocomplete({
-	  source: function(q, proses){
-		  var url = "<?php echo site_url("staffs/get_staff"); ?>/"+q.term;
-		  $.getJSON(url, function(data){
-			  var items = [];
-			  $.each(data, function(i, v){
-				  items.push({label:v.staff_name, id:v.staff_id});
-			  });
-			  proses(items);
-		  });
-	  },
-	  select: function(e, ui){
-		  $("#staff_id").val(ui.item.id);
-	  }
-	});
-	
 	$(".proc").on("click", function(e){
 		e.preventDefault();
 		var data = $("form").serialize();
 		var target = $(this).attr("target") == "_blank" ? "_blank":"_self";
 		var to = $(this).data("to");
 		window.open("<?php echo current_url(); ?>/?"+data+"&to="+to, target);
+	});
+
+	$("#airline").autocomplete({
+		source: function(q, proses){
+			var url = "<?php echo site_url("airline/get_airline")?>/"+q.term;
+			$.getJSON(url, function(data){
+				var items = [];
+				$.each(data, function(i, v){
+					items.push({label:v.name, id:v.id});
+				});
+				proses(items);
+			});
+		},
+		select: function(e, ui){
+			$("#air_id").val(ui.item.id);
+		}
 	});
 });
 </script>
@@ -53,18 +53,17 @@ $(document).ready(function(){
 				<span class="ico-coins"></span>
 			</div>
 			<h1>
-				Report Ticket Selling per Staff<small>Report Daily Ticket Selling</small>
+				Report Ticket Selling per Airlines<small>Report Daily Ticket Selling</small>
 			</h1>
 		</div>
 		<form action="" method="post">
 			<div class="span2">
-				Staff<br />
-				<?php echo form_input($staff); ?>
-				<input type="hidden" id="staff_id" name="staff_id" />
+				Branch<br />
+				<?php echo $branch; ?>
 			</div>
 			<div class="span2" style="margin-left: 20px;">
 				Periode<br />
-				<?php echo form_input($periode); ?>
+				<?php echo $periode; ?>
 			</div>
 			<div class="cl"></div>
 		</form>

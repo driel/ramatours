@@ -23,6 +23,7 @@
 	<div>
 		<table class="report" style="width:100%">
 			<tr>
+			  <td class="blackshade">No</td>
 				<td class="blackshade" >Branch</td>
 				<td class="blackshade">Staff</td>
 				<td class="blackshade">Tour ID</td>
@@ -36,10 +37,12 @@
 				<td class="blackshade">Surcharge Fee</td>
 				<td class="blackshade">Total</td>
 				<td class="blackshade">Discount</td>
+				<td class="blackshade">Komisi</td>
 			</tr>
-			<?php foreach($results->result() as $row): ?>
+			<?php $i = 1; foreach($results->result() as $row): ?>
 			<?php $airline = get_airline($row->tix_air); ?>
 			<tr>
+			  <td class="data"><?php echo $i; ?></td>
 				<td class="data"><?php echo $row->branch_name; ?></td>
 				<td class="data"><?php echo $row->staff_name; ?></td>
 				<td class="data ta_right"><?php echo $row->tix_tour_id; ?></td>
@@ -75,10 +78,22 @@
 				  	</tr>
 				  </table>
 				</td>
+				<td class="data">
+				  <table class="report" width="100%">
+				  	<tr>
+				  		<td class="blackshade">Rp</td>
+				  		<td class="blackshade">USD</td>
+				  	</tr>
+				  	<tr>
+				  		<td class="data ta_right"><?php echo sum_total("tix_komisi_rp", $row->tix_id)?></td>
+				  		<td class="data ta_right"><?php echo sum_total("tix_komisi_us", $row->tix_id)?></td>
+				  	</tr>
+				  </table>
+				</td>
 			</tr>
-			<?php endforeach; ?>
+			<?php $i++; endforeach; ?>
 			<tr>
-				<td colspan="13" class="pagesummary">Summary</td>
+				<td colspan="15" class="pagesummary">Summary</td>
 			</tr>
 		</table>
 	</div>

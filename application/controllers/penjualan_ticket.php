@@ -135,7 +135,7 @@ class Penjualan_Ticket extends CI_Controller{
           $this->load->library('html2pdf');
           
           $this->html2pdf->filename = 'Report penjualan harian ('.date("Y-m-d").').pdf';
-          $this->html2pdf->paper('a4', 'potrait');
+          $this->html2pdf->paper('a4', 'landscape');
           $this->html2pdf->html($this->load->view("penjualan_ticket/report", $data, true));
            
           $this->html2pdf->create();
@@ -176,7 +176,7 @@ class Penjualan_Ticket extends CI_Controller{
           $this->load->library('html2pdf');
   
           $this->html2pdf->filename = 'Report penjualan harian ('.date("Y-m-d").').pdf';
-          $this->html2pdf->paper('a4', 'potrait');
+          $this->html2pdf->paper('a4', 'landscape');
           $this->html2pdf->html($this->load->view("penjualan_ticket/report", $data, true));
            
           $this->html2pdf->create();
@@ -217,7 +217,7 @@ class Penjualan_Ticket extends CI_Controller{
           $this->load->library('html2pdf');
   
           $this->html2pdf->filename = 'Report penjualan harian ('.date("Y-m-d").').pdf';
-          $this->html2pdf->paper('a4', 'potrait');
+          $this->html2pdf->paper('a4', 'landscape');
           $this->html2pdf->html($this->load->view("penjualan_ticket/report", $data, true));
            
           $this->html2pdf->create();
@@ -238,6 +238,68 @@ class Penjualan_Ticket extends CI_Controller{
       $data["staff"] = array("id"=>"staff");
   
       $this->load->view("penjualan_ticket/report_staff", $data);
+    }
+  }
+  
+  function rekap(){
+    if($this->input->get("to")){
+      $periode = $this->input->get("periode");
+      if($periode == "monthly"){
+        $date_start = date("Y-m")."-01";
+        $date_end = date("Y-m")."-31";
+      }else{
+        $date_start = date("Y")."-01-01";
+        $date_end = date("Y")."-12-31";
+      }
+      $query = "SELECT
+      branch.branch_name AS branch_name,
+      air.name AS airline,
+      SUM(pjd.tix_price_rp) AS price_rp,
+      SUM(pjd.tix_price_us) AS price_us,
+      SUM(pjd.tix_discount_rp) AS discount_rp,
+      SUM(pjd.tix_discount_us) AS discount_us,
+      SUM(pjd.tix_komisi_rp) AS komisi_rp,
+      SUM(pjd.tix_komisi_us) AS komisi_us
+      FROM penjualan_ticket pj
+      JOIN penjualan_ticket_detail pjd ON pj.tix_id=pjd.tix_id
+      JOIN branches branch ON branch.branch_id=pj.tix_branch_id
+      JOIN airline air ON air.id=pjd.tix_air
+      WHERE pj.tix_date_time BETWEEN '{$date_start}' AND '{$date_end}' GROUP BY pjd.tix_air";
+      
+      $data["results"] = $this->penjualan->rekap($query);
+      $data["title"] = "Rekap penjualan ticket per airline";
+      
+      switch($this->input->get("to")){
+        case "xls":
+          header("Content-type: application/vnd.ms-excel");
+          header("Content-Disposition: attachment; filename=Rekap penjualan ticket (".date("Y-m-d").").xls");
+          header("Pragma: no-cache");
+          header("Expires: 0");
+          $this->load->view("penjualan_ticket/rekap_{$periode}", $data);
+          break;
+      
+        case "pdf":
+          $this->load->library('html2pdf');
+      
+          $this->html2pdf->filename = 'Rekap penjualan ticket ('.date("Y-m-d").').pdf';
+          $this->html2pdf->paper('a4', 'landscape');
+          $this->html2pdf->html($this->load->view("penjualan_ticket/rekap_{$periode}", $data, true));
+           
+          $this->html2pdf->create();
+          break;
+      
+        default:
+          $this->load->view("penjualan_ticket/rekap_{$periode}", $data);
+          break;
+      }
+    }else{
+      $branch = new Branch();
+      $data["branch"] = form_dropdown("branch", $branch->list_drop(), "");
+      $data["periode"] = form_dropdown("periode", array(
+          "monthly"=>"Monthly",
+          "yearly"=>"Yearly"
+      ), "monthly");
+      $this->load->view("penjualan_ticket/rekap", $data);
     }
   }
   
