@@ -192,7 +192,7 @@ class Penjualan_Ticket extends CI_Controller{
       $branch_selected = $this->input->get('staff_cabang');
       $data['staff_cabang'] = form_dropdown('branch', $list_branch, $branch_selected);
   
-      $data["periode"] = array("name"=>"periode", "id"=>"periode", "value"=>date("M y"));
+      $data["periode"] = array("name"=>"periode", "id"=>"periode", "value"=>date("M Y"));
   
       $data["airline"] = array("id"=>"airline");
   
@@ -233,7 +233,7 @@ class Penjualan_Ticket extends CI_Controller{
       $branch_selected = $this->input->get('staff_cabang');
       $data['staff_cabang'] = form_dropdown('branch', $list_branch, $branch_selected);
   
-      $data["periode"] = array("name"=>"periode", "id"=>"periode", "value"=>date("M y"));
+      $data["periode"] = array("name"=>"periode", "id"=>"periode", "value"=>date("M Y"));
   
       $data["staff"] = array("id"=>"staff");
   
