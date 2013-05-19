@@ -23,6 +23,18 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
+	$('#period').datepicker({
+      changeMonth: true,
+      changeYear: true,
+      showButtonPanel: true,
+      dateFormat: 'M yy',
+      onClose: function(dateText, inst) { 
+          var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+          var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+          $(this).datepicker('setDate', new Date(year, month, 1));
+      }
+  });
+	
   	$("#period_by").change(function() {
 		if ($(this).val() == 'Monthly') {
 			$("#by_monthly").show();
@@ -42,6 +54,27 @@ $(document).ready(function(){
 			$("#filter_yearly").show();
 		}
 	});
+	
+	$("#staff").autocomplete({
+        source: function(request, response){
+          console.log(request)
+          var url = "<?php echo site_url('absensi/get_staff')?>/"+request.term;
+          $.getJSON(url, function(data){
+            var list = [];
+            $.each(data, function(i, v){
+              var li = {
+                value: v.staff_name,
+                staff_id: v.staff_id
+              }
+              list.push(li);
+            });
+            response(list);
+          });
+        },
+        select: function(event, ui){
+          $("#staff_id").val(ui.item.staff_id);
+        }
+      });
 
 	$(".proc").on("click", function(e){
 		e.preventDefault();
@@ -52,6 +85,13 @@ $(document).ready(function(){
 	});
 });
 </script>
+<style>
+.ui-datepicker{width: 220px;}
+.ui-datepicker-calendar { display: none;}
+.ui-datepicker-inline .ui-datepicker-calendar { display: block;}
+#ui-datepicker-div select.ui-datepicker-month, #ui-datepicker-div select.ui-datepicker-year{width: 80px!important; font-size: 12px; height:30px!important;}
+#ui-datepicker-div select.ui-datepicker-year{margin-left: 10px!important;}
+</style>
 <div class="body">
   <div class="content">
     <?php echo $this->session->flashdata('message'); ?>
@@ -64,23 +104,23 @@ $(document).ready(function(){
       </h1>
     </div>
     <form action="" method="post">
-    	<div class="span3">Period<br />
+    	<div class="span2" style="margin-right: 20px;">Period<br />
     	<?php echo $period_by; ?></div>
-    	<div id="by_monthly" class="span3">Monthly<br />
-    	<?php echo $period_month; ?>&nbsp;<?php echo $period_year; ?></div>
-    	<div id="by_yearly" class="span3" style="display:none;">By <br />
+    	<div id="by_monthly" class="span2" style="margin-right: 20px;">Monthly<br />
+    	<?php echo form_input($period); ?></div>
+    	<div id="by_yearly" class="span2" style="margin-right: 20px;display:none;">By <br />
     	<?php echo $yearly_by; ?></div>
-    	<div id="filter1_monthly" class="span3">Branch<br />
+    	<div id="filter1_monthly" class="span2" style="margin-right: 20px;">Branch<br />
     	<?php echo $staff_cabang; ?>
     	</div>
-    	<div id="filter2_monthly" class="span3">Department<br />
+    	<div id="filter2_monthly" class="span2" style="margin-right: 20px;">Department<br />
     	<?php echo $staff_departement; ?>
     	</div>
-    	<div id="filter3_monthly" class="span3">Title<br />
+    	<div id="filter3_monthly" class="span2" style="margin-right: 20px;">Title<br />
     	<?php echo $staff_jabatan; ?>
     	</div>
-    	<div id="filter4_monthly" class="span3">Name<br />
-    	<?php echo form_input(array('name' => 'staff_name', 'value' => $this->input->get('staff_name'), 'size' => '28'));?>
+    	<div id="filter4_monthly" class="span2" style="margin-right: 20px;">Name<br />
+    	<?php echo $staff; echo $staff_id; ?></div>
     	</div>
     	<div class="cl"></div>
     </form>

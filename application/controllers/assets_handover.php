@@ -295,23 +295,19 @@ class Assets_Handover extends CI_Controller {
     $this->uri_segment = $this->uri->segment(5);
     $this->detail_id = $this->uri->segment(5);
 
-    if ($this->input->get("asset_name") != "") {
+    if ($this->input->get("asset_id") != "") {
       $asset = new Asset();
-      $data['asset'] = $asset->where('asset_name', $this->input->get("asset_name"))->get();
+      $data['asset_data'] = $asset->where('asset_id', $this->input->get("asset_id"))->get();
 
       $data['assets_handover'] = $asset_handover
-      ->where('trasset_asset_id', $data['asset']->asset_id)
+      ->where('trasset_asset_id', $data['asset_data']->asset_id)
       ->order_by('trasset_id', 'ASC')
       ->get()->all;
     }
 
-    // Asset
-    $asset = new Asset();
-    $list_asset = $asset->list_drop();
-    $asset_selected = $this->input->get('asset_name');
-    $data['asset_list'] = form_dropdown('asset_name',
-        $list_asset,
-        $asset_selected);
+	//Asset
+	$data["asset"] = form_input(array("id"=>"asset"));
+	$data["asset_id"] = form_input(array("name"=>"asset_id", "type"=>"hidden", "id"=>"asset_id"));
 
     if ($this->input->get('to') == 'pdf') {
       $this->load->library('html2pdf');

@@ -1,46 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-	<style type="text/css">
-	table {border-width: 1px 1px 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid; font-size:12px;}
-	td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid; font-size:10px;}
-	.site_name{float:left; font-size:22px;}
-	.date{float:right; font-size:10px;}
-	h2{margin-top: 0;}
-	</style>
+		<meta charset="UTF-8" />
+		<title>
+		  Report Cuti
+		</title>
+		<?php echo load_css("report-style.css"); ?>
+		<?php echo load_css("dashboard.css"); ?>
+		<style type="text/css">
+		  table.report {border-collapse: collapse; border: solid 2px #000;}
+		  table.report td {padding: 2px; border: solid 1px #ccc;}
+		  table.report td.blackshade {background-color: #DFEAF5;}
+		  table.report td.pagesummary {background: #FFB;}
+		  td, td, p{font-size:9px;}
+		</style>
 	</head>
     <body>
-    	<table style="border: 0;" width="100%">
-    		<tr>
-    			<td style="border: 0;" align="left"><span class="site_name">Rama Tours</span></td>
-    			<td style="border: 0;" align="right"><span class="date"><?php echo date("d/m/Y - H:i"); ?></span></td>
-    		</tr>
-    	</table>
-		<span class="cl"></span><br />
-		<h2 style="text-align:center">Daftar Cuti Karyawan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
-		<table width="100%" align="center">
-	      <thead>
-            <tr>
-	          	<th rowspan="2">No</th>
-	          	<th rowspan="2">Name</th>
-	          	<th rowspan="2">Branch</th>
-	          	<th rowspan="2">Departement</th>
-	          	<th rowspan="2">Title</th>
-                <th rowspan="2" width="10%">Requested date</th>
-                <th colspan="2">Date</th>
-                <th colspan="3">Approval</th>
+  		<h3>Report Sisa Cuti Karyawan</h3>
+  		<span style="font-size:9px;"><?php echo date("y/m/d"); ?></span>
+		<div>
+		<table class="report" style="width:100%">
+	        <tr>
+	          	<td rowspan="2" class="blackshade">No</td>
+	          	<td rowspan="2" class="blackshade">Name</td>
+	          	<td rowspan="2" class="blackshade">Branch</td>
+	          	<td rowspan="2" class="blackshade">Departement</td>
+	          	<td rowspan="2" class="blackshade">Title</td>
+                <td rowspan="2" width="10%" class="blackshade">Requested date</td>
+                <td colspan="2" class="blackshade">Date</td>
+                <td colspan="3" class="blackshade">Approval</td>
             </tr>
             <tr>
-                <th width="10%">From</th>
-                <th width="10%">To</th>
-                <th width="10%">Status</th>
-                <th width="10%">Reason</th>
-                <th width="10%">By</th>
+                <td width="10%" class="blackshade">From</td>
+                <td width="10%" class="blackshade">To</td>
+                <td width="10%" class="blackshade">Status</td>
+                <td width="10%" class="blackshade">Reason</td>
+                <td width="10%" class="blackshade">By</td>
             </tr>
         </thead>
         <tbody>
             <?php
-	      	$odd = true;
 	      	$i=0;
             foreach ($cuti->result() as $row) {
 	            $staff = get_staff_detail($row->staff_id);
@@ -51,20 +50,23 @@
 	              $comment = $detail->comment;  
 	            }
 		      	$i++;
-	        	$odd = !$odd;
+
+				$branch = get_branch_detail($row->staff_cabang);
+				$dept = get_dept_detail($row->staff_departement);
+				$title = get_title_detail($row->staff_jabatan);
             ?>
-        		<tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?>>
-		            <td align="right"><?php echo $i; ?></td>
-		            <td><?php echo $row->staff_name; ?></td>
-		            <td><?php echo $row->staff_cabang; ?></td>
-		            <td><?php echo $row->staff_departement; ?></td>
-		            <td><?php echo $row->staff_jabatan; ?></td>
-                    <td><?php echo date_format(new DateTime($row->date_request),'j M Y'); ?></td>
-                    <td><?php echo date_format(new DateTime($row->date_start),'j M Y'); ?></td>
-                    <td><?php echo date_format(new DateTime($row->date_end),'j M Y'); ?></td>
-                    <td><?php echo $row->status; ?></td>
-                    <td><?php echo $comment; ?></td>
-                    <td><?php echo $approve_by ? $approve_by->username:"-"; ?></td>
+        		<tr>
+		            <td class="data ta_right"><?php echo $i; ?></td>
+		            <td class="data ta_right"><?php echo $row->staff_name; ?></td>
+	            	<td class="data"><?php echo $branch? $branch->branch_name:'-'; ?></td>
+	            	<td class="data"><?php echo $dept? $dept->dept_name:'-'; ?></td>
+	            	<td class="data"><?php echo $title? $title->title_name:'-'; ?></td>
+                    <td class="data ta_center"><?php echo date_format(new DateTime($row->date_request),'j M Y'); ?></td>
+                    <td class="data ta_center"><?php echo date_format(new DateTime($row->date_start),'j M Y'); ?></td>
+                    <td class="data ta_center"><?php echo date_format(new DateTime($row->date_end),'j M Y'); ?></td>
+                    <td class="data ta_center"><?php echo $row->status; ?></td>
+                    <td class="data"><?php echo $comment; ?></td>
+                    <td class="data"><?php echo $approve_by ? $approve_by->username:"-"; ?></td>
                 </tr>
             <?php
 			}

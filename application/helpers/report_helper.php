@@ -11,7 +11,7 @@ if (!function_exists('get_total_component_a')) {
     	$ci->db->join('components','components.comp_id=salary_components_a.gaji_component_id');
     	$ci->db->join('absensi','absensi.staff_id=salary_components_a.staff_id');
     	$ci->db->where('salary_components_a.staff_id',$staff_id);
-    	$ci->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period);
+    	$ci->db->where("DATE_FORMAT(absensi.date,'%b %Y')=",$period);
   		$comp_a = $ci->db->get("salary_components_a");
 		foreach($comp_a->result() as $sal_a) {
 			$comp = 0;
@@ -35,7 +35,7 @@ if (!function_exists('get_total_component_b')) {
     	$ci->db->join('components','components.comp_id=salary_components_b.gaji_component_id');
     	$ci->db->join('absensi','absensi.staff_id=salary_components_b.staff_id');
     	$ci->db->where('salary_components_b.staff_id',$staff_id);
-    	$ci->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period);
+    	$ci->db->where("DATE_FORMAT(absensi.date,'%b %Y')=",$period);
   		$comp_b = $ci->db->get("salary_components_b");
 		foreach($comp_b->result() as $sal_b) {
 			$comp = 0;
@@ -103,7 +103,7 @@ if (!function_exists('get_branch_recap_component_a')) {
     	$ci->db->join('staffs','absensi.staff_id=staffs.staff_id');
     	$ci->db->join('branches','staffs.staff_cabang=branches.branch_id');
     	$ci->db->where('branches.branch_id',$branch);
-    	$ci->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period);
+    	$ci->db->where("DATE_FORMAT(absensi.date,'%b %Y')=",$period);
   		$comp_b = $ci->db->get("salary_components_a");
 		foreach($comp_b->result() as $sal_b) {
 			$comp = 0;
@@ -129,7 +129,7 @@ if (!function_exists('get_branch_recap_component_b')) {
     	$ci->db->join('staffs','absensi.staff_id=staffs.staff_id');
     	$ci->db->join('branches','staffs.staff_cabang=branches.branch_id');
     	$ci->db->where('branches.branch_id',$branch);
-    	$ci->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period);
+    	$ci->db->where("DATE_FORMAT(absensi.date,'%b %Y')=",$period);
   		$comp_b = $ci->db->get("salary_components_b");
 		foreach($comp_b->result() as $sal_b) {
 			$comp = 0;
@@ -161,7 +161,7 @@ if (!function_exists('get_branch_total_monthly_tax')) {
 
     	$total = 0;
     	$ci = &get_instance();
-    	$ci->db->join('taxes_employees','staffs.staff_status_pajak=taxes_employees.sp_status');
+    	$ci->db->join('taxes_employees','staffs.staff_status_pajak=taxes_employees.sp_id');
     	$ci->db->join('salary_components_a','salary_components_a.staff_id=staffs.staff_id');
     	$ci->db->join('components','components.comp_id=salary_components_a.gaji_component_id');
     	$ci->db->join('branches','staffs.staff_cabang=branches.branch_id');
@@ -228,9 +228,18 @@ if (!function_exists('print_slip_gaji')) {
 		}
 
     	$content = "
+		<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"> 
+		<html lang=\"en\">
+		<head>
+		<meta charset=\"UTF-8\" />
+		<title>
+	  	Slip Gaji Karyawan
+		</title>
+		</head>
+		<body>
 		<table width=\"100%\" border=\"0\" align=\"center\">
 			<tr>
-				<td colspan=\"6\" align=\"center\"><h3>Slip Gaji: ".bulan_full($_GET["period_month"])." ".$_GET["period_year"]."</h3></td>
+				<td colspan=\"6\" align=\"center\"><h3>Slip Gaji: ".$_GET["period"]."</h3></td>
 			</tr>
 			<tr>
 				<td width=\"20%\">Branch</td>
@@ -334,7 +343,10 @@ if (!function_exists('print_slip_gaji')) {
 				    </table>
 				</td>
 			</tr>
-	    </table>";
+	    </table>
+	    </body>
+	    </html>
+		";
 	    
 	    $content .= "<input type=\"hidden\" id=\"staff_id\" value=\"".$staff_id."\" /><input type=\"hidden\" id=\"staff_period\" value=\"".$period."\" />";
 	    

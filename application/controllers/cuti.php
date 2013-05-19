@@ -1,6 +1,7 @@
 <?php
 class Cuti extends CI_Controller{
   private $perpage = 50;
+  private $limit = 10;
   function __construct(){
     parent::__construct();
     $this->load->model("Cuti_model", "cuti");
@@ -8,6 +9,7 @@ class Cuti extends CI_Controller{
     $this->load->helper("cuti");
     $this->load->helper("branch");
     $this->load->helper("dept");
+    $this->load->helper("title");
   }
   
   function index(){

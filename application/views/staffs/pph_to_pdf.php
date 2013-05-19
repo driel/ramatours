@@ -1,272 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-	<style type="text/css">
-	table {border-width: 1px 1px 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid; font-size:12px;}
-	td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid; font-size:10px;}
-	.site_name{float:left; font-size:22px;}
-	.date{float:right; font-size:10px;}
-	h2{margin-top: 0;}
-	</style>
+		<meta charset="UTF-8" />
+		<title>
+		  Report PPh 21
+		</title>
+		<?php echo load_css("report-style.css"); ?>
+		<?php echo load_css("dashboard.css"); ?>
+		<style type="text/css">
+		  table.report {border-collapse: collapse; border: solid 2px #000;}
+		  table.report td {padding: 2px; border: solid 1px #ccc;}
+		  table.report td.blackshade {background-color: #DFEAF5;}
+		  table.report td.pagesummary {background: #FFB;}
+		  td, td, p{font-size:9px;}
+		</style>
 	</head>
     <body>
-    	<table style="border: 0;" width="100%">
-    		<tr>
-    			<td style="border: 0;" align="left"><span class="site_name">Rama Tours</span></td>
-    			<td style="border: 0;" align="right"><span class="date"><?php echo date("d/m/Y - H:i"); ?></span></td>
-    		</tr>
-    	</table>
-		<span class="cl"></span><br />
     	<?php
     	if ($this->input->get('period_by') == 'Monthly') {
     	?>
-		<h2 style="text-align:center">Daftar PPh 21 Bulanan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
-		<table width="100%" align="center">
-	      <thead>
+  		<h3>Daftar PPh 21 Bulanan</h3>
+  		<span style="font-size:9px;"><?php echo date("y/m/d"); ?></span>
+		<div>
+		<table class="report" style="width:100%">
 	        <tr>
-	          <th rowspan="2">No</th>
-	          <th rowspan="2">Cabang</th>
-	          <th rowspan="2">Staff</th>
-	          <th rowspan="2">Department</th>
-	          <th rowspan="2">Title</th>
-	          <th colspan="3">Daftar Absensi</th>
-	          <th rowspan="2">Total A</th>
-	          <th rowspan="2">Total B</th>
-	          <th rowspan="2">Grand</th>
-	          <th colspan="2">PPh</th>
-	          <th rowspan="2">Net</th>
+	          <td rowspan="2" class="blackshade">No</td>
+	          <td rowspan="2" class="blackshade">Cabang</td>
+	          <td rowspan="2" class="blackshade">Staff</td>
+	          <td rowspan="2" class="blackshade">Department</td>
+	          <td rowspan="2" class="blackshade">Title</td>
+	          <td colspan="3" class="blackshade">Daftar Absensi</td>
+	          <td rowspan="2" class="blackshade">Total A</td>
+	          <td rowspan="2" class="blackshade">Total B</td>
+	          <td rowspan="2" class="blackshade">Grand</td>
+	          <td colspan="2" class="blackshade">PPh</td>
+	          <td rowspan="2" class="blackshade">Net</td>
 	        </tr>
 	        <tr>
-	          <th>Absen</th>
-	          <th>Cuti</th>
-	          <th>Izin</th>
-	          <th>Perusahaan</th>
-	          <th>Pribadi</th>
+	          <td class="blackshade">Absen</td>
+	          <td class="blackshade">Cuti</td>
+	          <td class="blackshade">Izin</td>
+	          <td class="blackshade">Perusahaan</td>
+	          <td class="blackshade">Pribadi</td>
 	        </tr>
-	      </thead>
-	      <tbody>
 	      <?php
 	      $branch = '';
-	      $odd = true;
 	      $i=0;
 	      foreach ($staff_branch->result() as $row) {
 	      	$i++;
-        	$odd = !$odd;
           ?>
-    		<tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?>>
-	            <td align="right"><?php echo $i; ?></td>
-	            <td><?php if ($row->staff_cabang == $branch) { echo '';} else { $branch = $row->staff_cabang; echo $row->staff_cabang;} ?></td>
-	            <td><?php echo $row->staff_name; ?></td>
-	            <td><?php echo $row->staff_cabang; ?></td>
-	            <td><?php echo $row->staff_jabatan; ?></td>
-	            <td align="right"><?php echo $row->hari_masuk; ?></td>
-	            <td align="right"><?php echo floor((strtotime($row->date_end)-strtotime($row->date_start))/(60*60*24)); ?></td>
-	            <td align="right"><?php echo $row->izin_jumlah_hari; ?></td>
-	            <td align="right"><?php $total_a = get_total_component_a($row->staff_id,$this->input->get('period_year').'-'.$this->input->get('period_month')); echo number_format($total_a,0,',','.'); ?></td>
-	            <td align="right"><?php $total_b = get_total_component_b($row->staff_id,$this->input->get('period_year').'-'.$this->input->get('period_month')); echo number_format($total_b,0,',','.'); ?></td>
-	            <td align="right"><?php $grand = ($total_a+$total_b); echo $grand; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format(get_total_monthly_tax($row->staff_id),0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format(get_total_monthly_tax($row->staff_id),0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($grand,0,',','.'):number_format(($grand-get_total_monthly_tax($row->staff_id)),0,',','.'); ?></td>
+    		<tr>
+	            <td class="data ta_right"><?php echo $i; ?></td>
+	            <td class="data"><?php if ($row->staff_cabang == $branch) { echo '';} else { $branch = $row->staff_cabang; echo $row->staff_cabang;} ?></td>
+	            <td class="data"><?php echo $row->staff_name; ?></td>
+	            <td class="data"><?php echo $row->staff_cabang; ?></td>
+	            <td class="data"><?php echo $row->staff_jabatan; ?></td>
+	            <td class="data ta_right"><?php echo $row->hari_masuk; ?></td>
+	            <td class="data ta_right"><?php echo floor((strtotime($row->date_end)-strtotime($row->date_start))/(60*60*24)); ?></td>
+	            <td class="data ta_right"><?php echo $row->izin_jumlah_hari; ?></td>
+	            <td class="data ta_right"><?php $total_a = get_total_component_a($row->staff_id,$this->input->get('period')); echo number_format($total_a,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $total_b = get_total_component_b($row->staff_id,$this->input->get('period')); echo number_format($total_b,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $grand = ($total_a+$total_b); echo $grand; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format(get_total_monthly_tax($row->staff_id),0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format(get_total_monthly_tax($row->staff_id),0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($grand,0,',','.'):number_format(($grand-get_total_monthly_tax($row->staff_id)),0,',','.'); ?></td>
 	          </tr>
 	      <?php } ?>
-	      </tbody>
 	    </table>
+	    </div>
 	    <?php
 	    } else if ($period_by_selected == 'Yearly') {
     		if ($yearly_by_selected == 'Branch') {
 		?>
-		<h2 style="text-align:center">Rekapitulasi PPh 21 Cabang (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
-		<table width="100%" align="center">
-	      <thead>
+  		<h3>Rekapitulasi PPh 21 Cabang</h3>
+  		<span style="font-size:9px;"><?php echo date("y/m/d"); ?></span>
+		<div>
+		<table class="report" style="width:100%">
 	        <tr>
-	          <th rowspan="2">No</th>
-	          <th rowspan="2">Cabang</th>
-	          <th colspan="2">Januari</th>
-	          <th colspan="2">Februari</th>
-	          <th colspan="2">Maret</th>
-	          <th colspan="2">April</th>
-	          <th colspan="2">Mei</th>
-	          <th colspan="2">Juni</th>
-	          <th colspan="2">Juli</th>
-	          <th colspan="2">Agustus</th>
-	          <th colspan="2">September</th>
-	          <th colspan="2">Oktober</th>
-	          <th colspan="2">November</th>
-	          <th colspan="2">Desember</th>
-	          <th colspan="2">Total</th>
+	          <td rowspan="2" class="blackshade">No</td>
+	          <td rowspan="2" class="blackshade">Cabang</td>
+	          <td colspan="2" class="blackshade">Januari</td>
+	          <td colspan="2" class="blackshade">Februari</td>
+	          <td colspan="2" class="blackshade">Maret</td>
+	          <td colspan="2" class="blackshade">April</td>
+	          <td colspan="2" class="blackshade">Mei</td>
+	          <td colspan="2" class="blackshade">Juni</td>
+	          <td colspan="2" class="blackshade">Juli</td>
+	          <td colspan="2" class="blackshade">Agustus</td>
+	          <td colspan="2" class="blackshade">September</td>
+	          <td colspan="2" class="blackshade">Oktober</td>
+	          <td colspan="2" class="blackshade">November</td>
+	          <td colspan="2" class="blackshade">Desember</td>
+	          <td colspan="2" class="blackshade">Total</td>
 	        </tr>
 	        <tr>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
 	        </tr>
-	      </thead>
-	      <tbody>
 	      <?php
-	      $odd = true;
 	      $i=0;
 	      foreach ($branches->result() as $row) {
 	      	$i++;
-        	$odd = !$odd;
           ?>
-    		<tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?>>
-	            <td align="right"><?php echo $i; ?></td>
-	            <td><?php echo $row->branch_name; ?></td>
-	            <td align="right"><?php $tax_y1 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y1,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n1 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n1,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y2 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y2,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n2 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n2,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y3 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y3,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n3 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n3,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y4 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y4,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n4 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n4,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y5 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y5,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n5 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n5,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y6 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y6,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n6 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n6,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y7 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y7,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n7 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n7,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y8 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y8,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n8 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n8,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y9 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y9,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n9 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n9,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y10 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y10,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n10 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n10,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y11 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y11,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n11 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n11,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y12 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_y12,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n12 = get_branch_total_monthly_tax($row->branch_name,'y'); echo number_format($tax_n12,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_y = $tax_y1+$tax_y2+$tax_y3+$tax_y4+$tax_y5+$tax_y6+$tax_y7+$tax_y8+$tax_y9+$tax_y10+$tax_y11+$tax_y12; echo number_format($tax_y,0,',','.'); ?></td>
-	            <td align="right"><?php $tax_n = $tax_n1+$tax_n2+$tax_n3+$tax_n4+$tax_n5+$tax_n6+$tax_n7+$tax_n8+$tax_n9+$tax_n10+$tax_n11+$tax_n12; echo number_format($tax_n,0,',','.'); ?></td>
+    		<tr>
+	            <td class="data ta_right"><?php echo $i; ?></td>
+	            <td class="data"><?php echo $row->branch_name; ?></td>
+	            <td class="data ta_right"><?php $tax_y1 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y1,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n1 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n1,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y2 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y2,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n2 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n2,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y3 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y3,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n3 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n3,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y4 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y4,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n4 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n4,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y5 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y5,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n5 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n5,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y6 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y6,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n6 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n6,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y7 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y7,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n7 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n7,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y8 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y8,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n8 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n8,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y9 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y9,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n9 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n9,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y10 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y10,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n10 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n10,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y11 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y11,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n11 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n11,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y12 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_y12,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n12 = get_branch_total_monthly_tax($row->branch_id,'y'); echo number_format($tax_n12,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_y = $tax_y1+$tax_y2+$tax_y3+$tax_y4+$tax_y5+$tax_y6+$tax_y7+$tax_y8+$tax_y9+$tax_y10+$tax_y11+$tax_y12; echo number_format($tax_y,0,',','.'); ?></td>
+	            <td class="data ta_right"><?php $tax_n = $tax_n1+$tax_n2+$tax_n3+$tax_n4+$tax_n5+$tax_n6+$tax_n7+$tax_n8+$tax_n9+$tax_n10+$tax_n11+$tax_n12; echo number_format($tax_n,0,',','.'); ?></td>
 	          </tr>
 	      <?php } ?>
-	      </tbody>
 	    </table>
+	    </div>
 		<?php
    			} else {
    		?>
-		<h2 style="text-align:center">Rekapitulasi PPh 21 Karyawan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
-		<table width="100%" align="center">
-	      <thead>
+  		<h3>Rekapitulasi PPh 21 Karyawan</h3>
+  		<span style="font-size:9px;"><?php echo date("y/m/d"); ?></span>
+		<div>
+		<table class="report" style="width:100%">
 	        <tr>
-	          <th rowspan="2">No</th>
-	          <th rowspan="2">Cabang</th>
-	          <th rowspan="2">Staff</th>
-	          <th rowspan="2">Department</th>
-	          <th rowspan="2">Title</th>
-	          <th colspan="2">Januari</th>
-	          <th colspan="2">Februari</th>
-	          <th colspan="2">Maret</th>
-	          <th colspan="2">April</th>
-	          <th colspan="2">Mei</th>
-	          <th colspan="2">Juni</th>
-	          <th colspan="2">Juli</th>
-	          <th colspan="2">Agustus</th>
-	          <th colspan="2">September</th>
-	          <th colspan="2">Oktober</th>
-	          <th colspan="2">November</th>
-	          <th colspan="2">Desember</th>
-	          <th colspan="2">Total</th>
+	          <td rowspan="2" class="blackshade">No</td>
+	          <td rowspan="2" class="blackshade">Cabang</td>
+	          <td rowspan="2" class="blackshade">Staff</td>
+	          <td rowspan="2" class="blackshade">Department</td>
+	          <td rowspan="2" class="blackshade">Title</td>
+	          <td colspan="2" class="blackshade">Januari</td>
+	          <td colspan="2" class="blackshade">Februari</td>
+	          <td colspan="2" class="blackshade">Maret</td>
+	          <td colspan="2" class="blackshade">April</td>
+	          <td colspan="2" class="blackshade">Mei</td>
+	          <td colspan="2" class="blackshade">Juni</td>
+	          <td colspan="2" class="blackshade">Juli</td>
+	          <td colspan="2" class="blackshade">Agustus</td>
+	          <td colspan="2" class="blackshade">September</td>
+	          <td colspan="2" class="blackshade">Oktober</td>
+	          <td colspan="2" class="blackshade">November</td>
+	          <td colspan="2" class="blackshade">Desember</td>
+	          <td colspan="2" class="blackshade">Total</td>
 	        </tr>
 	        <tr>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
-	          <th>Company</th>
-	          <th>Personal</th>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
+	          <td class="blackshade">Company</td>
+	          <td class="blackshade">Personal</td>
 	        </tr>
-	      </thead>
-	      <tbody>
 	      <?php
 	      $branch = '';
-	      $odd = true;
 	      $i=0;
 	      foreach ($staff_branch->result() as $row) {
 	      	$pph = get_total_monthly_tax($row->staff_id);
 	      	$i++;
-        	$odd = !$odd;
           ?>
-    		<tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?>>
-	            <td align="right"><?php echo $i; ?></td>
-	            <td><?php if ($row->staff_cabang == $branch) { echo '';} else { $branch = $row->staff_cabang; echo $row->staff_cabang;} ?></td>
-	            <td><?php echo $row->staff_name; ?></td>
-	            <td><?php echo $row->staff_departement; ?></td>
-	            <td><?php echo $row->staff_jabatan; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'y'? number_format($pph*12,0,',','.'):'-'; ?></td>
-	            <td align="right"><?php echo $row->pph_by_company == 'n'? number_format($pph*12,0,',','.'):'-'; ?></td>
+    		<tr>
+	            <td class="data ta_right"><?php echo $i; ?></td>
+	            <td class="data"><?php if ($row->staff_cabang == $branch) { echo '';} else { $branch = $row->staff_cabang; echo $row->staff_cabang;} ?></td>
+	            <td class="data"><?php echo $row->staff_name; ?></td>
+	            <td class="data"><?php echo $row->staff_departement; ?></td>
+	            <td class="data"><?php echo $row->staff_jabatan; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'y'? number_format($pph*12,0,',','.'):'-'; ?></td>
+	            <td class="data ta_right"><?php echo $row->pph_by_company == 'n'? number_format($pph*12,0,',','.'):'-'; ?></td>
 	          </tr>
 	      <?php } ?>
-	      </tbody>
 	    </table>
+	    </div>
 		<?php	
    			}
 		}

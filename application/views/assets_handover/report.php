@@ -9,6 +9,27 @@
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
+	$("#asset").autocomplete({
+        source: function(request, response){
+          console.log(request)
+          var url = "<?php echo site_url('assets/get_asset')?>/"+request.term;
+          $.getJSON(url, function(data){
+            var list = [];
+            $.each(data, function(i, v){
+              var li = {
+                value: v.asset_name,
+                asset_id: v.asset_id
+              }
+              list.push(li);
+            });
+            response(list);
+          });
+        },
+        select: function(event, ui){
+          $("#asset_id").val(ui.item.asset_id);
+        }
+      });
+
   	$(".proc").on("click", function(e){
 		e.preventDefault();
 		var data = $("form").serialize();
@@ -31,7 +52,7 @@ $(document).ready(function(){
         </div>
 	    <form action="" method="post">
 	    	<div class="span3">Asset<br />
-	    	<?php echo $asset_list; ?></div>
+	    	<?php echo $asset.$asset_id;?></div>
 	    	<div class="cl"></div>
 	    </form>
 	    <div style="margin: 10px 0; border-bottom:1px solid #e0e0e0;"></div>

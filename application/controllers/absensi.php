@@ -5,6 +5,9 @@ class Absensi extends CI_Controller{
     parent::__construct();
     $this->load->model("Absensi_model", "absensi");
     $this->load->helper("staff");
+    $this->load->helper("branch");
+    $this->load->helper("dept");
+    $this->load->helper("title");
     //$this->output->enable_profiler(true);
   }
   

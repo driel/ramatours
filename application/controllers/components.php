@@ -180,7 +180,7 @@ class Components extends CI_Controller {
 		$this->load->model("Absensi_model", "absensi");
 		if ($this->input->get('to') == 'pdf') {
 			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff_id"))->row();
-			$content = print_slip_gaji($staff,$this->input->get("period_year").'-'.$this->input->get("period_month"));
+			$content = print_slip_gaji($staff,$this->input->get("period"));
 
 			$this->load->library('html2pdf');
 
@@ -191,14 +191,14 @@ class Components extends CI_Controller {
 	    	$this->html2pdf->create();
     	} else if ($this->input->get('to') == 'xls') {
 			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff_id"))->row();
-			$content = print_slip_gaji($staff,$this->input->get("period_year").'-'.$this->input->get("period_month"));
+			$content = print_slip_gaji($staff,$this->input->get("period"));
 
     		$param['file_name'] = 'staff_component_slip.xls';
     		$param['content_sheet'] = $content;
     		$this->load->view('to_excel',$param);
     	} else if($this->input->get('to') == 'print'){
 			$staff = $this->absensi->get_staff("staff_id", $this->input->get("staff_id"))->row();
-			$content = print_slip_gaji($staff,$this->input->get("period_year").'-'.$this->input->get("period_month"));
+			$content = print_slip_gaji($staff,$this->input->get("period"));
 
         	$data['content'] = $content;
         	$this->load->view('components/slip_to_pdf', $data);
@@ -209,26 +209,7 @@ class Components extends CI_Controller {
 		  		$years[$i] = $i;
 		  	}
 	
-	        $period_year_selected = $this->input->get('period_year') == ''? date('Y'):$this->input->get('period_year');
-	        $data['period_year'] = form_dropdown('period_year',
-	                        $years,
-	                        $period_year_selected);
-	
-			$data['period_year_selected'] = $period_year_selected;
-	
-			// Monthly Period
-	        $list_period = array();
-			for ($i=1; $i<=12; $i++) {
-	            if ($i < 10) { $i = '0'.$i; }
-	            $list_period[$i] = bulan_full($i);
-	        }
-	        
-	        $period_month_selected = $this->input->get('period_month') == ''? date('m'):$this->input->get('period_month');
-	        $data['period_month'] = form_dropdown('period_month',
-	                        $list_period,
-	                        $period_month_selected);
-	
-			$data['period_month_selected'] = $period_month_selected;
+      		$data["period"] = array("name"=>"period", "id"=>"period", "value"=>date("M Y"));
 	
         	//Staff
     		$data["staff"] = form_input(array("id"=>"staff"));
@@ -250,26 +231,7 @@ class Components extends CI_Controller {
 	  		$years[$i] = $i;
 	  	}
 
-        $period_year_selected = $this->input->get('period_year') == ''? date('Y'):$this->input->get('period_year');
-        $data['period_year'] = form_dropdown('period_year',
-                        $years,
-                        $period_year_selected);
-
-		$data['period_year_selected'] = $period_year_selected;
-
-		// Monthly Period
-        $list_period = array();
-		for ($i=1; $i<=12; $i++) {
-            if ($i < 10) { $i = '0'.$i; }
-            $list_period[$i] = bulan_full($i);
-        }
-        
-        $period_month_selected = $this->input->get('period_month') == ''? date('m'):$this->input->get('period_month');
-        $data['period_month'] = form_dropdown('period_month',
-                        $list_period,
-                        $period_month_selected);
-
-		$data['period_month_selected'] = $period_month_selected;
+      	$data["periode"] = array("name"=>"periode", "id"=>"periode", "value"=>date("M Y"));
 
 		// Branch
         $branch = new Branch();
@@ -303,10 +265,10 @@ class Components extends CI_Controller {
     	$this->db->join('cuti','cuti.staff_id=staffs.staff_id AND `cuti`.`status` =  \'approve\'','left');
     	$this->db->join('izin','izin.izin_staff_id=staffs.staff_id','left');
 
-		if ($this->input->get("period_year") != "" && $this->input->get("period_month") != "") {
-			$this->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$this->input->get("period_year").'-'.$this->input->get("period_month"));
+		if ($this->input->get("periode") != "") {
+			$this->db->where("DATE_FORMAT(absensi.date,'%b %Y')=",$this->input->get("period"));
 		} else {
-			$this->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period_year_selected.'-'.$period_month_selected);
+			$this->db->where("DATE_FORMAT(absensi.date,'%b %Y')=",date('M Y'));
 		}
 
 		if ($this->input->get("staff_cabang") != "") {
@@ -331,6 +293,8 @@ class Components extends CI_Controller {
         $total_rows = $staff_branch->num_rows();
 
     	$data['staff_branch'] = $staff_branch;
+
+		$data['title'] = "Detil Gaji Karyawan";
 
 		if ($this->input->get('to') == 'pdf') {
 			$this->load->library('html2pdf');
@@ -378,26 +342,7 @@ class Components extends CI_Controller {
 	  		$years[$i] = $i;
 	  	}
 
-        $period_year_selected = $this->input->get('period_year') == ''? date('Y'):$this->input->get('period_year');
-        $data['period_year'] = form_dropdown('period_year',
-                        $years,
-                        $period_year_selected);
-
-		$data['period_year_selected'] = $period_year_selected;
-
-		// Monthly Period
-        $list_period = array();
-		for ($i=1; $i<=12; $i++) {
-            if ($i < 10) { $i = '0'.$i; }
-            $list_period[$i] = bulan_full($i);
-        }
-        
-        $period_month_selected = $this->input->get('period_month') == ''? date('m'):$this->input->get('period_month');
-        $data['period_month'] = form_dropdown('period_month',
-                        $list_period,
-                        $period_month_selected);
-
-		$data['period_month_selected'] = $period_month_selected;
+      	$data["periode"] = array("name"=>"periode", "id"=>"periode", "value"=>date("M Y"));
 
 		// Yearly Period
         $year_selected = $this->input->get('yearly') == ''? date('Y'):$this->input->get('yearly');
@@ -422,6 +367,8 @@ class Components extends CI_Controller {
                         $yearly_by_selected,'id="yearly_by"');
 
 		$data['yearly_by_selected'] = $yearly_by_selected;
+
+		$data['title'] = "Report Rekapitulasi Gaji Karyawan";
 
 		if ($period_by_selected == 'Yearly' && $yearly_by_selected == 'Staff') {
     		$this->db->join('branches','branches.branch_id=staffs.staff_cabang','left');

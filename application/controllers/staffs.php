@@ -6,6 +6,7 @@ if (!defined('BASEPATH'))
 class Staffs extends CI_Controller {
 
     private $perpage = 50;
+    private $limit = 10;
 
     public function __construct() {
         parent::__construct();
@@ -27,6 +28,8 @@ class Staffs extends CI_Controller {
         $this->load->helper("branch");
         $this->load->helper("dept");
         $this->load->helper("title");
+        $this->load->helper("marital");
+        $this->load->helper("employee_status");
         $this->session->userdata('logged_in') == true ? '' : redirect('users/sign_in');
     }
 
@@ -802,40 +805,6 @@ class Staffs extends CI_Controller {
         $uri_segment = 3;
         $offset = $this->uri->segment($uri_segment);
 
-		if ($this->input->get("staff_cabang") != "") {
-			$staff_list->like('staff_cabang',$this->input->get("staff_cabang"));
-		}
-
-		if ($this->input->get("staff_departement") != "") {
-			$staff_list->like('staff_departement',$this->input->get("staff_departement"));
-		}
-
-		if ($this->input->get("staff_jabatan") != "") {
-			$staff_list->like('staff_jabatan',$this->input->get("staff_jabatan"));
-		}
-
-		if ($this->input->get("staff_birthdate") != "") {
-			$birthdate = str_replace(date('Y-'),"",$this->input->get("staff_birthdate"));
-			$staff_list->where("DATE_FORMAT(staff_birthdate,'%m-%d')",$birthdate);
-		}
-
-		if ($this->input->get("marital_status") != "") {
-			$staff_list->like('staff_status_nikah',$this->input->get("marital_status"));
-		}
-
-		if ($this->input->get("staff_name") != "") {
-			$staff_list->like('staff_name',$this->input->get("staff_name"));
-		}
-
-		if (strtolower($this->input->get("status")) != "on") {
-			$staff_list->where("date_out !=","0000-00-00");
-			$staff_list->where("contract_to <","DATE_FORMAT(NOW(),'%Y-%m-%d')");
-		}
-
-        $staff_list->order_by($data['col'], $data['dir']);
-        $data['staff_list'] = $staff_list
-                        ->get($this->perpage, $offset)->all;
-
 		// Branch
         $branch = new Branch();
         $list_branch = $branch->list_drop();
@@ -864,7 +833,53 @@ class Staffs extends CI_Controller {
         $list_marital = $marital->list_drop();
         $data['marital'] = form_dropdown("marital_status", $list_marital);
 
+		$report_title = "Daftar Karyawan";
+
+		if ($this->input->get("staff_cabang") != "") {
+			$cabang = get_branch_detail($this->input->get("staff_cabang"));
+			$report_title .= " Cabang ".($cabang ? $cabang->branch_name:'-');
+			$staff_list->like('staff_cabang',$this->input->get("staff_cabang"));
+		}
+
+		if ($this->input->get("staff_departement") != "") {
+			$divisi = get_dept_detail($this->input->get("staff_departement"));
+			$report_title .= " Divisi ".($divisi ? $divisi->dept_name:'-');
+			$staff_list->like('staff_departement',$this->input->get("staff_departement"));
+		}
+
+		if ($this->input->get("staff_jabatan") != "") {
+			$jabatan = get_title_detail($this->input->get("staff_jabatan"));
+			$report_title .= " Jabatan ".($jabatan ? $jabatan->title_name:'-');
+			$staff_list->like('staff_jabatan',$this->input->get("staff_jabatan"));
+		}
+
+		if ($this->input->get("staff_birthdate") != "") {
+			$birthdate = str_replace(date('Y-'),"",$this->input->get("staff_birthdate"));
+			$staff_list->where("DATE_FORMAT(staff_birthdate,'%m-%d')",$birthdate);
+		}
+
+		if ($this->input->get("marital_status") != "") {
+			$nikah = get_marital_detail($this->input->get("marital_status"));
+			$report_title .= " Divisi ".($niah ? $dnikah->sn_name:'-');
+			$staff_list->like('staff_status_nikah',$this->input->get("marital_status"));
+		}
+
+		if ($this->input->get("staff_name") != "") {
+			$staff_list->like('staff_name',$this->input->get("staff_name"));
+		}
+
+		if (strtolower($this->input->get("status")) != "on") {
+			$staff_list->where("date_out !=","0000-00-00");
+			$staff_list->where("contract_to <","DATE_FORMAT(NOW(),'%Y-%m-%d')");
+		}
+
+        $staff_list->order_by($data['col'], $data['dir']);
+        $data['staff_list'] = $staff_list
+                        ->get($this->perpage, $offset)->all;
+
 		$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
+
+		$data['report_title'] = $report_title;
 
     	if ($this->input->get('to') == 'pdf') {
 			$this->load->library('html2pdf');
@@ -1029,32 +1044,7 @@ class Staffs extends CI_Controller {
 
 		$data['period_by_selected'] = $period_by_selected;
 
-		// Year Period
-        $years = array();
-		for($i=date('Y'); $i>(date('Y')-5); $i--) {
-	  		$years[$i] = $i;
-	  	}
-
-        $period_year_selected = $this->input->get('period_year') == ''? date('Y'):$this->input->get('period_year');
-        $data['period_year'] = form_dropdown('period_year',
-                        $years,
-                        $period_year_selected);
-
-		$data['period_year_selected'] = $period_year_selected;
-
-		// Monthly Period
-        $list_period = array();
-		for ($i=1; $i<=12; $i++) {
-            if ($i < 10) { $i = '0'.$i; }
-            $list_period[$i] = bulan_full($i);
-        }
-        
-        $period_month_selected = $this->input->get('period_month') == ''? date('m'):$this->input->get('period_month');
-        $data['period_month'] = form_dropdown('period_month',
-                        $list_period,
-                        $period_month_selected);
-
-		$data['period_month_selected'] = $period_month_selected;
+  		$data["period"] = array("name"=>"period", "id"=>"period", "value"=>date("M Y"));
 
 		// Yearly Period
         $years = array();
@@ -1101,7 +1091,12 @@ class Staffs extends CI_Controller {
                         $list_jbt,
                         $jbt_selected);
 
-		$data['staff_name'] = array('name' => 'staff_name', 'value' => $this->input->get('staff_name'));
+    	//Staff
+		$data["staff"] = form_input(array("id"=>"staff"));
+		$data["staff_id"] = form_input(array("name"=>"staff_id", "type"=>"hidden", "id"=>"staff_id"));
+
+        $uri_segment = 3;
+        $offset = $this->uri->segment($uri_segment);
 
 		if ($period_by_selected == 'Yearly' && $yearly_by_selected == 'Branch') {
 			$this->db->order_by('branch_id', 'ASC');
@@ -1119,9 +1114,9 @@ class Staffs extends CI_Controller {
 
 			if ($period_by_selected == 'Monthly') {
 				if ($this->input->get("period") != "") {
-					$this->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$this->input->get("period_year").'-'.$this->input->get("period_month"));
+					$this->db->where("DATE_FORMAT(absensi.date,'%b %Y')=",$this->input->get("period"));
 				} else {
-					$this->db->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period_year_selected.'-'.$period_month_selected);
+					$this->db->where("DATE_FORMAT(absensi.date,'%b %Y')=",date("M Y"));
 				}
 
 				if ($this->input->get("staff_cabang") != "") {
@@ -1136,8 +1131,8 @@ class Staffs extends CI_Controller {
 					$this->db->like('staffs.staff_jabatan',$this->input->get("staff_jabatan"));
 				}
 
-				if ($this->input->get("staff_name") != "") {
-					$this->db->like('staffs.staff_name',$this->input->get("staff_name"));
+				if ($this->input->get("staff_id") != "") {
+					$this->db->where('staffs.staff_id',$this->input->get("staff_id"));
 				}
 			}
 
@@ -1281,6 +1276,8 @@ class Staffs extends CI_Controller {
     		$param['file_name'] = 'staff_list_report.xls';
     		$param['content_sheet'] = $this->load->view('staffs/expired_doc_to_pdf', $data, true);
     		$this->load->view('to_excel',$param);
+		} else if($this->input->get('to') == 'print'){
+        	$this->load->view('staffs/expired_doc_to_pdf', $data);
 		} else {
 	        $config['base_url'] = site_url("staffs/report_expired_doc");
 	        $config['total_rows'] = $total_rows;

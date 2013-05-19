@@ -1,51 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-	<style type="text/css">
-	table {border-width: 1px 1px 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid; font-size:12px;}
-	td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid; font-size:10px;}
-	.site_name{float:left; font-size:22px;}
-	.date{float:right; font-size:10px;}
-	h2{margin-top: 0;}
-	</style>
+		<meta charset="UTF-8" />
+		<title>
+		  <?php echo $report_title; ?>
+		</title>
+		<?php echo load_css("report-style.css"); ?>
+		<?php echo load_css("dashboard.css"); ?>
+		<style type="text/css">
+		  table.report {border-collapse: collapse; border: solid 2px #000;}
+		  table.report td {padding: 2px; border: solid 1px #ccc;}
+		  table.report td.blackshade {background-color: #DFEAF5;}
+		  table.report td.pagesummary {background: #FFB;}
+		  td, th, p{font-size:9px;}
+		</style>
 	</head>
     <body>
-    	<table style="border: 0;" width="100%">
-    		<tr>
-    			<td style="border: 0;" align="left"><span class="site_name">Rama Tours</span></td>
-    			<td style="border: 0;" align="right"><span class="date"><?php echo date("d/m/Y - H:i"); ?></span></td>
-    		</tr>
-    	</table>
-		<span class="cl"></span><br />
-		<h2 style="text-align:center">Daftar Karyawan (<?php echo $this->input->get("staff_cabang") != FALSE ? $this->input->get("staff_cabang"):"Seluruh cabang"?>)</h2>
-		<table width="100%" align="center">
-	      <thead>
+  <h3><?php echo $report_title; ?></h3>
+  <span style="font-size:9px;"><?php echo date("y/m/d"); ?></span>
+	<div>
+		<table class="report" style="width:100%">
 	        <tr>
-	          <th>No</th>
-	          <th>Name</th>
-	          <th>Branch</th>
-	          <th>Departement</th>
-	          <th>Title</th>
-	          <th>Sex</th>
-	          <th>Birth Date</th>
-	          <th>Address</th>
-	          <th>Email</th>
-	          <th>Home Phone</th>
-	          <th>Cellular Phone</th>
-	          <th>Start</th>
-	          <th>Umur</th>
-	          <th>Marital</th>
-	          <th>Status</th>
-	          <th>Active</th>
+	          <td class="blackshade">No</td>
+	          <td class="blackshade">Name</td>
+	          <td class="blackshade">Branch</td>
+	          <td class="blackshade">Departement</td>
+	          <td class="blackshade">Title</td>
+	          <td class="blackshade">Sex</td>
+	          <td class="blackshade">Birth Date</td>
+	          <td class="blackshade">Address</td>
+	          <td class="blackshade">Email</td>
+	          <td class="blackshade">Home Phone</td>
+	          <td class="blackshade">Cellular Phone</td>
+	          <td class="blackshade">Start</td>
+	          <td class="blackshade">Umur</td>
+	          <td class="blackshade">Marital</td>
+	          <td class="blackshade">Status</td>
+	          <td class="blackshade">Active</td>
 	        </tr>
-	      </thead>
-	      <tbody>
 	      <?php
-	      $odd = true;
 	      $i=0;
 	      foreach ($staff_list as $row) {
 	      	$i++;
-        	$odd = !$odd;
         	$date_out = date_format(new DateTime($row->date_out),'j M Y');
 			$contract_to = $row->contract_to;
 			
@@ -54,30 +50,38 @@
 			$interval = $now->diff($born);
 			$age = $interval->y;
 			
-			$staff_status = ($date_out != '' && $contract_to < date('Y-m-d')? 'Active':'Inactive');
+			$branch = get_branch_detail($row->staff_cabang);
+			$dept = get_dept_detail($row->staff_departement);
+			$title = get_title_detail($row->staff_jabatan);
+			$marital = get_marital_detail($row->staff_status_nikah);
+			$emp_status = get_employee_status_detail($row->staff_status_karyawan);
+			
+			$staff_status = ($date_out != '0000-00-00' && $contract_to < date('Y-m-d')? 'Active':'Inactive');
 	      ?>
-	          <tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?> <?php echo $staff_status == 'Inactive'? 'style="font-style: italic;"':''; ?>>
-	            <td align="right"><?php echo $i; ?></td>
-	            <td><?php echo $row->staff_name; ?></td>
-	            <td><?php echo $row->staff_cabang; ?></td>
-	            <td><?php echo $row->staff_departement; ?></td>
-	            <td><?php echo $row->staff_jabatan; ?></td>
-	            <td><?php echo $row->staff_sex; ?></td>
-	            <td><?php echo $row->staff_birthplace.', '.date_format(new DateTime($row->staff_birthdate),'j M Y'); ?></td>
-	            <td><?php echo $row->staff_address; ?></td>
-	            <td><?php echo $row->staff_email; ?></td>
-	            <td align="center"><?php echo $row->staff_phone_home; ?></td>
-	            <td align="center"><?php echo $row->staff_phone_hp; ?></td>
+	          <tr <?php echo $staff_status == 'Inactive'? 'style="font-style: italic;"':''; ?>>
+	            <td class="data ta_right"><?php echo $i; ?></td>
+	            <td class="data"><?php echo $row->staff_name; ?></td>
+	            <td class="data"><?php echo $branch? $branch->branch_name:'-'; ?></td>
+	            <td class="data"><?php echo $dept? $dept->dept_name:'-'; ?></td>
+	            <td class="data"><?php echo $title? $title->title_name:'-'; ?></td>
+	            <td class="data"><?php echo $row->staff_sex; ?></td>
+	            <td class="data"><?php echo $row->staff_birthplace.', '.date_format(new DateTime($row->staff_birthdate),'j M Y'); ?></td>
+	            <td class="data"><?php echo $row->staff_address; ?></td>
+	            <td class="data"><?php echo $row->staff_email; ?></td>
+	            <td class="data ta_center"><?php echo $row->staff_phone_home; ?></td>
+	            <td class="data ta_center"><?php echo $row->staff_phone_hp; ?></td>
 	            <td align="center"><?php date_format(new DateTime($row->mulai_kerja),'j M Y'); ?></td>
-	          	<td align="right"><?php echo $age;?></td>
-	            <td><?php echo $row->staff_status_nikah; ?></td>
-	            <td><?php echo $row->staff_status_karyawan; ?></td>
-	            <td align="center"><?php echo $staff_status; ?></td>
+	          	<td class="data ta_right"><?php echo $age;?></td>
+	            <td class="data"><?php echo $marital? $marital->sn_name:'-'; ?></td>
+	            <td class="data"><?php echo $emp_status? $emp_status->sk_name:'-'; ?></td>
+	            <td class="data ta_center"><?php echo $staff_status; ?></td>
 	          </tr>
 	      <?php
 		  }
 		  ?>
-	      </tbody>
+			<tr>
+				<td colspan="16" class="pagesummary">Summary</td>
+			</tr>
 	    </table>
 	</body>
 </html>

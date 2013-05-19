@@ -1,98 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-	<style type="text/css">
-		table {
-			border-width: 0 0 1px 1px;
-			border-spacing: 0;
-			border-collapse: collapse;
-			border-style: solid;
-		}
- 
-		td, th {
-			margin: 0;
-			padding: 4px;
-			border-width: 1px 1px 0 0;
-			border-style: solid;
-		}
-	</style>
+		<meta charset="UTF-8" />
+		<title>
+		  Report Expired Document
+		</title>
+		<?php echo load_css("report-style.css"); ?>
+		<?php echo load_css("dashboard.css"); ?>
+		<style type="text/css">
+		  table.report {border-collapse: collapse; border: solid 2px #000;}
+		  table.report td {padding: 2px; border: solid 1px #ccc;}
+		  table.report td.blackshade {background-color: #DFEAF5;}
+		  table.report td.pagesummary {background: #FFB;}
+		  td, td, p{font-size:9px;}
+		</style>
 	</head>
     <body>
-    	<center>
-    		<h3>Document Expired Report</h3>
-    	</center>
-      	<table width="50%" align="center">
-      		<?php
-      		if ($this->input->get('staff_cabang') != "") {
-      		?>
-  			<tr>
-  				<td>Branch</td>
- 				<td><?php echo $this->input->get('staff_cabang'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('$staff_departement') != "") {
-      		?>
-  			<tr>
-  				<td>Department</td>
- 				<td><?php echo $this->input->get('$staff_departement'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('staff_jabatan') != "") {
-      		?>
-  			<tr>
-  				<td>Title</td>
- 				<td><?php echo $this->input->get('staff_jabatan'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		if ($this->input->get('staff_name') != "") {
-      		?>
-  			<tr>
-  				<td>Name</td>
- 				<td><?php echo $this->input->get('staff_name'); ?></td>
-			</tr>
-      		<?php
-      		}
-      		?>
-      	</table>
-      	<br />
-		<table width="100%" align="center">
-	      <thead>
+  		<h3>Report Expired Document</h3>
+  		<span style="font-size:9px;"><?php echo date("y/m/d"); ?></span>
+		<div>
+		<table class="report" style="width:100%">
 	        <tr>
-	          <th rowspan="2">Name</th>
-	          <th rowspan="2">Branch</th>
-	          <th rowspan="2">Departement</th>
-	          <th rowspan="2">Title</th>
-	          <th colspan="2">Nomor</th>
-	          <th colspan="2">Nomor</th>
+	          <td rowspan="2" class="blackshade">No</td>
+	          <td rowspan="2" class="blackshade">Branch</td>
+	          <td rowspan="2" class="blackshade">Departement</td>
+	          <td rowspan="2" class="blackshade">Name</td>
+	          <td rowspan="2" class="blackshade">Title</td>
+	          <td colspan="2" class="blackshade">Nomor</td>
+	          <td colspan="2" class="blackshade">Nomor</td>
 	        </tr>
 	        <tr>
-	          <th>Passport</th>
-	          <th>Expired</th>
-	          <th>Passport</th>
-	          <th>Expired</th>
+	          <td class="blackshade">Passport</td>
+	          <td class="blackshade">Expired</td>
+	          <td class="blackshade">Kitas</td>
+	          <td class="blackshade">Expired</td>
 	        </tr>
 	      </thead>
-	      <tbody>
 	      <?php
+	      $i=0;
 	      foreach ($staff_list as $row) {
+	      	$i++;
+
+			$branch = get_branch_detail($row->staff_cabang);
+			$dept = get_dept_detail($row->staff_departement);
+			$title = get_title_detail($row->staff_jabatan);
 	      ?>
 	          <tr>
-	            <td><?php echo $row->staff_name; ?></td>
-	            <td><?php echo $row->staff_cabang; ?></td>
-	            <td><?php echo $row->staff_departement; ?></td>
-	            <td><?php echo $row->staff_jabatan; ?></td>
-	            <td><?php echo $row->no_passport; ?></td>
-	            <td><?php echo $row->passport_expired; ?></td>
-	            <td><?php echo $row->no_kitas; ?></td>
-	            <td><?php echo $row->kitas_expired; ?></td>
+	            <td class="data ta_right"><?php echo $i; ?></td>
+	            <td class="data"><?php echo $row->staff_name; ?></td>
+	            <td class="data"><?php echo $branch? $branch->branch_name:'-'; ?></td>
+	            <td class="data"><?php echo $dept? $dept->dept_name:'-'; ?></td>
+	            <td class="data"><?php echo $title? $title->title_name:'-'; ?></td>
+	            <td class="data"><?php echo $row->no_passport; ?></td>
+	            <td class="data ta_center"><?php echo $row->passport_expired; ?></td>
+	            <td class="data"><?php echo $row->no_kitas; ?></td>
+	            <td class="data ta_center"><?php echo $row->kitas_expired; ?></td>
 	          </tr>
 	      <?php
 		  }
 		  ?>
-	      </tbody>
 	    </table>
+	    </div>
 	</body>
 </html>

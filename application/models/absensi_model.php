@@ -80,7 +80,7 @@ class Absensi_model extends CI_Model{
   }
   
   function get_staff_absensi($staff_id,$period){
-    return $this->db->where("staff_id", $staff_id)->where("DATE_FORMAT(absensi.date,'%Y-%m')",$period)->get("absensi");
+    return $this->db->where("staff_id", $staff_id)->where("DATE_FORMAT(absensi.date,'%b %Y')=",$period)->get("absensi");
   }
   
   function get_periode($staff_id, $start, $end){

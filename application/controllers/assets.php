@@ -187,6 +187,13 @@ class Assets extends CI_Controller {
         $this->session->set_flashdata('message', 'Asset successfully deleted!');
         redirect('assets/');
     }
+  
+  	function get_asset($asset_name){
+    	$asset = $this->db->like("asset_name", $asset_name)->get("assets");
+    	if($asset){
+      		echo json_encode($asset->result());
+    	}
+  	}
 
     public function report_list($offset = 0) {
         //$this->filter_access('Assets', 'roled_select', base_url());
@@ -223,6 +230,10 @@ class Assets extends CI_Controller {
             $data['dir'] = "ASC";
         }
 
+    	//Asset
+		$data["asset"] = form_input(array("id"=>"asset"));
+		$data["asset_id"] = form_input(array("name"=>"asset_id", "type"=>"hidden", "id"=>"asset_id"));
+
         $total_rows = $asset_list->count();
         $data['title'] = "Assets";
         $data['btn_home'] = anchor(base_url(), 'Home', array('class' => 'btn'));
@@ -234,8 +245,8 @@ class Assets extends CI_Controller {
 			$asset_list->like('branch',$this->input->get("branch"));
 		}
 
-		if ($this->input->get("asset_name") != "") {
-			$asset_list->like('asset_name',$this->input->get("asset_name"));
+		if ($this->input->get("asset_id") != "") {
+			$asset_list->where('asset_id',$this->input->get("asset_id"));
 		}
 
         $asset_list->order_by($data['col'], $data['dir']);
@@ -248,8 +259,6 @@ class Assets extends CI_Controller {
         $data['branch'] = form_dropdown('branch',
                         $list_branch,
                         $branch_selected);
-
-		$data['asset_name'] = array('name' => 'asset_name', 'value' => $this->input->get('asset_name'));
 
 		if ($this->input->get('to') == 'pdf') {
 			$this->load->library('html2pdf');

@@ -1,6 +1,18 @@
 <?php get_header(); ?>
 <script type="text/javascript">
 $(document).ready(function(){
+	$('#periode').datepicker({
+      changeMonth: true,
+      changeYear: true,
+      showButtonPanel: true,
+      dateFormat: 'M yy',
+      onClose: function(dateText, inst) { 
+          var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+          var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+          $(this).datepicker('setDate', new Date(year, month, 1));
+      }
+  });
+	
   	$(".proc").on("click", function(e){
 		e.preventDefault();
 		var data = $("form").serialize();
@@ -10,6 +22,13 @@ $(document).ready(function(){
 	});
 });
 </script>
+<style>
+.ui-datepicker{width: 220px;}
+.ui-datepicker-calendar { display: none;}
+.ui-datepicker-inline .ui-datepicker-calendar { display: block;}
+#ui-datepicker-div select.ui-datepicker-month, #ui-datepicker-div select.ui-datepicker-year{width: 80px!important; font-size: 12px; height:30px!important;}
+#ui-datepicker-div select.ui-datepicker-year{margin-left: 10px!important;}
+</style>
 <div class="body">
   <div class="content">
     <?php echo $this->session->flashdata('message'); ?>
@@ -22,13 +41,13 @@ $(document).ready(function(){
       </h1>
     </div>
     <form action="" method="post">
-    	<div class="span3">Period<br />
-    	<?php echo $period_month; ?>&nbsp;<?php echo $period_year; ?></div>
-    	<div class="span3">Branch<br />
+    	<div class="span2" style="margin-left: 20px;">Period<br />
+    	<?php echo form_input($periode); ?></div>
+    	<div class="span2" style="margin-left: 20px;">Branch<br />
     	<?php echo $staff_cabang; ?></div>
-    	<div class="span3">Department<br />
+    	<div class="span2" style="margin-left: 20px;">Department<br />
     	<?php echo $staff_departement; ?></div>
-    	<div class="span3">Title <br />
+    	<div class="span2" style="margin-left: 20px;">Title <br />
     	<?php echo $staff_jabatan; ?></div>
     	<div class="cl"></div>
     </form>

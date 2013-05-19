@@ -10,7 +10,7 @@ class Izin_model extends CI_Model{
 
   function list_where($where = null, $limit = 10, $offset = 0){
   	$this->db->join('staffs','staffs.staff_id=izin.izin_staff_id');  	
-  	$this->db->join('branches','branches.branch_id=staffs.staff_cabang');  	
+  	$this->db->join('branches','branches.branch_id=staffs.staff_cabang','left');  	
 
 	foreach($where as $key=>$value) {
 		if ((isset($key) && isset($value)) && (($key != '0' || $key != '') && $value != '')) {

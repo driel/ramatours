@@ -1,91 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-	<style type="text/css">
-		table {border-width: 1px 1px 1px 1px;border-spacing: 0;border-collapse: collapse;border-style: solid; font-size:12px;}
-		td, th {margin: 0;padding: 4px;border-width: 1px 1px 0 0;border-style: solid; font-size:10px;}
-		.site_name{float:left; font-size:22px;}
-		.date{float:right; font-size:10px;}
-		h2{margin-top: 0;}
-
-		table.no_border {
-			border-style: none;
-		}
- 
-		td.no_border, th.no_border {
-			margin: 0;
-			padding: 4px;
-			border-style: none;
-		}
-	</style>
+		<meta charset="UTF-8" />
+		<title>
+		  Report Serah Terima Aset
+		</title>
+		<?php echo load_css("report-style.css"); ?>
+		<?php echo load_css("dashboard.css"); ?>
+		<style type="text/css">
+		  table.report {border-collapse: collapse; border: solid 2px #000;}
+		  table.report td {padding: 2px; border: solid 1px #ccc;}
+		  table.report td.blackshade {background-color: #DFEAF5;}
+		  table.report td.pagesummary {background: #FFB;}
+		  td, td, p{font-size:9px;}
+		</style>
 	</head>
     <body>
-    	<table style="border: 0;" width="100%">
-    		<tr>
-    			<td style="border: 0;" align="left"><span class="site_name">Rama Tours</span></td>
-    			<td style="border: 0;" align="right"><span class="date"><?php echo date("d/m/Y - H:i"); ?></span></td>
-    		</tr>
-    	</table>
-		<span class="cl"></span><br />
-		<h2 style="text-align:center">Daftar Serah Terima Asset</h2>
-		<center>
-	    	<table align="center" class="no_border">
-	            <tr>
-	                <td class="no_border" width="50%">Name</td>
-	                <td class="no_border"><?php echo $asset->asset_name; ?></td>
-	            </tr>
-	            <tr>
-	                <td class="no_border" width="50%">Code</td>
-	                <td class="no_border"><?php echo $asset->asset_code; ?></td>
-	            </tr>
-	            <tr>
-	                <td class="no_border">Status</td>
-	                <td class="no_border"><?php echo $asset->asset_status; ?></td>
-	            </tr>
-	            <tr>
-	            	<td class="no_border">Description</td>
-	            	<td class="no_border"><?php echo $asset->description; ?></td>
-	            </tr>
-	        </table>
-    	</center>
-		<br />
-		<table width="100%" align="center">
-            <thead>
+  		<h3>Report Serah Terima Aset (<?php echo $asset_data->asset_name; ?>)</h3>
+	  	<span style="font-size:9px;"><?php echo date("y/m/d"); ?></span>
+		<div>
+			<table class="report" style="width:100%">
                 <tr>
-                    <th rowspan="2">No</th>
-                    <th rowspan="2" width="15%">Date</th>
-                    <th colspan="2">Staff</th>
-                    <th rowspan="2">Document Number</th>
-                    <th rowspan="2">Status</th>
-                    <th rowspan="2" width="30%">Note</th>
+                    <td rowspan="2" class="blackshade">No</td>
+                    <td rowspan="2" width="15%" class="blackshade">Date</td>
+                    <td colspan="2" class="blackshade">Staff</td>
+                    <td rowspan="2" class="blackshade">Document Number</td>
+                    <td rowspan="2" class="blackshade">Status</td>
+                    <td rowspan="2" width="30%" class="blackshade">Note</td>
                 </tr>
                 <tr>
-                    <th>Yang Menyerahkan</th>
-                    <th>Yang Menerima</th>
+                    <td class="blackshade">Yang Menyerahkan</td>
+                    <td class="blackshade">Yang Menerima</td>
                 </tr>
-            </thead>
-            <tbody>
-            <?php
-	      	$odd = true;
-	      	$i=0;
-            foreach ($assets_handover as $row) {
-		      	$i++;
-	        	$odd = !$odd;
-            ?>
-        		<tr <?php echo $odd ? "bgcolor='#e0e0e0'":"";?>>
-		            <td align="right"><?php echo $i; ?></td>
-                    <td><?php echo date_format(new DateTime($row->trasset_date_time),'j M Y'); ?></td>
-                    <td><?php $row_staff_from = $staff->where('staff_id', $row->trasset_staff_id_from)->get();echo $row_staff_from->staff_name; ?></td>
-                    <td><?php $row_staff_to = $staff->where('staff_id', $row->trasset_staff_id_to)->get();
-echo $row_staff_to->staff_name; ?></td>
-                    <td><?php echo $row->trasset_doc_no; ?></td>
-                    <td><?php echo $row->trasset_status; ?></td>
-                    <td><?php echo $row->trasset_note; ?></td>
-            	</tr>
-            <?php
-			}
-			?>
-            </tbody>
-		</table>
+	            <?php
+		      	$i=0;
+	            foreach ($assets_handover as $row) {
+			      	$i++;
+	            ?>
+	        		<tr>
+			            <td class="data ta_right"><?php echo $i; ?></td>
+	                    <td class="data"><?php echo date_format(new DateTime($row->trasset_date_time),'j M Y'); ?></td>
+	                    <td class="data"><?php $row_staff_from = $staff->where('staff_id', $row->trasset_staff_id_from)->get();echo $row_staff_from->staff_name; ?></td>
+	                    <td class="data"><?php $row_staff_to = $staff->where('staff_id', $row->trasset_staff_id_to)->get();
+	echo $row_staff_to->staff_name; ?></td>
+	                    <td class="data"><?php echo $row->trasset_doc_no; ?></td>
+	                    <td class="data"><?php echo $row->trasset_status; ?></td>
+	                    <td class="data"><?php echo $row->trasset_note; ?></td>
+	            	</tr>
+	            <?php
+				}
+				?>
+			</table>
+		</div>
 	</body>
 </html>

@@ -5,6 +5,9 @@ class Izin extends CI_Controller{
     parent::__construct();
     $this->load->model("Izin_model", "izin");
     $this->load->helper("staff");
+    $this->load->helper("branch");
+    $this->load->helper("dept");
+    $this->load->helper("title");
   }
   
   function index(){
